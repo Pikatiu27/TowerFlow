@@ -51,12 +51,24 @@ Reference rules:
 - Australian Standards and project-approved engineering references remain the authority for design equations and capacity checks.
 - When a software manual and a design code disagree, the calculation must follow the design code unless a project-specific engineering decision is documented.
 
-## Interface Style Direction
+## Commercial Software Interface Direction
 
-TowerFlow should look like a concise engineering technology product, not a marketing landing page.
+TowerFlow should look like a concise commercial engineering software product, not a marketing landing page or visual demo.
 
 Interface style rules:
 
+- Use commercial software layout logic:
+  - A predictable work area for the model or drawing.
+  - A compact parameter/control area for inputs and commands.
+  - A persistent result/inspection area for selected objects and governing checks.
+  - Clear separation between navigation, input, visualisation, and output.
+  - Stable dimensions for repeated controls, toolbars, result tiles, tables, and panels.
+  - Workflows should support repeated engineering review, not one-time presentation.
+- Prioritise scanability:
+  - Important results should be visible without hunting.
+  - Tables, labels, and values should align consistently.
+  - Dense information is acceptable when it is grouped and readable.
+  - Decorative space should not reduce engineering information density.
 - Use a simple technical palette: light engineering grey backgrounds, deep graphite text, and restrained cyan/green accents.
 - Preserve red and blue as semantic structural result colours:
   - Red: tension or overstress where applicable.
@@ -69,6 +81,7 @@ Interface style rules:
   - Uppercase compact labels for data fields.
 - Keep the 3D canvas visually clean with subtle grid, lighting, and engineering-style overlays.
 - Keep information panels dense but readable, with no decorative card-heavy marketing layout.
+- Avoid hero-page, brochure, or landing-page patterns inside the application experience.
 - Maintain mobile-first readability:
   - No overlapping title, buttons, watermark, or result panels.
   - Controls must remain tappable.
@@ -226,7 +239,10 @@ Prove the full chain from structural analysis data to interactive 3D web visuali
 - Add orbit controls, lighting, camera framing, and basic scene reset.
 - Add member selection by click or hover.
 - Use clear engineering graphics before advanced shader effects.
-- Apply the project interface style direction:
+- Apply the project commercial software interface direction:
+  - Predictable model work area.
+  - Compact result and inspection panel.
+  - Stable controls and no layout shift during review.
   - Light technical background.
   - Deep graphite text.
   - Restrained cyan/green accents.
@@ -625,7 +641,7 @@ Each release should include:
 - Versioned JSON or API schema.
 - English documentation for product-facing material.
 - Reference list for any engineering calculation used in the release.
-- Interface check against the project typography, colour, and mobile layout rules.
+- Interface check against the project commercial software layout, typography, colour, scanability, and mobile layout rules.
 
 ## Product North Star
 
