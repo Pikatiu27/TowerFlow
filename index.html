@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TowerFlow Static Prototype</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="viewer-section" aria-label="3D tower viewer">
+        <div id="viewer" class="viewer"></div>
+        <div class="top-bar">
+          <div>
+            <p class="eyebrow">TowerFlow Phase 1</p>
+            <h1>Static Digital Twin Prototype</h1>
+          </div>
+          <button id="reset-view" type="button">Reset View</button>
+        </div>
+      </section>
+
+      <aside class="info-panel" aria-label="Engineering result panel">
+        <section>
+          <p class="eyebrow">Selected Member</p>
+          <h2 id="member-title">No member selected</h2>
+          <dl class="member-grid">
+            <div>
+              <dt>Force State</dt>
+              <dd id="member-state">Select a member</dd>
+            </div>
+            <div>
+              <dt>Axial Force</dt>
+              <dd id="member-force">--</dd>
+            </div>
+            <div>
+              <dt>Length</dt>
+              <dd id="member-length">--</dd>
+            </div>
+            <div>
+              <dt>Group</dt>
+              <dd id="member-group">--</dd>
+            </div>
+          </dl>
+          <p id="member-interpretation" class="interpretation">
+            Tap or click a tower member to review its axial force result.
+          </p>
+        </section>
+
+        <section>
+          <p class="eyebrow">Case Summary</p>
+          <h2 id="case-title">Loading...</h2>
+          <dl class="summary-grid">
+            <div>
+              <dt>Nodes</dt>
+              <dd id="node-count">--</dd>
+            </div>
+            <div>
+              <dt>Members</dt>
+              <dd id="member-count">--</dd>
+            </div>
+            <div>
+              <dt>Max |Axial|</dt>
+              <dd id="max-force">--</dd>
+            </div>
+            <div>
+              <dt>Fx Balance</dt>
+              <dd id="force-balance">--</dd>
+            </div>
+          </dl>
+        </section>
+      </aside>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

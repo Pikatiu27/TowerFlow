@@ -1,0 +1,883 @@
+{
+  "schemaVersion": "0.1.0",
+  "project": "TowerFlow",
+  "caseId": "tower-001-static-wind-x",
+  "title": "Triangular communication tower static wind prototype",
+  "units": {
+    "length": "m",
+    "force": "kN",
+    "stress": "kPa"
+  },
+  "analysisBoundary": [
+    "3D pin-jointed truss model",
+    "Steel tower superstructure only",
+    "One simplified horizontal wind load case",
+    "No member capacity check",
+    "No connection or foundation design"
+  ],
+  "nodes": [
+    {
+      "id": "N01",
+      "x": 0.0,
+      "y": 2.2,
+      "z": 0.0,
+      "displacementM": {
+        "ux": 0.0,
+        "uy": 0.0,
+        "uz": 0.0
+      }
+    },
+    {
+      "id": "N02",
+      "x": -1.905,
+      "y": -1.1,
+      "z": 0.0,
+      "displacementM": {
+        "ux": 0.0,
+        "uy": 0.0,
+        "uz": 0.0
+      }
+    },
+    {
+      "id": "N03",
+      "x": 1.905,
+      "y": -1.1,
+      "z": 0.0,
+      "displacementM": {
+        "ux": 0.0,
+        "uy": 0.0,
+        "uz": 0.0
+      }
+    },
+    {
+      "id": "N11",
+      "x": 0.0,
+      "y": 1.85,
+      "z": 4.0,
+      "displacementM": {
+        "ux": 0.000391,
+        "uy": -0.0,
+        "uz": 0.0
+      }
+    },
+    {
+      "id": "N12",
+      "x": -1.602,
+      "y": -0.925,
+      "z": 4.0,
+      "displacementM": {
+        "ux": 0.000467,
+        "uy": 4.4e-05,
+        "uz": 0.000337
+      }
+    },
+    {
+      "id": "N13",
+      "x": 1.602,
+      "y": -0.925,
+      "z": 4.0,
+      "displacementM": {
+        "ux": 0.000467,
+        "uy": -4.4e-05,
+        "uz": -0.000337
+      }
+    },
+    {
+      "id": "N21",
+      "x": 0.0,
+      "y": 1.5,
+      "z": 8.0,
+      "displacementM": {
+        "ux": 0.001723,
+        "uy": -0.0,
+        "uz": 0.0
+      }
+    },
+    {
+      "id": "N22",
+      "x": -1.299,
+      "y": -0.75,
+      "z": 8.0,
+      "displacementM": {
+        "ux": 0.001759,
+        "uy": 2.1e-05,
+        "uz": 0.000515
+      }
+    },
+    {
+      "id": "N23",
+      "x": 1.299,
+      "y": -0.75,
+      "z": 8.0,
+      "displacementM": {
+        "ux": 0.001759,
+        "uy": -2.1e-05,
+        "uz": -0.000515
+      }
+    },
+    {
+      "id": "N31",
+      "x": 0.0,
+      "y": 1.15,
+      "z": 12.0,
+      "displacementM": {
+        "ux": 0.003678,
+        "uy": -0.0,
+        "uz": 0.0
+      }
+    },
+    {
+      "id": "N32",
+      "x": -0.996,
+      "y": -0.575,
+      "z": 12.0,
+      "displacementM": {
+        "ux": 0.00369,
+        "uy": 7e-06,
+        "uz": 0.00052
+      }
+    },
+    {
+      "id": "N33",
+      "x": 0.996,
+      "y": -0.575,
+      "z": 12.0,
+      "displacementM": {
+        "ux": 0.00369,
+        "uy": -7e-06,
+        "uz": -0.00052
+      }
+    },
+    {
+      "id": "N41",
+      "x": 0.0,
+      "y": 0.8,
+      "z": 16.0,
+      "displacementM": {
+        "ux": 0.005974,
+        "uy": -0.0,
+        "uz": 0.0
+      }
+    },
+    {
+      "id": "N42",
+      "x": -0.693,
+      "y": -0.4,
+      "z": 16.0,
+      "displacementM": {
+        "ux": 0.005974,
+        "uy": -0.0,
+        "uz": 0.000392
+      }
+    },
+    {
+      "id": "N43",
+      "x": 0.693,
+      "y": -0.4,
+      "z": 16.0,
+      "displacementM": {
+        "ux": 0.005974,
+        "uy": 0.0,
+        "uz": -0.000392
+      }
+    }
+  ],
+  "members": [
+    {
+      "id": "M001",
+      "startNodeId": "N01",
+      "endNodeId": "N02",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 3.81,
+      "axialForceKN": 0.0,
+      "forceState": "low force"
+    },
+    {
+      "id": "M002",
+      "startNodeId": "N02",
+      "endNodeId": "N03",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 3.81,
+      "axialForceKN": 0.0,
+      "forceState": "low force"
+    },
+    {
+      "id": "M003",
+      "startNodeId": "N03",
+      "endNodeId": "N01",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 3.81,
+      "axialForceKN": 0.0,
+      "forceState": "low force"
+    },
+    {
+      "id": "M004",
+      "startNodeId": "N11",
+      "endNodeId": "N12",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 3.204,
+      "axialForceKN": -11.856,
+      "forceState": "compression"
+    },
+    {
+      "id": "M005",
+      "startNodeId": "N12",
+      "endNodeId": "N13",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 3.204,
+      "axialForceKN": 0.0,
+      "forceState": "low force"
+    },
+    {
+      "id": "M006",
+      "startNodeId": "N13",
+      "endNodeId": "N11",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 3.204,
+      "axialForceKN": 11.856,
+      "forceState": "tension"
+    },
+    {
+      "id": "M007",
+      "startNodeId": "N21",
+      "endNodeId": "N22",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 2.598,
+      "axialForceKN": -6.993,
+      "forceState": "compression"
+    },
+    {
+      "id": "M008",
+      "startNodeId": "N22",
+      "endNodeId": "N23",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 2.598,
+      "axialForceKN": 0.0,
+      "forceState": "low force"
+    },
+    {
+      "id": "M009",
+      "startNodeId": "N23",
+      "endNodeId": "N21",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 2.598,
+      "axialForceKN": 6.993,
+      "forceState": "tension"
+    },
+    {
+      "id": "M010",
+      "startNodeId": "N31",
+      "endNodeId": "N32",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 1.992,
+      "axialForceKN": -2.991,
+      "forceState": "compression"
+    },
+    {
+      "id": "M011",
+      "startNodeId": "N32",
+      "endNodeId": "N33",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 1.992,
+      "axialForceKN": -0.0,
+      "forceState": "low force"
+    },
+    {
+      "id": "M012",
+      "startNodeId": "N33",
+      "endNodeId": "N31",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 1.992,
+      "axialForceKN": 2.991,
+      "forceState": "tension"
+    },
+    {
+      "id": "M013",
+      "startNodeId": "N41",
+      "endNodeId": "N42",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 1.386,
+      "axialForceKN": 0.255,
+      "forceState": "tension"
+    },
+    {
+      "id": "M014",
+      "startNodeId": "N42",
+      "endNodeId": "N43",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 1.386,
+      "axialForceKN": 0.0,
+      "forceState": "low force"
+    },
+    {
+      "id": "M015",
+      "startNodeId": "N43",
+      "endNodeId": "N41",
+      "group": "plan bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 1.386,
+      "axialForceKN": -0.255,
+      "forceState": "compression"
+    },
+    {
+      "id": "M016",
+      "startNodeId": "N01",
+      "endNodeId": "N11",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": 0.0,
+      "forceState": "low force"
+    },
+    {
+      "id": "M017",
+      "startNodeId": "N02",
+      "endNodeId": "N12",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": 46.434,
+      "forceState": "tension"
+    },
+    {
+      "id": "M018",
+      "startNodeId": "N03",
+      "endNodeId": "N13",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": -46.434,
+      "forceState": "compression"
+    },
+    {
+      "id": "M019",
+      "startNodeId": "N01",
+      "endNodeId": "N12",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 5.323,
+      "axialForceKN": 8.184,
+      "forceState": "tension"
+    },
+    {
+      "id": "M020",
+      "startNodeId": "N02",
+      "endNodeId": "N11",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 5.323,
+      "axialForceKN": 13.13,
+      "forceState": "tension"
+    },
+    {
+      "id": "M021",
+      "startNodeId": "N02",
+      "endNodeId": "N13",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 5.323,
+      "axialForceKN": 4.947,
+      "forceState": "tension"
+    },
+    {
+      "id": "M022",
+      "startNodeId": "N03",
+      "endNodeId": "N12",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 5.323,
+      "axialForceKN": -4.947,
+      "forceState": "compression"
+    },
+    {
+      "id": "M023",
+      "startNodeId": "N03",
+      "endNodeId": "N11",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 5.323,
+      "axialForceKN": -13.13,
+      "forceState": "compression"
+    },
+    {
+      "id": "M024",
+      "startNodeId": "N01",
+      "endNodeId": "N13",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 5.323,
+      "axialForceKN": -8.184,
+      "forceState": "compression"
+    },
+    {
+      "id": "M025",
+      "startNodeId": "N11",
+      "endNodeId": "N21",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": 0.0,
+      "forceState": "low force"
+    },
+    {
+      "id": "M026",
+      "startNodeId": "N12",
+      "endNodeId": "N22",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": 34.132,
+      "forceState": "tension"
+    },
+    {
+      "id": "M027",
+      "startNodeId": "N13",
+      "endNodeId": "N23",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": -34.132,
+      "forceState": "compression"
+    },
+    {
+      "id": "M028",
+      "startNodeId": "N11",
+      "endNodeId": "N22",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.944,
+      "axialForceKN": 4.676,
+      "forceState": "tension"
+    },
+    {
+      "id": "M029",
+      "startNodeId": "N12",
+      "endNodeId": "N21",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.944,
+      "axialForceKN": 11.415,
+      "forceState": "tension"
+    },
+    {
+      "id": "M030",
+      "startNodeId": "N12",
+      "endNodeId": "N23",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.944,
+      "axialForceKN": 6.74,
+      "forceState": "tension"
+    },
+    {
+      "id": "M031",
+      "startNodeId": "N13",
+      "endNodeId": "N22",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.944,
+      "axialForceKN": -6.74,
+      "forceState": "compression"
+    },
+    {
+      "id": "M032",
+      "startNodeId": "N13",
+      "endNodeId": "N21",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.944,
+      "axialForceKN": -11.415,
+      "forceState": "compression"
+    },
+    {
+      "id": "M033",
+      "startNodeId": "N11",
+      "endNodeId": "N23",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.944,
+      "axialForceKN": -4.676,
+      "forceState": "compression"
+    },
+    {
+      "id": "M034",
+      "startNodeId": "N21",
+      "endNodeId": "N31",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": 0.0,
+      "forceState": "low force"
+    },
+    {
+      "id": "M035",
+      "startNodeId": "N22",
+      "endNodeId": "N32",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": 18.688,
+      "forceState": "tension"
+    },
+    {
+      "id": "M036",
+      "startNodeId": "N23",
+      "endNodeId": "N33",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": -18.688,
+      "forceState": "compression"
+    },
+    {
+      "id": "M037",
+      "startNodeId": "N21",
+      "endNodeId": "N32",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.615,
+      "axialForceKN": 2.539,
+      "forceState": "tension"
+    },
+    {
+      "id": "M038",
+      "startNodeId": "N22",
+      "endNodeId": "N31",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.615,
+      "axialForceKN": 9.182,
+      "forceState": "tension"
+    },
+    {
+      "id": "M039",
+      "startNodeId": "N22",
+      "endNodeId": "N33",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.615,
+      "axialForceKN": 6.643,
+      "forceState": "tension"
+    },
+    {
+      "id": "M040",
+      "startNodeId": "N23",
+      "endNodeId": "N32",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.615,
+      "axialForceKN": -6.643,
+      "forceState": "compression"
+    },
+    {
+      "id": "M041",
+      "startNodeId": "N23",
+      "endNodeId": "N31",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.615,
+      "axialForceKN": -9.182,
+      "forceState": "compression"
+    },
+    {
+      "id": "M042",
+      "startNodeId": "N21",
+      "endNodeId": "N33",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.615,
+      "axialForceKN": -2.539,
+      "forceState": "compression"
+    },
+    {
+      "id": "M043",
+      "startNodeId": "N31",
+      "endNodeId": "N41",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": 0.0,
+      "forceState": "low force"
+    },
+    {
+      "id": "M044",
+      "startNodeId": "N32",
+      "endNodeId": "N42",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": 5.553,
+      "forceState": "tension"
+    },
+    {
+      "id": "M045",
+      "startNodeId": "N33",
+      "endNodeId": "N43",
+      "group": "leg",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.015,
+      "axialForceKN": -5.553,
+      "forceState": "compression"
+    },
+    {
+      "id": "M046",
+      "startNodeId": "N31",
+      "endNodeId": "N42",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.345,
+      "axialForceKN": -0.556,
+      "forceState": "compression"
+    },
+    {
+      "id": "M047",
+      "startNodeId": "N32",
+      "endNodeId": "N41",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.345,
+      "axialForceKN": 4.897,
+      "forceState": "tension"
+    },
+    {
+      "id": "M048",
+      "startNodeId": "N32",
+      "endNodeId": "N43",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.345,
+      "axialForceKN": 5.454,
+      "forceState": "tension"
+    },
+    {
+      "id": "M049",
+      "startNodeId": "N33",
+      "endNodeId": "N42",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.345,
+      "axialForceKN": -5.454,
+      "forceState": "compression"
+    },
+    {
+      "id": "M050",
+      "startNodeId": "N33",
+      "endNodeId": "N41",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.345,
+      "axialForceKN": -4.897,
+      "forceState": "compression"
+    },
+    {
+      "id": "M051",
+      "startNodeId": "N31",
+      "endNodeId": "N43",
+      "group": "diagonal bracing",
+      "areaM2": 0.0025,
+      "elasticModulusKPa": 200000000.0,
+      "lengthM": 4.345,
+      "axialForceKN": 0.556,
+      "forceState": "tension"
+    }
+  ],
+  "supports": [
+    {
+      "nodeId": "N01",
+      "ux": true,
+      "uy": true,
+      "uz": true
+    },
+    {
+      "nodeId": "N02",
+      "ux": true,
+      "uy": true,
+      "uz": true
+    },
+    {
+      "nodeId": "N03",
+      "ux": true,
+      "uy": true,
+      "uz": true
+    }
+  ],
+  "loadCases": [
+    {
+      "id": "LC1",
+      "name": "Simplified wind in global X direction",
+      "loads": [
+        {
+          "nodeId": "N21",
+          "fxKN": 1.5,
+          "fyKN": 0.0,
+          "fzKN": 0.0
+        },
+        {
+          "nodeId": "N22",
+          "fxKN": 1.5,
+          "fyKN": 0.0,
+          "fzKN": 0.0
+        },
+        {
+          "nodeId": "N23",
+          "fxKN": 1.5,
+          "fyKN": 0.0,
+          "fzKN": 0.0
+        },
+        {
+          "nodeId": "N31",
+          "fxKN": 2.0,
+          "fyKN": 0.0,
+          "fzKN": 0.0
+        },
+        {
+          "nodeId": "N32",
+          "fxKN": 2.0,
+          "fyKN": 0.0,
+          "fzKN": 0.0
+        },
+        {
+          "nodeId": "N33",
+          "fxKN": 2.0,
+          "fyKN": 0.0,
+          "fzKN": 0.0
+        },
+        {
+          "nodeId": "N41",
+          "fxKN": 2.5,
+          "fyKN": 0.0,
+          "fzKN": 0.0
+        },
+        {
+          "nodeId": "N42",
+          "fxKN": 2.5,
+          "fyKN": 0.0,
+          "fzKN": 0.0
+        },
+        {
+          "nodeId": "N43",
+          "fxKN": 2.5,
+          "fyKN": 0.0,
+          "fzKN": 0.0
+        }
+      ]
+    }
+  ],
+  "supportReactions": [
+    {
+      "nodeId": "N01",
+      "component": "fxKN",
+      "valueKN": 4.926
+    },
+    {
+      "nodeId": "N01",
+      "component": "fyKN",
+      "valueKN": 0.0
+    },
+    {
+      "nodeId": "N01",
+      "component": "fzKN",
+      "valueKN": 0.0
+    },
+    {
+      "nodeId": "N02",
+      "component": "fxKN",
+      "valueKN": -11.463
+    },
+    {
+      "nodeId": "N02",
+      "component": "fyKN",
+      "valueKN": -9.464
+    },
+    {
+      "nodeId": "N02",
+      "component": "fzKN",
+      "valueKN": -59.843
+    },
+    {
+      "nodeId": "N03",
+      "component": "fxKN",
+      "valueKN": -11.463
+    },
+    {
+      "nodeId": "N03",
+      "component": "fyKN",
+      "valueKN": 9.464
+    },
+    {
+      "nodeId": "N03",
+      "component": "fzKN",
+      "valueKN": 59.843
+    }
+  ],
+  "checks": {
+    "sumAppliedFxKN": 18.0,
+    "sumReactionFxKN": -18.0,
+    "forceBalanceFxKN": 0.0,
+    "maxAbsAxialForceKN": 46.434
+  }
+}
