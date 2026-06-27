@@ -26,6 +26,55 @@ TowerFlow should help engineers, asset owners, and operators answer:
 
 The product must be calculation-led, not graphics-led. 3D visualisation exists to explain structural behaviour and asset risk, not to replace engineering verification.
 
+## Calculation Reference Policy
+
+TowerFlow calculations must be developed against traceable project references.
+
+Primary project reference folder:
+
+```text
+C:\Users\silin\Documents\Codex\Reference
+```
+
+Current tower-software reference files saved in that folder:
+
+- `Bentley_OpenTower_Designer_eBook.pdf`
+- `Bentley_OpenTower_Product_Data_Sheet.pdf`
+- `TowerFlow_reference_sources.md`
+
+Reference rules:
+
+- Check the local `Reference` folder before implementing or changing calculation logic.
+- Treat Bentley OpenTower material as product and workflow reference material, not as a substitute for design-code equations.
+- Do not use MSTower material as an authoritative reference unless an authorized copy or verified official source is available.
+- Record any reference used by a calculation in the relevant assumptions, verification, or source note.
+- Australian Standards and project-approved engineering references remain the authority for design equations and capacity checks.
+- When a software manual and a design code disagree, the calculation must follow the design code unless a project-specific engineering decision is documented.
+
+## Interface Style Direction
+
+TowerFlow should look like a concise engineering technology product, not a marketing landing page.
+
+Interface style rules:
+
+- Use a simple technical palette: light engineering grey backgrounds, deep graphite text, and restrained cyan/green accents.
+- Preserve red and blue as semantic structural result colours:
+  - Red: tension or overstress where applicable.
+  - Blue: compression.
+  - Grey: low force or neutral state.
+- Keep typography hierarchical and compact:
+  - Clear page title.
+  - Smaller section titles.
+  - Monospace or tabular styling for numerical engineering values.
+  - Uppercase compact labels for data fields.
+- Keep the 3D canvas visually clean with subtle grid, lighting, and engineering-style overlays.
+- Keep information panels dense but readable, with no decorative card-heavy marketing layout.
+- Maintain mobile-first readability:
+  - No overlapping title, buttons, watermark, or result panels.
+  - Controls must remain tappable.
+  - Text must wrap within its container.
+- Public prototypes should include a subtle `sconmyway` watermark.
+
 ## Technical Direction
 
 The proposed technical direction is suitable, but the order of adoption matters.
@@ -114,8 +163,13 @@ Set the technical and engineering foundation before building the first prototype
   - Units.
   - Assumptions.
   - Code references.
+  - Software reference notes.
   - Known limitations.
   - Verification examples.
+- Establish the initial project reference register from:
+  - `C:\Users\silin\Documents\Codex\Reference`
+  - OpenTower reference PDFs.
+  - Any authorized MSTower manual provided later.
 - Confirm the initial software stack:
   - React, TypeScript, and Vite for the web app.
   - React Three Fiber and Three.js for 3D.
@@ -128,6 +182,7 @@ Set the technical and engineering foundation before building the first prototype
 - Project roadmap.
 - Initial JSON schema draft.
 - Calculation assumptions note.
+- Calculation reference register.
 - Example tower geometry definition.
 - Technical stack decision note.
 
@@ -137,6 +192,7 @@ Set the technical and engineering foundation before building the first prototype
 - All product output language is confirmed as English.
 - The first structural model boundary is clear.
 - The data contract between analysis and frontend is defined.
+- Calculation references and their authority level are documented.
 
 ## Phase 1: Static Digital Twin Prototype
 
@@ -170,6 +226,12 @@ Prove the full chain from structural analysis data to interactive 3D web visuali
 - Add orbit controls, lighting, camera framing, and basic scene reset.
 - Add member selection by click or hover.
 - Use clear engineering graphics before advanced shader effects.
+- Apply the project interface style direction:
+  - Light technical background.
+  - Deep graphite text.
+  - Restrained cyan/green accents.
+  - Compact engineering data hierarchy.
+  - Subtle `sconmyway` watermark for public prototypes.
 - Show an English information panel with:
   - Member ID.
   - Force type.
@@ -194,6 +256,7 @@ Prove the full chain from structural analysis data to interactive 3D web visuali
 - Example JSON result file.
 - Offline Python generation script.
 - Basic visual verification notes.
+- Basic interface style verification notes for desktop and mobile.
 
 ### Exit Criteria
 
@@ -202,6 +265,7 @@ Prove the full chain from structural analysis data to interactive 3D web visuali
 - Member colours match force signs and magnitudes.
 - At least one load case is manually checked for basic equilibrium.
 - The user can identify force flow through the tower visually.
+- The interface respects the project typography, colour, mobile, and watermark rules.
 
 ## Phase 2: Parametric Analysis MVP
 
@@ -560,6 +624,8 @@ Each release should include:
 - Known limitations.
 - Versioned JSON or API schema.
 - English documentation for product-facing material.
+- Reference list for any engineering calculation used in the release.
+- Interface check against the project typography, colour, and mobile layout rules.
 
 ## Product North Star
 
