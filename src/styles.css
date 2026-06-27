@@ -67,6 +67,23 @@ button {
   pointer-events: auto;
 }
 
+.watermark {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2;
+  border: 1px solid rgba(23, 32, 51, 0.14);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.78);
+  color: rgba(23, 32, 51, 0.66);
+  font-size: 0.84rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  padding: 7px 10px;
+  pointer-events: none;
+  text-transform: lowercase;
+}
+
 .eyebrow {
   margin: 0 0 5px;
   color: #58657a;
@@ -167,6 +184,12 @@ dd {
   .top-bar h1 {
     max-width: 230px;
     font-size: 1.12rem;
+  }
+
+  .watermark {
+    right: 12px;
+    bottom: 12px;
+    font-size: 0.78rem;
   }
 
   .info-panel {
