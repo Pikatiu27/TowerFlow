@@ -18,7 +18,7 @@ const labels = {
 };
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xf5f7fb);
+scene.background = new THREE.Color(0xeef3f6);
 
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -36,12 +36,12 @@ const memberObjects = [];
 let selectedObject = null;
 let towerData = null;
 
-scene.add(new THREE.HemisphereLight(0xffffff, 0xb8c0cc, 2.6));
+scene.add(new THREE.HemisphereLight(0xffffff, 0x9fb0bd, 2.75));
 const sun = new THREE.DirectionalLight(0xffffff, 2.2);
 sun.position.set(8, -10, 18);
 scene.add(sun);
 
-const grid = new THREE.GridHelper(7, 7, 0x9aa7b8, 0xd7dde7);
+const grid = new THREE.GridHelper(7, 7, 0x8fa0ae, 0xd5dee7);
 grid.rotation.x = Math.PI / 2;
 scene.add(grid);
 
@@ -51,9 +51,9 @@ function nodeVector(node) {
 
 function memberColour(member, maxAbsForce) {
   const magnitude = Math.min(Math.abs(member.axialForceKN) / Math.max(maxAbsForce, 0.001), 1);
-  const low = new THREE.Color(0x9aa3af);
-  const tension = new THREE.Color(0xd12d2d);
-  const compression = new THREE.Color(0x2367c9);
+  const low = new THREE.Color(0x9aa6b2);
+  const tension = new THREE.Color(0xd73d32);
+  const compression = new THREE.Color(0x007fbd);
   if (Math.abs(member.axialForceKN) < 0.05) return low;
   return low.clone().lerp(member.axialForceKN > 0 ? tension : compression, 0.35 + magnitude * 0.65);
 }
@@ -71,7 +71,7 @@ function makeMember(start, end, member, maxAbsForce) {
 
 function addNodeMarker(position) {
   const geometry = new THREE.SphereGeometry(0.055, 14, 14);
-  const material = new THREE.MeshStandardMaterial({ color: 0x1f2937, roughness: 0.55 });
+  const material = new THREE.MeshStandardMaterial({ color: 0x12313f, roughness: 0.5 });
   const marker = new THREE.Mesh(geometry, material);
   marker.position.copy(position);
   scene.add(marker);
