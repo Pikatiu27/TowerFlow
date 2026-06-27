@@ -43,3 +43,5 @@ For phone testing on the same Wi-Fi network, replace `localhost` with the comput
 ## Notes
 
 The viewer imports Three.js from a CDN. It is intentionally static so it can later be published to GitHub Pages without a backend.
+
+GitHub Pages is not currently enabled for this private repository because the active GitHub plan does not support Pages for this repository visibility. To publish a phone-accessible hosted page later, either make the repository public or use another static host that supports private-source deployments.
