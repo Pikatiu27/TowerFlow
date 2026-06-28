@@ -8,6 +8,24 @@ This includes the web interface, labels, tooltips, reports, charts, exported fil
 
 Chinese can be used for project discussion, but the delivered product must remain English-first.
 
+## SI Unit Rule
+
+TowerFlow must use SI units for all calculations, schemas, product interfaces, reports, charts, exported files, examples, and engineering summaries.
+
+Mandatory product and calculation units:
+
+- Length: m or mm as appropriate.
+- Area: m2 or mm2 as appropriate.
+- Force: N or kN.
+- Moment: kN.m or N.mm as appropriate.
+- Stress and pressure: MPa, kPa, or Pa as appropriate.
+- Mass: kg.
+- Density: kg/m3.
+- Wind speed: m/s.
+- Angles: degrees unless radians are explicitly required by a calculation routine.
+
+Source documents may use imperial or other non-SI units. Those original values may be preserved only as source metadata or reference notes. They must be converted to SI before entering TowerFlow calculation inputs, result JSON, UI labels, charts, or reports.
+
 ## Product Positioning
 
 TowerFlow is a lightweight web-based engineering tool for Australian communication and utility towers.
@@ -181,6 +199,7 @@ Set the technical and engineering foundation before building the first prototype
 - Establish engineering documentation standards:
   - Inputs.
   - Units.
+  - SI conversion notes for any non-SI source data.
   - Assumptions.
   - Code references.
   - Software reference notes.
@@ -648,6 +667,7 @@ Each release should include:
 - Versioned JSON or API schema.
 - English documentation for product-facing material.
 - Reference list for any engineering calculation used in the release.
+- SI unit check for all product-facing and calculation-facing outputs.
 - Interface check against the project commercial software layout, typography, colour, scanability, and mobile layout rules.
 
 ## Product North Star

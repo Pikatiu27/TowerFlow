@@ -9,7 +9,7 @@
 - `schemaVersion`: version of the static result contract.
 - `caseId`: unique result case identifier.
 - `title`: human-readable case title.
-- `units`: length, force, and stress units.
+- `units`: SI units used by the result file.
 - `analysisBoundary`: engineering scope and limitations.
 - `nodes`: node coordinates and solved displacements.
 - `members`: member connectivity, properties, axial force, and force state.
@@ -30,3 +30,7 @@
 - Compression: blue.
 - Low force: neutral grey.
 - Colour intensity increases with absolute axial force magnitude.
+
+## Unit Convention
+
+All result JSON values must use SI units. Original non-SI source dimensions may be retained only in metadata fields such as `towerReference.sourceOriginalUnits`.

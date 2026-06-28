@@ -15,11 +15,17 @@ DEMO_TOWER = {
     "id": "rohn-25g-inspired-demo",
     "name": "ROHN 25G-inspired triangular mast demo",
     "manufacturerReference": "ROHN 25G 10 ft tower section product family",
+    "unitPolicy": "TowerFlow calculation and product values are SI. Original imperial source values are retained only in reference metadata.",
     "geometryBasis": [
         "Triangular lattice mast inspired by public ROHN 25G product information.",
-        "Nominal section height: 10 ft converted to 3.048 m.",
-        "Nominal face width: 12.5 in converted to 0.3175 m.",
-        "Five levels are used to create a four-section 40 ft / 12.192 m demo mast.",
+        "Nominal section height: 3.048 m.",
+        "Nominal face width: 0.3175 m.",
+        "Five levels are used to create a four-section 12.192 m demo mast.",
+    ],
+    "sourceOriginalUnits": [
+        "Original source section height reference: 10 ft.",
+        "Original source face width reference: 12.5 in.",
+        "Original source total demo height reference: 40 ft.",
     ],
     "sourceReferences": [
         {
@@ -284,8 +290,10 @@ def main():
         "towerReference": DEMO_TOWER,
         "units": {
             "length": "m",
+            "displacement": "m",
             "force": "kN",
             "stress": "kPa",
+            "area": "m2",
         },
         "analysisBoundary": [
             "3D pin-jointed truss model",

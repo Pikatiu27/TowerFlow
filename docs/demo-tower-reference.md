@@ -14,11 +14,17 @@ ROHN 25G product-family information is publicly visible through official ROHN pa
 
 ## Geometry Basis
 
-- Nominal section height: 10 ft = 3.048 m.
-- Nominal triangular face width: 12.5 in = 0.3175 m.
-- Demo height: four sections = 40 ft = 12.192 m.
+- Nominal section height: 3.048 m.
+- Nominal triangular face width: 0.3175 m.
+- Demo height: four sections = 12.192 m.
 - Tower type: triangular lattice mast.
 - Model idealisation: 3D pin-jointed truss.
+
+Original source values were in imperial units and are retained only as reference metadata:
+
+- Section height source note: 10 ft.
+- Face width source note: 12.5 in.
+- Demo height source note: 40 ft.
 
 ## Source Reference
 

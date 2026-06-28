@@ -10,6 +10,8 @@ The purpose is to collect traceable geometry and product-family references. It i
 - Do not copy restricted drawings or proprietary schedules into this repository.
 - Keep derived TowerFlow seed models generic unless manufacturer permission and project-specific documents are available.
 - Record when dimensions are public, partial, or not publicly available.
+- TowerFlow calculation inputs, product outputs, schemas, and seed-model numeric fields must use SI units.
+- Non-SI values from source documents may be retained only as source notes.
 - Product-facing TowerFlow outputs remain in English.
 
 ## Summary Table
@@ -46,6 +48,8 @@ Public product families visible on the ROHN site:
 
 Source: ROHN 25GSS assembly drawing.
 
+The table below records source notes. TowerFlow seed data must store converted SI values.
+
 25GSS self-supporting tower assembly range:
 
 | Part / Model | Public Height Information | Public Notes |
@@ -70,6 +74,8 @@ Source: ROHN 25GSS assembly drawing, material notes.
 | Fasteners | 120 ksi minimum tensile strength |
 
 Source: ROHN G-Series design/foundation drawing.
+
+The table below records source notes. TowerFlow seed data must store converted SI values.
 
 G-Series mat foundation public values:
 
@@ -299,7 +305,8 @@ Suggested metadata:
   "geometry_status": "partial_public_reference",
   "design_standard_reference": "ANSI/TIA-222-G, not Australian design",
   "tower_type": "self_supporting_triangular_lattice",
-  "height_options_ft": [10, 20, 30, 35, 40],
+  "height_options_m": [3.048, 6.096, 9.144, 10.668, 12.192],
+  "source_height_notes": ["10 ft", "20 ft", "30 ft", "35 ft", "40 ft"],
   "primary_use": "TowerFlow data-schema and visualisation seed",
   "not_for_certification": true
 }

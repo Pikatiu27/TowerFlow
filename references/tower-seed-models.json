@@ -3,6 +3,8 @@
   "status": "reference_seed_data_not_for_design",
   "unit_policy": {
     "internal_units": "SI",
+    "product_output_units": "SI only",
+    "calculation_input_units": "SI only",
     "source_units_preserved_in_metadata": true
   },
   "seeds": [
@@ -22,41 +24,50 @@
       "height_options": [
         {
           "model": "25SS010",
-          "height_ft": 10
+          "height_m": 3.048,
+          "source_height_note": "10 ft"
         },
         {
           "model": "25SS020",
-          "height_ft": 20
+          "height_m": 6.096,
+          "source_height_note": "20 ft"
         },
         {
           "model": "25SS030",
-          "height_ft": 30
+          "height_m": 9.144,
+          "source_height_note": "30 ft"
         },
         {
           "model": "25SS035",
-          "height_ft": 35
+          "height_m": 10.668,
+          "source_height_note": "35 ft"
         },
         {
           "model": "25SS040",
-          "height_ft": 40
+          "height_m": 12.192,
+          "source_height_note": "40 ft"
         }
       ],
       "public_section_lengths": [
         {
           "part": "25G standard section",
-          "length_ft": 10
+          "length_m": 3.048,
+          "source_length_note": "10 ft"
         },
         {
           "part": "25AG2 top section",
-          "length_ft": 9.75
+          "length_m": 2.972,
+          "source_length_note": "9.75 ft"
         },
         {
           "part": "25G5 kit",
-          "length_ft": 4.92
+          "length_m": 1.5,
+          "source_length_note": "4.92 ft"
         },
         {
           "part": "SB25G5 short base assembly",
-          "length_ft": 5
+          "length_m": 1.524,
+          "source_length_note": "5 ft"
         }
       ],
       "public_member_notes": [
@@ -76,31 +87,35 @@
       "foundation_public_values": [
         {
           "tower_number": "25G",
-          "overturning_moment_ft_lb": 7000,
-          "total_shear_lb": 510,
-          "mat_width_ft": 4.0,
-          "concrete_volume_cu_yd": 2.4
+          "overturning_moment_kN_m": 9.491,
+          "total_shear_kN": 2.269,
+          "mat_width_m": 1.219,
+          "concrete_volume_m3": 1.835,
+          "source_values_note": "7,000 ft-lb; 510 lb; 4 ft 0 in; 2.4 cu yd"
         },
         {
           "tower_number": "45G",
-          "overturning_moment_ft_lb": 12300,
-          "total_shear_lb": 1000,
-          "mat_width_ft": 5.25,
-          "concrete_volume_cu_yd": 4.1
+          "overturning_moment_kN_m": 16.677,
+          "total_shear_kN": 4.448,
+          "mat_width_m": 1.6,
+          "concrete_volume_m3": 3.135,
+          "source_values_note": "12,300 ft-lb; 1,000 lb; 5 ft 3 in; 4.1 cu yd"
         },
         {
           "tower_number": "55G",
-          "overturning_moment_ft_lb": 22100,
-          "total_shear_lb": 1600,
-          "mat_width_ft": 6.0,
-          "concrete_volume_cu_yd": 5.3
+          "overturning_moment_kN_m": 29.963,
+          "total_shear_kN": 7.117,
+          "mat_width_m": 1.829,
+          "concrete_volume_m3": 4.052,
+          "source_values_note": "22,100 ft-lb; 1,600 lb; 6 ft 0 in; 5.3 cu yd"
         },
         {
           "tower_number": "65G / 45GSR",
-          "overturning_moment_ft_lb": 53100,
-          "total_shear_lb": 3500,
-          "mat_width_ft": 7.75,
-          "concrete_volume_cu_yd": 8.9
+          "overturning_moment_kN_m": 71.994,
+          "total_shear_kN": 15.569,
+          "mat_width_m": 2.362,
+          "concrete_volume_m3": 6.805,
+          "source_values_note": "53,100 ft-lb; 3,500 lb; 7 ft 9 in; 8.9 cu yd"
         }
       ],
       "towerflow_use": "data-schema, visualisation, and solver-verification seed only",

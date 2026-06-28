@@ -12,6 +12,7 @@ This prototype is an engineering visualisation proof of concept. It demonstrates
 - Supports: three base nodes restrained in global X, Y, and Z translation.
 - Loading: one simplified horizontal wind load case in the global X direction.
 - Result focus: member axial force and support reaction visualisation.
+- Units: SI only for calculation and product-facing values.
 
 ## Exclusions
 
