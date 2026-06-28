@@ -59,10 +59,12 @@ const grid = new THREE.GridHelper(4, 8, 0x8fa0ae, 0xd5dee7);
 scene.add(grid);
 
 function nodeVector(node) {
+  // Engineering data is Z-up; Three.js renders Y-up. Keep this mapping local to the viewer.
   return new THREE.Vector3(node.x, node.z, -node.y);
 }
 
 function loadVector(load) {
+  // Force components follow the same engineering-to-rendering adapter as node coordinates.
   return new THREE.Vector3(load.fxKN ?? 0, load.fzKN ?? 0, -(load.fyKN ?? 0));
 }
 

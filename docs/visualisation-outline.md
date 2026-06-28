@@ -337,11 +337,13 @@ Three.js mapping:
 
 ```text
 Engineering X -> Three.js X
-Engineering Y -> Three.js Z
+Engineering Y -> Three.js -Z
 Engineering Z -> Three.js Y
 ```
 
-The engineering JSON schema must remain `X-Y-Z` with `Z` vertical. The viewer adapter handles the Three.js coordinate conversion.
+The engineering JSON schema must remain `X-Y-Z` with `Z` vertical. The viewer adapter handles the Three.js coordinate conversion. Viewer labels, screenshots, and the axis triad must show engineering axes, not Three.js internal axes.
+
+Current Phase 1 node fields are `x`, `y`, and `z`, with metres defined by `units.length = "m"`. Load components `fxKN`, `fyKN`, and `fzKN` align with global `X`, `Y`, and `Z`.
 
 The viewer state should always know:
 

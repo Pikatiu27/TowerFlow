@@ -24,6 +24,15 @@
 - Negative axial force means compression.
 - Near-zero force is labelled `low force`.
 
+## Coordinate Convention
+
+- Node fields `x`, `y`, and `z` are engineering coordinates in metres because `units.length` is `m`.
+- Global `X` and `Y` are horizontal plan axes.
+- Global `Z` is vertical, positive upward.
+- The default origin is the tower base centreline at the foundation or ground reference plane.
+- Load components `fxKN`, `fyKN`, and `fzKN` align with global `X`, `Y`, and `Z`.
+- The web viewer may remap axes internally for Three.js, but JSON values remain engineering coordinates.
+
 ## Viewer Colour Convention
 
 - Tension: red.

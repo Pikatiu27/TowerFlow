@@ -26,6 +26,39 @@ Mandatory product and calculation units:
 
 Source documents may use imperial or other non-SI units. Those original values may be preserved only as source metadata or reference notes. They must be converted to SI before entering TowerFlow calculation inputs, result JSON, UI labels, charts, or reports.
 
+## Coordinate Rule
+
+TowerFlow must use one engineering coordinate convention across calculations, result schemas, user interfaces, charts, reports, screenshots, and exported files.
+
+Mandatory coordinate convention:
+
+- Use a right-handed global Cartesian coordinate system.
+- Global `X`: horizontal project axis, default wind direction `0 deg` and positive wind load direction for the Phase 1 demo.
+- Global `Y`: horizontal transverse project axis.
+- Global `Z`: vertical axis, positive upward.
+- Default origin: tower base centreline at the foundation or ground reference plane.
+- Plan geometry is measured in the global `X-Y` plane.
+- Height is measured in positive global `Z`.
+
+Schema rule:
+
+- Current Phase 1 node coordinates use `x`, `y`, and `z` fields, with metres defined by `units.length = "m"`.
+- Future schemas may use explicit suffixes such as `x_m`, `y_m`, and `z_m`, but they must not change the engineering meaning of the axes.
+- Loads use engineering components `fxKN`, `fyKN`, and `fzKN` aligned with global `X`, `Y`, and `Z`.
+- Viewer, report, and screenshot labels must show engineering axes, not internal rendering axes.
+
+Rendering adapter rule:
+
+- Three.js uses `Y` as its vertical render axis, while TowerFlow engineering data uses `Z` as vertical.
+- The viewer adapter is the only layer allowed to remap axes for rendering.
+- The current right-handed rendering adapter is:
+
+```text
+Engineering X -> Three.js X
+Engineering Y -> Three.js -Z
+Engineering Z -> Three.js Y
+```
+
 ## Product Positioning
 
 TowerFlow is a lightweight web-based engineering tool for Australian communication and utility towers.
@@ -112,7 +145,7 @@ Use this hierarchy when updating the project outline:
 
 - `TOWERFLOW_ROADMAP.md` is the controlling product outline. It defines product rules, phase scope, deliverables, exit criteria, and release definition of done.
 - `docs/visualisation-outline.md` is the detailed display and view-state guide. It defines how accepted visual features should behave, but it does not expand phase scope by itself.
-- `docs/units-policy.md` defines the SI unit contract for calculations, schemas, product interfaces, reports, examples, and exports.
+- `docs/units-policy.md` defines the SI unit contract and base coordinate contract for calculations, schemas, product interfaces, reports, examples, and exports.
 - `references/software-calculation-references.md` records calculation and solver references.
 - `references/manufacturer-tower-references.md` and `references/tower-seed-models.json` record manufacturer and seed-model references.
 
@@ -151,7 +184,7 @@ Priority rules:
 
 ## Coordinate and View Convention
 
-TowerFlow must use one explicit coordinate convention across calculation data, JSON files, 3D rendering, screenshots, and reports.
+This section expands the project-wide Coordinate Rule for camera presets, local member axes, and viewer behaviour.
 
 ### Global Coordinate System
 
@@ -173,16 +206,18 @@ Wind direction convention:
 - `0 deg` is aligned with the positive `X` direction unless a project-specific convention is documented.
 - Positive angle rotation is counter-clockwise in plan when viewed from above.
 
-JSON coordinate rule:
+Current Phase 1 JSON coordinate rule:
 
 ```json
 {
   "id": "N-001",
-  "x_m": 0.0,
-  "y_m": 0.0,
-  "z_m": 0.0
+  "x": 0.0,
+  "y": 0.0,
+  "z": 0.0
 }
 ```
+
+The `units.length` field defines these values as metres. Do not reinterpret these fields as render coordinates.
 
 ### Local Member Coordinate System
 
@@ -208,13 +243,15 @@ TowerFlow rule:
 - Convert to rendering coordinates inside the viewer adapter only.
 - Do not change the engineering JSON schema to match Three.js camera conventions.
 
-Recommended viewer mapping:
+Current viewer mapping:
 
 ```text
 Engineering X -> Three.js X
-Engineering Y -> Three.js Z
+Engineering Y -> Three.js -Z
 Engineering Z -> Three.js Y
 ```
+
+This mapping preserves the engineering right-handed `X-Y-Z` convention while using Three.js `Y` as vertical.
 
 ### Standard View Names
 
