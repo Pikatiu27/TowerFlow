@@ -17,6 +17,7 @@ The purpose is to collect traceable geometry and product-family references. It i
 | Manufacturer / Supplier | Public Source Quality | Useful Tower / Pole Type | Public Dimensions Found | TowerFlow Use |
 | --- | --- | --- | --- | --- |
 | ROHN Products | Strong | Self-supporting lattice towers, guyed towers, steel poles | Yes, partial standard tower and foundation dimensions | Good seed reference for generic triangular lattice tower examples |
+| Site Pro 1 | Limited from automated access | Wireless site hardware, antenna mounts, platforms, tower accessories | No verified tower geometry dimensions captured in current search | Useful accessory and mount reference, not a primary tower geometry source |
 | Civilmart / Rocla | Moderate | Duraspun concrete communication and power poles | Public product notes, no full public dimension table found | Good reference for future monopole / concrete pole workflow |
 | LeBlanc / LeBlanc & Royal | Weak in current public search | Broadcast and guyed towers | No manufacturer catalogue found in current search | Keep as historical/manufacturer lead only |
 | Transfield / Broadspectrum / Ventia | Weak for manufacturing | Infrastructure and telecommunications services | No tower manufacturing dimension catalogue found | Treat as contractor / asset-services reference, not tower product source |
@@ -111,6 +112,75 @@ Important limitations:
 - ROHN standards are ANSI/TIA-based, not AS/NZS 1170.2 or AS 4100.
 - Face width, full bracing geometry, joint details, and site-specific capacity must be verified from the original drawings and engineering data.
 - The public notes are not enough for Australian design certification.
+
+## Site Pro 1
+
+Official links:
+
+- Homepage: https://www.sitepro1.com/
+- Robots file checked: https://www.sitepro1.com/robots.txt
+
+Access note:
+
+- The official homepage is protected by a browser challenge in the current automated research environment.
+- The public `robots.txt` file allows crawling, but direct automated access to product and catalogue pages returned access challenges or HTTP 403 responses during this research pass.
+- Because of that, this reference entry intentionally avoids unverified dimensions or part-specific claims.
+
+Public source status:
+
+| Data Type | Publicly Verified in Current Research? | Notes |
+| --- | --- | --- |
+| Official company/product site | Yes | Homepage is reachable but protected by browser challenge |
+| Tower geometry catalogue | Not verified | No reliable public tower geometry schedule captured |
+| Monopole/lattice tower dimensions | Not verified | Do not use for TowerFlow geometry seeds yet |
+| Mount/accessory dimensions | Not verified | Likely useful if accessed manually, but not captured in this pass |
+| Structural design basis | Not verified | No calculation manual captured |
+
+TowerFlow relevance:
+
+- Site Pro 1 appears more relevant to wireless site hardware, antenna mounting, and tower accessories than to primary tower geometry seed models.
+- It may become useful for modelling attached equipment, antenna mounts, sector frames, platforms, cable supports, and appurtenance loads.
+- It should not be treated as a primary source for tower leg geometry, bracing geometry, or foundation design unless official drawings or catalogue pages are obtained.
+
+Recommended use:
+
+- Keep Site Pro 1 as a future reference for appurtenance and mount libraries.
+- Add a future schema category for `mounting_hardware` separate from `tower_geometry`.
+- If manual browser access is available, collect official product pages or PDF cutsheets for:
+  - Antenna pipe mounts.
+  - Sector frames.
+  - Monopole ring mounts.
+  - Platforms.
+  - Standoff mounts.
+  - Cable support hardware.
+- Store each item with dimensions, weight, projected area, source URL, and source date before using it in load calculations.
+
+Recommended TowerFlow schema fields for future Site Pro 1-style accessories:
+
+```json
+{
+  "accessory_id": "string",
+  "manufacturer": "Site Pro 1",
+  "product_type": "antenna_mount_or_platform",
+  "source_url": "string",
+  "source_date": "YYYY-MM-DD",
+  "geometry_status": "verified_public_cut_sheet_required",
+  "dimensions": {
+    "height_m": null,
+    "width_m": null,
+    "depth_m": null
+  },
+  "weight_kg": null,
+  "projected_area_m2": null,
+  "mounting_height_m": null,
+  "not_for_certification": true
+}
+```
+
+Important limitations:
+
+- No Site Pro 1 item should be used in TowerFlow calculations until its dimensions, weight, and projected area are verified from an official cut sheet or project drawing.
+- Do not mix accessory loads into tower geometry seeds without clear source metadata.
 
 ## Civilmart / Rocla
 
@@ -260,4 +330,3 @@ Suggested metadata:
 - Check whether COMMPole can export a non-confidential pole schedule for reference.
 - Look for Australian standard detail drawings for triangular lattice towers used in mobile base station deployments.
 - Add any found source into this file before using it in a TowerFlow seed model.
-
