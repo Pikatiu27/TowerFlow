@@ -1,0 +1,149 @@
+{
+  "version": "0.1.0",
+  "status": "reference_seed_data_not_for_design",
+  "unit_policy": {
+    "internal_units": "SI",
+    "source_units_preserved_in_metadata": true
+  },
+  "seeds": [
+    {
+      "seed_id": "triangular_lattice_rohn_style_25g_public_reference",
+      "manufacturer_reference": "ROHN Products",
+      "source_type": "public manufacturer drawings",
+      "source_links": [
+        "https://rohnnet.com/product-catalog/",
+        "https://rohnnet.com/self-supporting-towers-g-series/",
+        "https://rohnnet.com/wp-content/uploads/2025/08/Assembly-25GSS.pdf",
+        "https://rohnnet.com/wp-content/uploads/2025/08/Design-REV-G.pdf"
+      ],
+      "geometry_status": "partial_public_reference",
+      "design_standard_reference": "ANSI/TIA-222-G public manufacturer drawing context; not AS/NZS 1170.2 or AS 4100",
+      "tower_type": "self_supporting_triangular_lattice",
+      "height_options": [
+        {
+          "model": "25SS010",
+          "height_ft": 10
+        },
+        {
+          "model": "25SS020",
+          "height_ft": 20
+        },
+        {
+          "model": "25SS030",
+          "height_ft": 30
+        },
+        {
+          "model": "25SS035",
+          "height_ft": 35
+        },
+        {
+          "model": "25SS040",
+          "height_ft": 40
+        }
+      ],
+      "public_section_lengths": [
+        {
+          "part": "25G standard section",
+          "length_ft": 10
+        },
+        {
+          "part": "25AG2 top section",
+          "length_ft": 9.75
+        },
+        {
+          "part": "25G5 kit",
+          "length_ft": 4.92
+        },
+        {
+          "part": "SB25G5 short base assembly",
+          "length_ft": 5
+        }
+      ],
+      "public_member_notes": [
+        {
+          "component": "leg",
+          "source_note": "1-1/4 in diameter x 16 ga, 50 ksi minimum yield strength"
+        },
+        {
+          "component": "brace",
+          "source_note": "5/16 in solid rod, 36 ksi minimum yield strength"
+        },
+        {
+          "component": "fasteners",
+          "source_note": "120 ksi minimum tensile strength"
+        }
+      ],
+      "foundation_public_values": [
+        {
+          "tower_number": "25G",
+          "overturning_moment_ft_lb": 7000,
+          "total_shear_lb": 510,
+          "mat_width_ft": 4.0,
+          "concrete_volume_cu_yd": 2.4
+        },
+        {
+          "tower_number": "45G",
+          "overturning_moment_ft_lb": 12300,
+          "total_shear_lb": 1000,
+          "mat_width_ft": 5.25,
+          "concrete_volume_cu_yd": 4.1
+        },
+        {
+          "tower_number": "55G",
+          "overturning_moment_ft_lb": 22100,
+          "total_shear_lb": 1600,
+          "mat_width_ft": 6.0,
+          "concrete_volume_cu_yd": 5.3
+        },
+        {
+          "tower_number": "65G / 45GSR",
+          "overturning_moment_ft_lb": 53100,
+          "total_shear_lb": 3500,
+          "mat_width_ft": 7.75,
+          "concrete_volume_cu_yd": 8.9
+        }
+      ],
+      "towerflow_use": "data-schema, visualisation, and solver-verification seed only",
+      "not_for_certification": true,
+      "limitations": [
+        "Not an Australian Standards design seed.",
+        "Full geometry and joint details must be checked from original drawings.",
+        "Do not represent this as an exact ROHN product clone in TowerFlow UI."
+      ]
+    },
+    {
+      "seed_id": "concrete_communication_pole_au_placeholder",
+      "manufacturer_reference": "Civilmart / Rocla",
+      "source_type": "public product description",
+      "source_links": [
+        "https://www.rocla.com.au/",
+        "https://civilmart.com.au/products/electrical-communications/poles/",
+        "https://civilmart.com.au/product/communication-poles/",
+        "https://commpole.civilmart.com.au/"
+      ],
+      "geometry_status": "dimension_schedule_not_found",
+      "tower_type": "concrete_monopole",
+      "public_notes": [
+        "Duraspun concrete communication poles are hollow steel-reinforced concrete poles.",
+        "Public product page describes antenna communication networks, mobile phone base stations, and wireless network support applications.",
+        "COMMPole selection software is publicly referenced for selecting communication poles."
+      ],
+      "fields_to_obtain_before_modelling": [
+        "pole_height",
+        "base_diameter",
+        "tip_diameter",
+        "hollow_core_diameter",
+        "wall_thickness",
+        "reinforcement_or_prestress_notes",
+        "foundation_type",
+        "antenna_mounting_heights"
+      ],
+      "towerflow_use": "future concrete-pole schema placeholder only",
+      "not_for_certification": true,
+      "limitations": [
+        "No public dimension table found in current research.",
+        "Do not create a dimensioned model until public schedule, COMMPole output, or project-specific drawing is available."
+      ]
+    }
+  ]
+}
