@@ -83,7 +83,7 @@ button {
 
 .top-bar > div {
   min-width: 0;
-  max-width: 590px;
+  max-width: 470px;
   border-left: 3px solid var(--accent);
   background: rgba(255, 255, 255, 0.76);
   padding: 12px 14px;
@@ -97,10 +97,37 @@ button {
   white-space: nowrap;
 }
 
+.view-toolbar {
+  position: absolute;
+  top: 104px;
+  left: 16px;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.view-toolbar button {
+  min-height: 34px;
+  border-color: rgba(95, 107, 122, 0.32);
+  background: rgba(255, 255, 255, 0.84);
+  color: #263242;
+  font-size: 0.76rem;
+  padding: 0 11px;
+  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.06);
+}
+
+.view-toolbar button.is-active {
+  border-color: rgba(0, 166, 178, 0.7);
+  background: rgba(0, 166, 178, 0.1);
+  color: var(--accent-strong);
+}
+
 .watermark {
   position: absolute;
   right: 18px;
-  bottom: 18px;
+  top: 104px;
   z-index: 2;
   border: 1px solid rgba(0, 166, 178, 0.32);
   border-radius: 6px;
@@ -113,6 +140,82 @@ button {
   pointer-events: none;
   text-transform: lowercase;
   box-shadow: 0 10px 28px rgba(17, 24, 39, 0.08);
+}
+
+.axis-gizmo {
+  position: absolute;
+  right: 18px;
+  top: 150px;
+  z-index: 2;
+  width: 92px;
+  height: 92px;
+  border: 1px solid rgba(174, 186, 199, 0.62);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: 0 10px 28px rgba(17, 24, 39, 0.08);
+  pointer-events: none;
+}
+
+.grid-label {
+  position: absolute;
+  right: 18px;
+  top: 248px;
+  z-index: 2;
+  border: 1px solid rgba(174, 186, 199, 0.62);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 760;
+  padding: 7px 10px;
+  pointer-events: none;
+  box-shadow: 0 10px 28px rgba(17, 24, 39, 0.08);
+}
+
+.axis-gizmo svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.axis-line {
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.axis-x {
+  stroke: #d73d32;
+}
+
+.axis-y {
+  stroke: #43a047;
+}
+
+.axis-z {
+  stroke: #007fbd;
+}
+
+.axis-origin {
+  fill: #111827;
+}
+
+.axis-label {
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.axis-x-text {
+  fill: #d73d32;
+}
+
+.axis-y-text {
+  fill: #43a047;
+}
+
+.axis-z-text {
+  fill: #007fbd;
 }
 
 .view-context,
@@ -221,9 +324,9 @@ h2 {
 }
 
 h1 {
-  max-width: 560px;
+  max-width: 440px;
   color: var(--ink);
-  font-size: clamp(1.38rem, 2.35vw, 2.25rem);
+  font-size: clamp(1.24rem, 1.75vw, 1.72rem);
   font-weight: 820;
 }
 
@@ -358,10 +461,34 @@ dd {
     font-size: 1.18rem;
   }
 
+  .view-toolbar {
+    top: 92px;
+    left: 12px;
+    right: 12px;
+    gap: 6px;
+  }
+
+  .view-toolbar button {
+    min-height: 32px;
+    font-size: 0.72rem;
+    padding: 0 9px;
+  }
+
   .watermark {
     right: 12px;
-    bottom: 88px;
+    top: 134px;
     font-size: 0.78rem;
+  }
+
+  .grid-label {
+    display: none;
+  }
+
+  .axis-gizmo {
+    right: 12px;
+    top: 174px;
+    width: 74px;
+    height: 74px;
   }
 
   .view-context {
@@ -384,10 +511,7 @@ dd {
   }
 
   .legend-panel {
-    left: 12px;
-    bottom: 144px;
-    width: 220px;
-    padding: 10px;
+    display: none;
   }
 
   .info-panel {

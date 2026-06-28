@@ -149,6 +149,113 @@ Priority rules:
 - Treat custom shaders and animated force-flow effects as enhancements, not core engineering logic.
 - Use OpenSees, CalculiX, Code_Aster, or other heavier solvers only after the lightweight workflow is trusted.
 
+## Coordinate and View Convention
+
+TowerFlow must use one explicit coordinate convention across calculation data, JSON files, 3D rendering, screenshots, and reports.
+
+### Global Coordinate System
+
+Use a right-handed Cartesian coordinate system:
+
+- `X`: East-West horizontal axis.
+- `Y`: North-South horizontal axis.
+- `Z`: vertical axis, positive upward.
+
+Default origin:
+
+- `X = 0`, `Y = 0`, `Z = 0` is at the tower base centreline on the foundation or ground reference plane.
+- Tower height is measured in the positive `Z` direction.
+- Plan position is measured in the `X-Y` plane.
+
+Wind direction convention:
+
+- Wind direction is measured in plan around the `Z` axis.
+- `0 deg` is aligned with the positive `X` direction unless a project-specific convention is documented.
+- Positive angle rotation is counter-clockwise in plan when viewed from above.
+
+JSON coordinate rule:
+
+```json
+{
+  "id": "N-001",
+  "x_m": 0.0,
+  "y_m": 0.0,
+  "z_m": 0.0
+}
+```
+
+### Local Member Coordinate System
+
+Each member must have a local coordinate definition:
+
+- Local `x`: along the member from `start_node` to `end_node`.
+- Local `y` and local `z`: secondary axes reserved for frame orientation, section orientation, and local result display.
+
+For the Phase 1 truss workflow:
+
+- Axial force is the primary member result.
+- Positive axial force means tension.
+- Negative axial force means compression.
+- Bending, shear, and torsion local axes are out of scope until frame elements are introduced.
+
+### 3D Rendering Coordinate Mapping
+
+Three.js uses `Y` as its default vertical axis, while TowerFlow engineering data uses `Z` as vertical.
+
+TowerFlow rule:
+
+- Store engineering data as `X-Y-Z` with `Z` vertical.
+- Convert to rendering coordinates inside the viewer adapter only.
+- Do not change the engineering JSON schema to match Three.js camera conventions.
+
+Recommended viewer mapping:
+
+```text
+Engineering X -> Three.js X
+Engineering Y -> Three.js Z
+Engineering Z -> Three.js Y
+```
+
+### Standard View Names
+
+Use engineering view names consistently:
+
+| View Name | Camera Intent | Engineering Meaning |
+| --- | --- | --- |
+| Isometric | 3D angled view | General spatial review |
+| Front Elevation | Looking along global `-Y` or project front direction | Tower elevation in the `X-Z` plane |
+| Side Elevation | Looking along global `-X` or project side direction | Tower elevation in the `Y-Z` plane |
+| Plan | Looking down global `-Z` | Tower footprint in the `X-Y` plane |
+| Top-down | Same as plan unless UI needs a separate camera preset | Plan review |
+| Base Detail | Zoomed to foundation and lower panels | Anchor and base load path review |
+| Selected Object | Framed around selected member, node, equipment, or foundation component | Detailed inspection |
+| Reset View | Default isometric view | Return to known state |
+
+### View Display Rules
+
+- Every 3D view must show a small axis triad.
+- The axis triad must label `X`, `Y`, and `Z`.
+- A height reference or grid may be shown, but it must not obscure members.
+- Front, side, and plan views should use orthographic projection where possible.
+- Isometric and interactive inspection may use perspective projection.
+- View changes must not change active result type, load case, scenario, units, or filters.
+- Saved report views must store camera position, target, projection type, active result context, and legend state.
+
+### Phase 1 Minimum View Set
+
+Phase 1 must include:
+
+- Isometric view.
+- Front elevation view.
+- Side elevation view.
+- Plan view.
+- Reset view.
+- Axis triad.
+- Engineering `Z`-up data convention.
+- Viewer adapter from engineering coordinates to Three.js coordinates.
+
+Base detail, selected object framing, saved views, and orthographic/perspective switching can be added after the first static prototype is stable.
+
 The first working chain should be:
 
 ```text
@@ -206,6 +313,14 @@ Set the technical and engineering foundation before building the first prototype
   - Member forces.
   - Support reactions.
   - Utilisation results.
+- Define the project coordinate and view convention:
+  - Global `X-Y-Z` with `Z` vertical.
+  - Tower base centreline as default origin.
+  - Member local `x` from `start_node` to `end_node`.
+  - Positive axial force as tension.
+  - Negative axial force as compression.
+  - Three.js coordinate adapter isolated inside the viewer.
+  - Standard views: isometric, front elevation, side elevation, plan, and reset.
 - Establish engineering documentation standards:
   - Inputs.
   - Units.

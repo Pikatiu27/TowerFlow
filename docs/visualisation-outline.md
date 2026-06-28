@@ -317,6 +317,32 @@ This display logic is summarised from public official documentation and product 
 
 TowerFlow should handle views as explicit engineering states, not as loose camera movements.
 
+### 0. Coordinate and View Basis
+
+TowerFlow uses an engineering `Z`-up coordinate system:
+
+- Global `X`: East-West horizontal axis.
+- Global `Y`: North-South horizontal axis.
+- Global `Z`: vertical axis, positive upward.
+- Default origin: tower base centreline at the foundation or ground reference plane.
+
+Member local axis convention:
+
+- Local `x`: from `start_node` to `end_node`.
+- Positive axial force: tension.
+- Negative axial force: compression.
+- Local `y` and `z`: reserved for future frame orientation and section orientation.
+
+Three.js mapping:
+
+```text
+Engineering X -> Three.js X
+Engineering Y -> Three.js Z
+Engineering Z -> Three.js Y
+```
+
+The engineering JSON schema must remain `X-Y-Z` with `Z` vertical. The viewer adapter handles the Three.js coordinate conversion.
+
 The viewer state should always know:
 
 ```text

@@ -3,6 +3,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const viewer = document.querySelector("#viewer");
 const resetButton = document.querySelector("#reset-view");
+const viewButtons = Array.from(document.querySelectorAll("[data-view]"));
 const labels = {
   caseTitle: document.querySelector("#case-title"),
   nodeCount: document.querySelector("#node-count"),
@@ -34,8 +35,13 @@ controls.target.set(0, 0, 7);
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const memberObjects = [];
+const nodeObjects = [];
 let selectedObject = null;
 let towerData = null;
+let modelBounds = null;
+let modelCenter = new THREE.Vector3(0, 6, 0);
+let modelRadius = 8;
+let activeView = "iso";
 const MEMBER_RADIUS_M = 0.018;
 
 scene.add(new THREE.HemisphereLight(0xffffff, 0x9fb0bd, 2.75));
@@ -43,8 +49,7 @@ const sun = new THREE.DirectionalLight(0xffffff, 2.2);
 sun.position.set(8, -10, 18);
 scene.add(sun);
 
-const grid = new THREE.GridHelper(7, 7, 0x8fa0ae, 0xd5dee7);
-grid.rotation.x = Math.PI / 2;
+const grid = new THREE.GridHelper(4, 8, 0x8fa0ae, 0xd5dee7);
 scene.add(grid);
 
 function nodeVector(node) {
@@ -82,6 +87,7 @@ function addNodeMarker(position) {
   const marker = new THREE.Mesh(geometry, material);
   marker.position.copy(position);
   scene.add(marker);
+  nodeObjects.push(marker);
 }
 
 function clearTower() {
@@ -90,7 +96,65 @@ function clearTower() {
     object.geometry.dispose();
     object.material.dispose();
   }
+  for (const object of nodeObjects) {
+    scene.remove(object);
+    object.geometry.dispose();
+    object.material.dispose();
+  }
   memberObjects.length = 0;
+  nodeObjects.length = 0;
+}
+
+function updateModelBounds() {
+  modelBounds = new THREE.Box3();
+  for (const object of [...memberObjects, ...nodeObjects]) {
+    modelBounds.expandByObject(object);
+  }
+  if (modelBounds.isEmpty()) {
+    modelCenter.set(0, 6, 0);
+    modelRadius = 8;
+    return;
+  }
+  modelBounds.getCenter(modelCenter);
+  const sphere = new THREE.Sphere();
+  modelBounds.getBoundingSphere(sphere);
+  modelRadius = Math.max(sphere.radius, 1.5);
+}
+
+function setActiveViewButton(viewName) {
+  activeView = viewName === "fit" ? "iso" : viewName;
+  for (const button of viewButtons) {
+    button.classList.toggle("is-active", button.dataset.view === activeView);
+  }
+}
+
+function setCameraView(viewName) {
+  if (!modelBounds) {
+    return;
+  }
+
+  const distance = Math.max(modelRadius * 4.2, 8);
+  const target = modelCenter.clone();
+  camera.up.set(0, 1, 0);
+
+  if (viewName === "front") {
+    camera.position.set(target.x, target.y, target.z + distance);
+  } else if (viewName === "side") {
+    camera.position.set(target.x + distance, target.y, target.z);
+  } else if (viewName === "plan") {
+    camera.position.set(target.x, target.y + distance, target.z);
+    camera.up.set(0, 0, -1);
+  } else {
+    camera.position.set(target.x + distance * 0.45, target.y + distance * 0.18, target.z + distance * 0.78);
+    viewName = "iso";
+  }
+
+  camera.near = Math.max(distance / 100, 0.05);
+  camera.far = distance * 8;
+  camera.updateProjectionMatrix();
+  controls.target.copy(target);
+  controls.update();
+  setActiveViewButton(viewName);
 }
 
 function renderTower(data) {
@@ -109,6 +173,9 @@ function renderTower(data) {
     scene.add(object);
     memberObjects.push(object);
   }
+
+  updateModelBounds();
+  setCameraView(activeView);
 
   labels.caseTitle.textContent = data.title;
   const activeLoadCase = data.loadCases?.[0]?.id ?? "LC1";
@@ -165,9 +232,7 @@ function pickMember(event) {
 }
 
 function resetView() {
-  camera.position.set(2.4, 5.6, 6.8);
-  controls.target.set(0, 0, 6.2);
-  controls.update();
+  setCameraView("iso");
 }
 
 function resize() {
@@ -196,9 +261,11 @@ function animate() {
 window.addEventListener("resize", resize);
 renderer.domElement.addEventListener("pointerup", pickMember);
 resetButton.addEventListener("click", resetView);
+for (const button of viewButtons) {
+  button.addEventListener("click", () => setCameraView(button.dataset.view));
+}
 
 resize();
-resetView();
 loadData().catch((error) => {
   labels.caseTitle.textContent = "Result data failed to load";
   labels.memberInterpretation.textContent = error.message;
