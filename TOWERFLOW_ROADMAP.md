@@ -106,16 +106,26 @@ Interface style rules:
   - Text must wrap within its container.
 - Public prototypes should include a subtle `sconmyway` watermark.
 
+## Planning Document Hierarchy
+
+Use this hierarchy when updating the project outline:
+
+- `TOWERFLOW_ROADMAP.md` is the controlling product outline. It defines product rules, phase scope, deliverables, exit criteria, and release definition of done.
+- `docs/visualisation-outline.md` is the detailed display and view-state guide. It defines how accepted visual features should behave, but it does not expand phase scope by itself.
+- `docs/units-policy.md` defines the SI unit contract for calculations, schemas, product interfaces, reports, examples, and exports.
+- `references/software-calculation-references.md` records calculation and solver references.
+- `references/manufacturer-tower-references.md` and `references/tower-seed-models.json` record manufacturer and seed-model references.
+
+Update rules:
+
+- If a change affects product scope, phase delivery, or release gates, update this roadmap.
+- If a change affects view modes, legends, selection, filters, saved views, or result display behaviour, update `docs/visualisation-outline.md`.
+- If a change affects source material, seed geometry, or software/manual references, update the relevant file under `references/`.
+- Reference files do not create implementation requirements until the roadmap or a phase task adopts them.
+
 ## Technical Direction
 
 The proposed technical direction is suitable, but the order of adoption matters.
-
-Calculation and solver references are tracked in `references/software-calculation-references.md`.
-
-Public manufacturer and tower seed references are tracked in:
-
-- `references/manufacturer-tower-references.md`
-- `references/tower-seed-models.json`
 
 Recommended stack:
 
@@ -265,6 +275,12 @@ Prove the full chain from structural analysis data to interactive 3D web visuali
 - Add orbit controls, lighting, camera framing, and basic scene reset.
 - Add member selection by click or hover.
 - Use clear engineering graphics before advanced shader effects.
+- Follow only the Phase 1 subset of `docs/visualisation-outline.md`:
+  - Tower geometry view.
+  - Force flow view.
+  - Member selection and detail panel.
+  - Basic result context and legend.
+  - Missing-data handling for unavailable checks.
 - Apply the project commercial software interface direction:
   - Predictable model work area.
   - Compact result and inspection panel.
@@ -669,6 +685,7 @@ Each release should include:
 - Reference list for any engineering calculation used in the release.
 - SI unit check for all product-facing and calculation-facing outputs.
 - Interface check against the project commercial software layout, typography, colour, scanability, and mobile layout rules.
+- Visualisation check against `docs/visualisation-outline.md` for any new or changed view mode.
 
 ## Product North Star
 
