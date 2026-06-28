@@ -26,9 +26,70 @@
           </div>
           <button id="reset-view" type="button">Reset View</button>
         </div>
+        <div class="view-context" aria-label="Active result context">
+          <div>
+            <span>Mode</span>
+            <strong>Results</strong>
+          </div>
+          <div>
+            <span>Scenario</span>
+            <strong>Demo Tower</strong>
+          </div>
+          <div>
+            <span>Load Case</span>
+            <strong id="active-load-case">LC1</strong>
+          </div>
+          <div>
+            <span>Result</span>
+            <strong>Axial Force</strong>
+          </div>
+          <div>
+            <span>Units</span>
+            <strong>SI</strong>
+          </div>
+        </div>
+        <div class="legend-panel" aria-label="Axial force legend">
+          <p class="eyebrow">Legend</p>
+          <div class="legend-row">
+            <span class="legend-swatch tension"></span>
+            <span>Tension</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-swatch compression"></span>
+            <span>Compression</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-swatch low-force"></span>
+            <span>Low axial force</span>
+          </div>
+          <p class="legend-note">Colour intensity scales with absolute axial force.</p>
+        </div>
       </section>
 
       <aside class="info-panel" aria-label="Engineering result panel">
+        <section>
+          <p class="eyebrow">View State</p>
+          <h2>Phase 1 Result Review</h2>
+          <dl class="context-grid">
+            <div>
+              <dt>Task Mode</dt>
+              <dd>Results</dd>
+            </div>
+            <div>
+              <dt>Result Type</dt>
+              <dd>Axial force</dd>
+            </div>
+            <div>
+              <dt>Load Case</dt>
+              <dd id="panel-load-case">LC1</dd>
+            </div>
+            <div>
+              <dt>Unit System</dt>
+              <dd>SI</dd>
+            </div>
+          </dl>
+        </section>
+
         <section>
           <p class="eyebrow">Selected Member</p>
           <h2 id="member-title">No member selected</h2>
@@ -76,6 +137,25 @@
               <dd id="force-balance">--</dd>
             </div>
           </dl>
+        </section>
+
+        <section>
+          <p class="eyebrow">Unavailable Checks</p>
+          <h2>Not calculated in Phase 1</h2>
+          <div class="status-list">
+            <div>
+              <span class="status-dot"></span>
+              <p><strong>Utilisation</strong> Member capacities are not defined.</p>
+            </div>
+            <div>
+              <span class="status-dot"></span>
+              <p><strong>Foundation</strong> Base plate, bolt, and concrete checks are out of scope.</p>
+            </div>
+            <div>
+              <span class="status-dot"></span>
+              <p><strong>Reliability</strong> Probabilistic inputs are not defined.</p>
+            </div>
+          </div>
         </section>
       </aside>
     </main>

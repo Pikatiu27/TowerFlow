@@ -115,6 +115,95 @@ button {
   box-shadow: 0 10px 28px rgba(17, 24, 39, 0.08);
 }
 
+.view-context,
+.legend-panel {
+  position: absolute;
+  z-index: 2;
+  border: 1px solid rgba(174, 186, 199, 0.72);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 14px 38px rgba(17, 24, 39, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.view-context {
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+}
+
+.view-context div {
+  min-width: 0;
+  background: rgba(247, 250, 252, 0.86);
+  padding: 10px 12px;
+}
+
+.view-context span,
+.legend-note {
+  display: block;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.view-context strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", ui-monospace, monospace;
+  font-size: 0.88rem;
+}
+
+.legend-panel {
+  left: 16px;
+  bottom: 106px;
+  width: min(260px, calc(100% - 32px));
+  padding: 12px;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #263242;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-top: 8px;
+}
+
+.legend-swatch {
+  width: 28px;
+  height: 8px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.08);
+}
+
+.legend-swatch.tension {
+  background: #d73d32;
+}
+
+.legend-swatch.compression {
+  background: #007fbd;
+}
+
+.legend-swatch.low-force {
+  background: #9aa6b2;
+}
+
+.legend-note {
+  margin: 12px 0 0;
+  text-transform: none;
+  line-height: 1.35;
+}
+
 .eyebrow {
   margin: 0 0 7px;
   color: var(--accent-strong);
@@ -165,7 +254,8 @@ h2 {
 }
 
 .member-grid,
-.summary-grid {
+.summary-grid,
+.context-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 11px;
@@ -173,7 +263,8 @@ h2 {
 }
 
 .member-grid div,
-.summary-grid div {
+.summary-grid div,
+.context-grid div {
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: 6px;
@@ -207,6 +298,38 @@ dd {
   padding-left: 12px;
 }
 
+.status-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.status-list div {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.status-list p {
+  margin: 0;
+  color: #344054;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.status-list strong {
+  color: var(--ink);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #aebac7;
+  margin-top: 4px;
+}
+
 @media (max-width: 800px) {
   .app-shell {
     display: flex;
@@ -237,8 +360,34 @@ dd {
 
   .watermark {
     right: 12px;
-    bottom: 12px;
+    bottom: 88px;
     font-size: 0.78rem;
+  }
+
+  .view-context {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .view-context div {
+    padding: 8px 9px;
+  }
+
+  .view-context span {
+    font-size: 0.62rem;
+  }
+
+  .view-context strong {
+    font-size: 0.76rem;
+  }
+
+  .legend-panel {
+    left: 12px;
+    bottom: 144px;
+    width: 220px;
+    padding: 10px;
   }
 
   .info-panel {
@@ -255,7 +404,8 @@ dd {
   }
 
   .member-grid,
-  .summary-grid {
+  .summary-grid,
+  .context-grid {
     grid-template-columns: 1fr;
   }
 

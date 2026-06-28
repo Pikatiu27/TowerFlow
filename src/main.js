@@ -15,6 +15,8 @@ const labels = {
   memberLength: document.querySelector("#member-length"),
   memberGroup: document.querySelector("#member-group"),
   memberInterpretation: document.querySelector("#member-interpretation"),
+  activeLoadCase: document.querySelector("#active-load-case"),
+  panelLoadCase: document.querySelector("#panel-load-case"),
 };
 
 const scene = new THREE.Scene();
@@ -109,6 +111,9 @@ function renderTower(data) {
   }
 
   labels.caseTitle.textContent = data.title;
+  const activeLoadCase = data.loadCases?.[0]?.id ?? "LC1";
+  labels.activeLoadCase.textContent = activeLoadCase;
+  labels.panelLoadCase.textContent = activeLoadCase;
   labels.nodeCount.textContent = String(data.nodes.length);
   labels.memberCount.textContent = String(data.members.length);
   labels.maxForce.textContent = `${maxAbsForce.toFixed(2)} kN`;
