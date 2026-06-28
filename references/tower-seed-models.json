@@ -144,6 +144,41 @@
         "No public dimension table found in current research.",
         "Do not create a dimensioned model until public schedule, COMMPole output, or project-specific drawing is available."
       ]
+    },
+    {
+      "seed_id": "sitepro1_mounting_hardware_placeholder",
+      "manufacturer_reference": "Site Pro 1",
+      "source_type": "official site identified; product dimensions not captured in current automated research",
+      "source_links": [
+        "https://www.sitepro1.com/",
+        "https://www.sitepro1.com/robots.txt"
+      ],
+      "geometry_status": "verified_public_cut_sheet_required",
+      "tower_type": "mounting_hardware_or_appurtenance",
+      "public_notes": [
+        "Treat as a potential source for antenna mounts, sector frames, platforms, and other wireless site hardware.",
+        "Do not treat as a primary tower geometry source unless official tower drawings are obtained.",
+        "Automated access to product pages was blocked by browser challenge or HTTP 403 during this research pass."
+      ],
+      "fields_to_obtain_before_modelling": [
+        "product_part_number",
+        "product_type",
+        "source_url",
+        "source_date",
+        "height",
+        "width",
+        "depth",
+        "weight",
+        "projected_area",
+        "mounting_connection",
+        "applicable_tower_or_pole_type"
+      ],
+      "towerflow_use": "future appurtenance and equipment load library placeholder only",
+      "not_for_certification": true,
+      "limitations": [
+        "No verified dimensions, weight, or projected area captured in current research.",
+        "Do not use in load calculations until an official product cut sheet or project drawing is available."
+      ]
     }
   ]
 }
