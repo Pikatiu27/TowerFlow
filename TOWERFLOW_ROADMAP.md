@@ -92,6 +92,13 @@ Interface style rules:
 
 The proposed technical direction is suitable, but the order of adoption matters.
 
+Calculation and solver references are tracked in `references/software-calculation-references.md`.
+
+Public manufacturer and tower seed references are tracked in:
+
+- `references/manufacturer-tower-references.md`
+- `references/tower-seed-models.json`
+
 Recommended stack:
 
 - Frontend application: React, TypeScript, and Vite.

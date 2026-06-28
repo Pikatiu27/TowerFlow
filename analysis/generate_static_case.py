@@ -8,6 +8,41 @@ OUTPUT_PATH = ROOT / "public" / "data" / "tower-001.results.json"
 
 E_MODULUS_KPA = 200_000_000.0
 AREA_M2 = 0.0025
+FT_TO_M = 0.3048
+IN_TO_M = 0.0254
+
+DEMO_TOWER = {
+    "id": "rohn-25g-inspired-demo",
+    "name": "ROHN 25G-inspired triangular mast demo",
+    "manufacturerReference": "ROHN 25G 10 ft tower section product family",
+    "geometryBasis": [
+        "Triangular lattice mast inspired by public ROHN 25G product information.",
+        "Nominal section height: 10 ft converted to 3.048 m.",
+        "Nominal face width: 12.5 in converted to 0.3175 m.",
+        "Five levels are used to create a four-section 40 ft / 12.192 m demo mast.",
+    ],
+    "sourceReferences": [
+        {
+            "label": "ROHN product catalogue",
+            "url": "https://rohnnet.com/product-catalog/",
+            "accessDate": "2026-06-28",
+            "use": "Official product-family reference for ROHN tower systems.",
+        },
+        {
+            "label": "ROHN 25GSS assembly drawing",
+            "url": "https://rohnnet.com/wp-content/uploads/2025/08/Assembly-25GSS.pdf",
+            "accessDate": "2026-06-28",
+            "use": "Official public assembly drawing reference for 25GSS height/module context.",
+        },
+        {
+            "label": "DX Engineering ROHN 25G tower section product page",
+            "url": "https://www.dxengineering.com/parts/roh-25g10",
+            "accessDate": "2026-06-28",
+            "use": "Public distributor product reference for nominal 25G section context.",
+        }
+    ],
+    "disclaimer": "Reference-derived demo geometry only. Not a construction drawing, certified design, or manufacturer-approved model.",
+}
 
 
 def gaussian_solve(matrix, vector):
@@ -63,8 +98,11 @@ def member(member_id, start, end, group):
 
 
 def build_geometry():
-    heights = [0.0, 4.0, 8.0, 12.0, 16.0]
-    radii = [2.2, 1.85, 1.5, 1.15, 0.8]
+    section_height_m = 10.0 * FT_TO_M
+    face_width_m = 12.5 * IN_TO_M
+    radius_m = face_width_m / math.sqrt(3.0)
+    heights = [round(section_height_m * level, 3) for level in range(5)]
+    radii = [radius_m for _ in heights]
     nodes = []
     for level_index, (z, radius) in enumerate(zip(heights, radii)):
         nodes.extend(triangular_level(level_index, z, radius))
@@ -103,15 +141,15 @@ def build_geometry():
     ]
 
     loads = [
-        {"nodeId": "N21", "fxKN": 1.5, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N22", "fxKN": 1.5, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N23", "fxKN": 1.5, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N31", "fxKN": 2.0, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N32", "fxKN": 2.0, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N33", "fxKN": 2.0, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N41", "fxKN": 2.5, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N42", "fxKN": 2.5, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N43", "fxKN": 2.5, "fyKN": 0.0, "fzKN": 0.0},
+        {"nodeId": "N21", "fxKN": 0.15, "fyKN": 0.0, "fzKN": 0.0},
+        {"nodeId": "N22", "fxKN": 0.15, "fyKN": 0.0, "fzKN": 0.0},
+        {"nodeId": "N23", "fxKN": 0.15, "fyKN": 0.0, "fzKN": 0.0},
+        {"nodeId": "N31", "fxKN": 0.2, "fyKN": 0.0, "fzKN": 0.0},
+        {"nodeId": "N32", "fxKN": 0.2, "fyKN": 0.0, "fzKN": 0.0},
+        {"nodeId": "N33", "fxKN": 0.2, "fyKN": 0.0, "fzKN": 0.0},
+        {"nodeId": "N41", "fxKN": 0.25, "fyKN": 0.0, "fzKN": 0.0},
+        {"nodeId": "N42", "fxKN": 0.25, "fyKN": 0.0, "fzKN": 0.0},
+        {"nodeId": "N43", "fxKN": 0.25, "fyKN": 0.0, "fzKN": 0.0},
     ]
 
     return nodes, members, supports, loads
@@ -242,7 +280,8 @@ def main():
         "schemaVersion": "0.1.0",
         "project": "TowerFlow",
         "caseId": "tower-001-static-wind-x",
-        "title": "Triangular communication tower static wind prototype",
+        "title": "ROHN 25G-inspired triangular mast static wind prototype",
+        "towerReference": DEMO_TOWER,
         "units": {
             "length": "m",
             "force": "kN",
@@ -252,6 +291,7 @@ def main():
             "3D pin-jointed truss model",
             "Steel tower superstructure only",
             "One simplified horizontal wind load case",
+            "Reference-derived demo dimensions only",
             "No member capacity check",
             "No connection or foundation design",
         ],

@@ -2,7 +2,39 @@
   "schemaVersion": "0.1.0",
   "project": "TowerFlow",
   "caseId": "tower-001-static-wind-x",
-  "title": "Triangular communication tower static wind prototype",
+  "title": "ROHN 25G-inspired triangular mast static wind prototype",
+  "towerReference": {
+    "id": "rohn-25g-inspired-demo",
+    "name": "ROHN 25G-inspired triangular mast demo",
+    "manufacturerReference": "ROHN 25G 10 ft tower section product family",
+    "geometryBasis": [
+      "Triangular lattice mast inspired by public ROHN 25G product information.",
+      "Nominal section height: 10 ft converted to 3.048 m.",
+      "Nominal face width: 12.5 in converted to 0.3175 m.",
+      "Five levels are used to create a four-section 40 ft / 12.192 m demo mast."
+    ],
+    "sourceReferences": [
+      {
+        "label": "ROHN product catalogue",
+        "url": "https://rohnnet.com/product-catalog/",
+        "accessDate": "2026-06-28",
+        "use": "Official product-family reference for ROHN tower systems."
+      },
+      {
+        "label": "ROHN 25GSS assembly drawing",
+        "url": "https://rohnnet.com/wp-content/uploads/2025/08/Assembly-25GSS.pdf",
+        "accessDate": "2026-06-28",
+        "use": "Official public assembly drawing reference for 25GSS height/module context."
+      },
+      {
+        "label": "DX Engineering ROHN 25G tower section product page",
+        "url": "https://www.dxengineering.com/parts/roh-25g10",
+        "accessDate": "2026-06-28",
+        "use": "Public distributor product reference for nominal 25G section context."
+      }
+    ],
+    "disclaimer": "Reference-derived demo geometry only. Not a construction drawing, certified design, or manufacturer-approved model."
+  },
   "units": {
     "length": "m",
     "force": "kN",
@@ -12,6 +44,7 @@
     "3D pin-jointed truss model",
     "Steel tower superstructure only",
     "One simplified horizontal wind load case",
+    "Reference-derived demo dimensions only",
     "No member capacity check",
     "No connection or foundation design"
   ],
@@ -19,7 +52,7 @@
     {
       "id": "N01",
       "x": 0.0,
-      "y": 2.2,
+      "y": 0.183,
       "z": 0.0,
       "displacementM": {
         "ux": 0.0,
@@ -29,8 +62,8 @@
     },
     {
       "id": "N02",
-      "x": -1.905,
-      "y": -1.1,
+      "x": -0.159,
+      "y": -0.092,
       "z": 0.0,
       "displacementM": {
         "ux": 0.0,
@@ -40,8 +73,8 @@
     },
     {
       "id": "N03",
-      "x": 1.905,
-      "y": -1.1,
+      "x": 0.159,
+      "y": -0.092,
       "z": 0.0,
       "displacementM": {
         "ux": 0.0,
@@ -52,133 +85,133 @@
     {
       "id": "N11",
       "x": 0.0,
-      "y": 1.85,
-      "z": 4.0,
+      "y": 0.183,
+      "z": 3.048,
       "displacementM": {
-        "ux": 0.000391,
+        "ux": 0.002142,
         "uy": -0.0,
         "uz": 0.0
       }
     },
     {
       "id": "N12",
-      "x": -1.602,
-      "y": -0.925,
-      "z": 4.0,
+      "x": -0.159,
+      "y": -0.092,
+      "z": 3.048,
       "displacementM": {
-        "ux": 0.000467,
-        "uy": 4.4e-05,
-        "uz": 0.000337
+        "ux": 0.002144,
+        "uy": 1e-06,
+        "uz": 0.000188
       }
     },
     {
       "id": "N13",
-      "x": 1.602,
-      "y": -0.925,
-      "z": 4.0,
+      "x": 0.159,
+      "y": -0.092,
+      "z": 3.048,
       "displacementM": {
-        "ux": 0.000467,
-        "uy": -4.4e-05,
-        "uz": -0.000337
+        "ux": 0.002144,
+        "uy": -1e-06,
+        "uz": -0.000188
       }
     },
     {
       "id": "N21",
       "x": 0.0,
-      "y": 1.5,
-      "z": 8.0,
+      "y": 0.183,
+      "z": 6.096,
       "displacementM": {
-        "ux": 0.001723,
+        "ux": 0.007216,
         "uy": -0.0,
         "uz": 0.0
       }
     },
     {
       "id": "N22",
-      "x": -1.299,
-      "y": -0.75,
-      "z": 8.0,
+      "x": -0.159,
+      "y": -0.092,
+      "z": 6.096,
       "displacementM": {
-        "ux": 0.001759,
-        "uy": 2.1e-05,
-        "uz": 0.000515
+        "ux": 0.007217,
+        "uy": 0.0,
+        "uz": 0.000306
       }
     },
     {
       "id": "N23",
-      "x": 1.299,
-      "y": -0.75,
-      "z": 8.0,
+      "x": 0.159,
+      "y": -0.092,
+      "z": 6.096,
       "displacementM": {
-        "ux": 0.001759,
-        "uy": -2.1e-05,
-        "uz": -0.000515
+        "ux": 0.007217,
+        "uy": -0.0,
+        "uz": -0.000306
       }
     },
     {
       "id": "N31",
       "x": 0.0,
-      "y": 1.15,
-      "z": 12.0,
+      "y": 0.183,
+      "z": 9.144,
       "displacementM": {
-        "ux": 0.003678,
+        "ux": 0.013867,
         "uy": -0.0,
         "uz": 0.0
       }
     },
     {
       "id": "N32",
-      "x": -0.996,
-      "y": -0.575,
-      "z": 12.0,
+      "x": -0.159,
+      "y": -0.092,
+      "z": 9.144,
       "displacementM": {
-        "ux": 0.00369,
-        "uy": 7e-06,
-        "uz": 0.00052
+        "ux": 0.013867,
+        "uy": 0.0,
+        "uz": 0.000361
       }
     },
     {
       "id": "N33",
-      "x": 0.996,
-      "y": -0.575,
-      "z": 12.0,
+      "x": 0.159,
+      "y": -0.092,
+      "z": 9.144,
       "displacementM": {
-        "ux": 0.00369,
-        "uy": -7e-06,
-        "uz": -0.00052
+        "ux": 0.013867,
+        "uy": -0.0,
+        "uz": -0.000361
       }
     },
     {
       "id": "N41",
       "x": 0.0,
-      "y": 0.8,
-      "z": 16.0,
+      "y": 0.183,
+      "z": 12.192,
       "displacementM": {
-        "ux": 0.005974,
+        "ux": 0.021079,
         "uy": -0.0,
         "uz": 0.0
       }
     },
     {
       "id": "N42",
-      "x": -0.693,
-      "y": -0.4,
-      "z": 16.0,
+      "x": -0.159,
+      "y": -0.092,
+      "z": 12.192,
       "displacementM": {
-        "ux": 0.005974,
+        "ux": 0.021079,
         "uy": -0.0,
-        "uz": 0.000392
+        "uz": 0.000376
       }
     },
     {
       "id": "N43",
-      "x": 0.693,
-      "y": -0.4,
-      "z": 16.0,
+      "x": 0.159,
+      "y": -0.092,
+      "z": 12.192,
       "displacementM": {
-        "ux": 0.005974,
+        "ux": 0.021079,
         "uy": 0.0,
-        "uz": -0.000392
+        "uz": -0.000376
       }
     }
   ],
@@ -190,7 +223,7 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 3.81,
+      "lengthM": 0.318,
       "axialForceKN": 0.0,
       "forceState": "low force"
     },
@@ -201,7 +234,7 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 3.81,
+      "lengthM": 0.318,
       "axialForceKN": 0.0,
       "forceState": "low force"
     },
@@ -212,7 +245,7 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 3.81,
+      "lengthM": 0.318,
       "axialForceKN": 0.0,
       "forceState": "low force"
     },
@@ -223,8 +256,8 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 3.204,
-      "axialForceKN": -11.856,
+      "lengthM": 0.318,
+      "axialForceKN": -2.567,
       "forceState": "compression"
     },
     {
@@ -234,7 +267,7 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 3.204,
+      "lengthM": 0.318,
       "axialForceKN": 0.0,
       "forceState": "low force"
     },
@@ -245,8 +278,8 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 3.204,
-      "axialForceKN": 11.856,
+      "lengthM": 0.318,
+      "axialForceKN": 2.567,
       "forceState": "tension"
     },
     {
@@ -256,8 +289,8 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 2.598,
-      "axialForceKN": -6.993,
+      "lengthM": 0.318,
+      "axialForceKN": -1.38,
       "forceState": "compression"
     },
     {
@@ -267,7 +300,7 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 2.598,
+      "lengthM": 0.318,
       "axialForceKN": 0.0,
       "forceState": "low force"
     },
@@ -278,8 +311,8 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 2.598,
-      "axialForceKN": 6.993,
+      "lengthM": 0.318,
+      "axialForceKN": 1.38,
       "forceState": "tension"
     },
     {
@@ -289,8 +322,8 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 1.992,
-      "axialForceKN": -2.991,
+      "lengthM": 0.318,
+      "axialForceKN": -0.492,
       "forceState": "compression"
     },
     {
@@ -300,8 +333,8 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 1.992,
-      "axialForceKN": -0.0,
+      "lengthM": 0.318,
+      "axialForceKN": 0.0,
       "forceState": "low force"
     },
     {
@@ -311,8 +344,8 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 1.992,
-      "axialForceKN": 2.991,
+      "lengthM": 0.318,
+      "axialForceKN": 0.492,
       "forceState": "tension"
     },
     {
@@ -322,9 +355,9 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 1.386,
-      "axialForceKN": 0.255,
-      "forceState": "tension"
+      "lengthM": 0.318,
+      "axialForceKN": 0.002,
+      "forceState": "low force"
     },
     {
       "id": "M014",
@@ -333,7 +366,7 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 1.386,
+      "lengthM": 0.318,
       "axialForceKN": 0.0,
       "forceState": "low force"
     },
@@ -344,9 +377,9 @@
       "group": "plan bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 1.386,
-      "axialForceKN": -0.255,
-      "forceState": "compression"
+      "lengthM": 0.318,
+      "axialForceKN": -0.002,
+      "forceState": "low force"
     },
     {
       "id": "M016",
@@ -355,7 +388,7 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
+      "lengthM": 3.048,
       "axialForceKN": 0.0,
       "forceState": "low force"
     },
@@ -366,8 +399,8 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
-      "axialForceKN": 46.434,
+      "lengthM": 3.048,
+      "axialForceKN": 30.846,
       "forceState": "tension"
     },
     {
@@ -377,8 +410,8 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
-      "axialForceKN": -46.434,
+      "lengthM": 3.048,
+      "axialForceKN": -30.846,
       "forceState": "compression"
     },
     {
@@ -388,8 +421,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 5.323,
-      "axialForceKN": 8.184,
+      "lengthM": 3.065,
+      "axialForceKN": 12.353,
       "forceState": "tension"
     },
     {
@@ -399,8 +432,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 5.323,
-      "axialForceKN": 13.13,
+      "lengthM": 3.065,
+      "axialForceKN": 18.135,
       "forceState": "tension"
     },
     {
@@ -410,8 +443,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 5.323,
-      "axialForceKN": 4.947,
+      "lengthM": 3.065,
+      "axialForceKN": 5.782,
       "forceState": "tension"
     },
     {
@@ -421,8 +454,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 5.323,
-      "axialForceKN": -4.947,
+      "lengthM": 3.065,
+      "axialForceKN": -5.782,
       "forceState": "compression"
     },
     {
@@ -432,8 +465,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 5.323,
-      "axialForceKN": -13.13,
+      "lengthM": 3.065,
+      "axialForceKN": -18.135,
       "forceState": "compression"
     },
     {
@@ -443,8 +476,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 5.323,
-      "axialForceKN": -8.184,
+      "lengthM": 3.065,
+      "axialForceKN": -12.353,
       "forceState": "compression"
     },
     {
@@ -454,7 +487,7 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
+      "lengthM": 3.048,
       "axialForceKN": 0.0,
       "forceState": "low force"
     },
@@ -465,8 +498,8 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
-      "axialForceKN": 34.132,
+      "lengthM": 3.048,
+      "axialForceKN": 19.287,
       "forceState": "tension"
     },
     {
@@ -476,8 +509,8 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
-      "axialForceKN": -34.132,
+      "lengthM": 3.048,
+      "axialForceKN": -19.287,
       "forceState": "compression"
     },
     {
@@ -487,8 +520,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.944,
-      "axialForceKN": 4.676,
+      "lengthM": 3.065,
+      "axialForceKN": 6.628,
       "forceState": "tension"
     },
     {
@@ -498,8 +531,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.944,
-      "axialForceKN": 11.415,
+      "lengthM": 3.065,
+      "axialForceKN": 12.41,
       "forceState": "tension"
     },
     {
@@ -509,8 +542,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.944,
-      "axialForceKN": 6.74,
+      "lengthM": 3.065,
+      "axialForceKN": 5.782,
       "forceState": "tension"
     },
     {
@@ -520,8 +553,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.944,
-      "axialForceKN": -6.74,
+      "lengthM": 3.065,
+      "axialForceKN": -5.782,
       "forceState": "compression"
     },
     {
@@ -531,8 +564,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.944,
-      "axialForceKN": -11.415,
+      "lengthM": 3.065,
+      "axialForceKN": -12.41,
       "forceState": "compression"
     },
     {
@@ -542,8 +575,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.944,
-      "axialForceKN": -4.676,
+      "lengthM": 3.065,
+      "axialForceKN": -6.628,
       "forceState": "compression"
     },
     {
@@ -553,7 +586,7 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
+      "lengthM": 3.048,
       "axialForceKN": 0.0,
       "forceState": "low force"
     },
@@ -564,8 +597,8 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
-      "axialForceKN": 18.688,
+      "lengthM": 3.048,
+      "axialForceKN": 9.161,
       "forceState": "tension"
     },
     {
@@ -575,8 +608,8 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
-      "axialForceKN": -18.688,
+      "lengthM": 3.048,
+      "axialForceKN": -9.161,
       "forceState": "compression"
     },
     {
@@ -586,8 +619,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.615,
-      "axialForceKN": 2.539,
+      "lengthM": 3.065,
+      "axialForceKN": 2.353,
       "forceState": "tension"
     },
     {
@@ -597,8 +630,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.615,
-      "axialForceKN": 9.182,
+      "lengthM": 3.065,
+      "axialForceKN": 6.69,
       "forceState": "tension"
     },
     {
@@ -608,8 +641,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.615,
-      "axialForceKN": 6.643,
+      "lengthM": 3.065,
+      "axialForceKN": 4.337,
       "forceState": "tension"
     },
     {
@@ -619,8 +652,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.615,
-      "axialForceKN": -6.643,
+      "lengthM": 3.065,
+      "axialForceKN": -4.337,
       "forceState": "compression"
     },
     {
@@ -630,8 +663,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.615,
-      "axialForceKN": -9.182,
+      "lengthM": 3.065,
+      "axialForceKN": -6.69,
       "forceState": "compression"
     },
     {
@@ -641,8 +674,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.615,
-      "axialForceKN": -2.539,
+      "lengthM": 3.065,
+      "axialForceKN": -2.353,
       "forceState": "compression"
     },
     {
@@ -652,7 +685,7 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
+      "lengthM": 3.048,
       "axialForceKN": 0.0,
       "forceState": "low force"
     },
@@ -663,8 +696,8 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
-      "axialForceKN": 5.553,
+      "lengthM": 3.048,
+      "axialForceKN": 2.411,
       "forceState": "tension"
     },
     {
@@ -674,8 +707,8 @@
       "group": "leg",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.015,
-      "axialForceKN": -5.553,
+      "lengthM": 3.048,
+      "axialForceKN": -2.411,
       "forceState": "compression"
     },
     {
@@ -685,8 +718,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.345,
-      "axialForceKN": -0.556,
+      "lengthM": 3.065,
+      "axialForceKN": -0.015,
       "forceState": "compression"
     },
     {
@@ -696,8 +729,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.345,
-      "axialForceKN": 4.897,
+      "lengthM": 3.065,
+      "axialForceKN": 2.394,
       "forceState": "tension"
     },
     {
@@ -707,8 +740,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.345,
-      "axialForceKN": 5.454,
+      "lengthM": 3.065,
+      "axialForceKN": 2.409,
       "forceState": "tension"
     },
     {
@@ -718,8 +751,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.345,
-      "axialForceKN": -5.454,
+      "lengthM": 3.065,
+      "axialForceKN": -2.409,
       "forceState": "compression"
     },
     {
@@ -729,8 +762,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.345,
-      "axialForceKN": -4.897,
+      "lengthM": 3.065,
+      "axialForceKN": -2.394,
       "forceState": "compression"
     },
     {
@@ -740,8 +773,8 @@
       "group": "diagonal bracing",
       "areaM2": 0.0025,
       "elasticModulusKPa": 200000000.0,
-      "lengthM": 4.345,
-      "axialForceKN": 0.556,
+      "lengthM": 3.065,
+      "axialForceKN": 0.015,
       "forceState": "tension"
     }
   ],
@@ -772,55 +805,55 @@
       "loads": [
         {
           "nodeId": "N21",
-          "fxKN": 1.5,
+          "fxKN": 0.15,
           "fyKN": 0.0,
           "fzKN": 0.0
         },
         {
           "nodeId": "N22",
-          "fxKN": 1.5,
+          "fxKN": 0.15,
           "fyKN": 0.0,
           "fzKN": 0.0
         },
         {
           "nodeId": "N23",
-          "fxKN": 1.5,
+          "fxKN": 0.15,
           "fyKN": 0.0,
           "fzKN": 0.0
         },
         {
           "nodeId": "N31",
-          "fxKN": 2.0,
+          "fxKN": 0.2,
           "fyKN": 0.0,
           "fzKN": 0.0
         },
         {
           "nodeId": "N32",
-          "fxKN": 2.0,
+          "fxKN": 0.2,
           "fyKN": 0.0,
           "fzKN": 0.0
         },
         {
           "nodeId": "N33",
-          "fxKN": 2.0,
+          "fxKN": 0.2,
           "fyKN": 0.0,
           "fzKN": 0.0
         },
         {
           "nodeId": "N41",
-          "fxKN": 2.5,
+          "fxKN": 0.25,
           "fyKN": 0.0,
           "fzKN": 0.0
         },
         {
           "nodeId": "N42",
-          "fxKN": 2.5,
+          "fxKN": 0.25,
           "fyKN": 0.0,
           "fzKN": 0.0
         },
         {
           "nodeId": "N43",
-          "fxKN": 2.5,
+          "fxKN": 0.25,
           "fyKN": 0.0,
           "fzKN": 0.0
         }
@@ -831,7 +864,7 @@
     {
       "nodeId": "N01",
       "component": "fxKN",
-      "valueKN": 4.926
+      "valueKN": 1.282
     },
     {
       "nodeId": "N01",
@@ -846,38 +879,38 @@
     {
       "nodeId": "N02",
       "component": "fxKN",
-      "valueKN": -11.463
+      "valueKN": -1.541
     },
     {
       "nodeId": "N02",
       "component": "fyKN",
-      "valueKN": -9.464
+      "valueKN": -1.627
     },
     {
       "nodeId": "N02",
       "component": "fzKN",
-      "valueKN": -59.843
+      "valueKN": -54.634
     },
     {
       "nodeId": "N03",
       "component": "fxKN",
-      "valueKN": -11.463
+      "valueKN": -1.541
     },
     {
       "nodeId": "N03",
       "component": "fyKN",
-      "valueKN": 9.464
+      "valueKN": 1.627
     },
     {
       "nodeId": "N03",
       "component": "fzKN",
-      "valueKN": 59.843
+      "valueKN": 54.634
     }
   ],
   "checks": {
-    "sumAppliedFxKN": 18.0,
-    "sumReactionFxKN": -18.0,
+    "sumAppliedFxKN": 1.8,
+    "sumReactionFxKN": -1.8,
     "forceBalanceFxKN": 0.0,
-    "maxAbsAxialForceKN": 46.434
+    "maxAbsAxialForceKN": 30.846
   }
 }

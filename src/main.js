@@ -30,11 +30,11 @@ controls.enableDamping = true;
 controls.target.set(0, 0, 7);
 
 const raycaster = new THREE.Raycaster();
-raycaster.params.Line.threshold = 0.16;
 const pointer = new THREE.Vector2();
 const memberObjects = [];
 let selectedObject = null;
 let towerData = null;
+const MEMBER_RADIUS_M = 0.018;
 
 scene.add(new THREE.HemisphereLight(0xffffff, 0x9fb0bd, 2.75));
 const sun = new THREE.DirectionalLight(0xffffff, 2.2);
@@ -59,14 +59,19 @@ function memberColour(member, maxAbsForce) {
 }
 
 function makeMember(start, end, member, maxAbsForce) {
-  const geometry = new THREE.BufferGeometry().setFromPoints([start, end]);
-  const material = new THREE.LineBasicMaterial({
+  const direction = new THREE.Vector3().subVectors(end, start);
+  const length = direction.length();
+  const geometry = new THREE.CylinderGeometry(MEMBER_RADIUS_M, MEMBER_RADIUS_M, length, 10);
+  const material = new THREE.MeshStandardMaterial({
     color: memberColour(member, maxAbsForce),
-    linewidth: 2,
+    roughness: 0.48,
+    metalness: 0.05,
   });
-  const line = new THREE.Line(geometry, material);
-  line.userData.member = member;
-  return line;
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.copy(start).add(end).multiplyScalar(0.5);
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
+  mesh.userData.member = member;
+  return mesh;
 }
 
 function addNodeMarker(position) {
@@ -155,8 +160,8 @@ function pickMember(event) {
 }
 
 function resetView() {
-  camera.position.set(7, 12, 9);
-  controls.target.set(0, 0, 7.5);
+  camera.position.set(2.4, 5.6, 6.8);
+  controls.target.set(0, 0, 6.2);
   controls.update();
 }
 
