@@ -810,60 +810,125 @@
     {
       "id": "LC1",
       "name": "Simplified wind in global X direction",
+      "description": "Phase 1 schematic nodal wind loads applied in global +X. Values are true SI kN loads; arrow lengths are display-scaled.",
+      "windDirectionDeg": 0,
       "loads": [
         {
+          "id": "L-WIND-X-01",
+          "type": "nodal wind load",
           "nodeId": "N21",
           "fxKN": 0.15,
           "fyKN": 0.0,
-          "fzKN": 0.0
+          "fzKN": 0.0,
+          "display": {
+            "showArrow": true,
+            "arrowScale": "schematic",
+            "label": "0.15 kN"
+          }
         },
         {
+          "id": "L-WIND-X-02",
+          "type": "nodal wind load",
           "nodeId": "N22",
           "fxKN": 0.15,
           "fyKN": 0.0,
-          "fzKN": 0.0
+          "fzKN": 0.0,
+          "display": {
+            "showArrow": true,
+            "arrowScale": "schematic",
+            "label": "0.15 kN"
+          }
         },
         {
+          "id": "L-WIND-X-03",
+          "type": "nodal wind load",
           "nodeId": "N23",
           "fxKN": 0.15,
           "fyKN": 0.0,
-          "fzKN": 0.0
+          "fzKN": 0.0,
+          "display": {
+            "showArrow": true,
+            "arrowScale": "schematic",
+            "label": "0.15 kN"
+          }
         },
         {
+          "id": "L-WIND-X-04",
+          "type": "nodal wind load",
           "nodeId": "N31",
           "fxKN": 0.2,
           "fyKN": 0.0,
-          "fzKN": 0.0
+          "fzKN": 0.0,
+          "display": {
+            "showArrow": true,
+            "arrowScale": "schematic",
+            "label": "0.20 kN"
+          }
         },
         {
+          "id": "L-WIND-X-05",
+          "type": "nodal wind load",
           "nodeId": "N32",
           "fxKN": 0.2,
           "fyKN": 0.0,
-          "fzKN": 0.0
+          "fzKN": 0.0,
+          "display": {
+            "showArrow": true,
+            "arrowScale": "schematic",
+            "label": "0.20 kN"
+          }
         },
         {
+          "id": "L-WIND-X-06",
+          "type": "nodal wind load",
           "nodeId": "N33",
           "fxKN": 0.2,
           "fyKN": 0.0,
-          "fzKN": 0.0
+          "fzKN": 0.0,
+          "display": {
+            "showArrow": true,
+            "arrowScale": "schematic",
+            "label": "0.20 kN"
+          }
         },
         {
+          "id": "L-WIND-X-07",
+          "type": "nodal wind load",
           "nodeId": "N41",
           "fxKN": 0.25,
           "fyKN": 0.0,
-          "fzKN": 0.0
+          "fzKN": 0.0,
+          "display": {
+            "showArrow": true,
+            "arrowScale": "schematic",
+            "label": "0.25 kN"
+          }
         },
         {
+          "id": "L-WIND-X-08",
+          "type": "nodal wind load",
           "nodeId": "N42",
           "fxKN": 0.25,
           "fyKN": 0.0,
-          "fzKN": 0.0
+          "fzKN": 0.0,
+          "display": {
+            "showArrow": true,
+            "arrowScale": "schematic",
+            "label": "0.25 kN"
+          }
         },
         {
+          "id": "L-WIND-X-09",
+          "type": "nodal wind load",
           "nodeId": "N43",
           "fxKN": 0.25,
           "fyKN": 0.0,
-          "fzKN": 0.0
+          "fzKN": 0.0,
+          "display": {
+            "showArrow": true,
+            "arrowScale": "schematic",
+            "label": "0.25 kN"
+          }
         }
       ]
     }

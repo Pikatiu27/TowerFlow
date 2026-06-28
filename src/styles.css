@@ -124,28 +124,10 @@ button {
   color: var(--accent-strong);
 }
 
-.watermark {
-  position: absolute;
-  right: 18px;
-  top: 104px;
-  z-index: 2;
-  border: 1px solid rgba(0, 166, 178, 0.32);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.76);
-  color: rgba(0, 127, 138, 0.78);
-  font-size: 0.84rem;
-  font-weight: 820;
-  letter-spacing: 0;
-  padding: 7px 11px;
-  pointer-events: none;
-  text-transform: lowercase;
-  box-shadow: 0 10px 28px rgba(17, 24, 39, 0.08);
-}
-
 .axis-gizmo {
   position: absolute;
   right: 18px;
-  top: 150px;
+  top: 104px;
   z-index: 2;
   width: 92px;
   height: 92px;
@@ -159,7 +141,7 @@ button {
 .grid-label {
   position: absolute;
   right: 18px;
-  top: 248px;
+  top: 202px;
   z-index: 2;
   border: 1px solid rgba(174, 186, 199, 0.62);
   border-radius: 6px;
@@ -299,6 +281,10 @@ button {
 
 .legend-swatch.low-force {
   background: #9aa6b2;
+}
+
+.legend-swatch.load-arrow {
+  background: #f59e0b;
 }
 
 .legend-note {
@@ -474,19 +460,13 @@ dd {
     padding: 0 9px;
   }
 
-  .watermark {
-    right: 12px;
-    top: 134px;
-    font-size: 0.78rem;
-  }
-
   .grid-label {
     display: none;
   }
 
   .axis-gizmo {
     right: 12px;
-    top: 174px;
+    top: 134px;
     width: 74px;
     height: 74px;
   }

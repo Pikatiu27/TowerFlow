@@ -10,6 +10,10 @@ const labels = {
   memberCount: document.querySelector("#member-count"),
   maxForce: document.querySelector("#max-force"),
   forceBalance: document.querySelector("#force-balance"),
+  loadTitle: document.querySelector("#load-title"),
+  loadCount: document.querySelector("#load-count"),
+  sumAppliedFx: document.querySelector("#sum-applied-fx"),
+  loadDirection: document.querySelector("#load-direction"),
   memberTitle: document.querySelector("#member-title"),
   memberState: document.querySelector("#member-state"),
   memberForce: document.querySelector("#member-force"),
@@ -36,6 +40,7 @@ const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const memberObjects = [];
 const nodeObjects = [];
+const loadObjects = [];
 let selectedObject = null;
 let towerData = null;
 let modelBounds = null;
@@ -43,6 +48,7 @@ let modelCenter = new THREE.Vector3(0, 6, 0);
 let modelRadius = 8;
 let activeView = "iso";
 const MEMBER_RADIUS_M = 0.018;
+const LOAD_COLOUR = 0xf59e0b;
 
 scene.add(new THREE.HemisphereLight(0xffffff, 0x9fb0bd, 2.75));
 const sun = new THREE.DirectionalLight(0xffffff, 2.2);
@@ -54,6 +60,39 @@ scene.add(grid);
 
 function nodeVector(node) {
   return new THREE.Vector3(node.x, node.z, -node.y);
+}
+
+function loadVector(load) {
+  return new THREE.Vector3(load.fxKN ?? 0, load.fzKN ?? 0, -(load.fyKN ?? 0));
+}
+
+function formatLoadVector(load) {
+  const fx = Number(load.fxKN ?? 0).toFixed(2);
+  const fy = Number(load.fyKN ?? 0).toFixed(2);
+  const fz = Number(load.fzKN ?? 0).toFixed(2);
+  return `Fx ${fx}, Fy ${fy}, Fz ${fz} kN`;
+}
+
+function makeLoadLabel(text) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 256;
+  canvas.height = 72;
+  const context = canvas.getContext("2d");
+  context.fillStyle = "rgba(255, 255, 255, 0.86)";
+  context.strokeStyle = "rgba(245, 158, 11, 0.72)";
+  context.lineWidth = 4;
+  context.beginPath();
+  context.roundRect(4, 4, 248, 64, 10);
+  context.fill();
+  context.stroke();
+  context.fillStyle = "#111827";
+  context.font = "700 24px ui-monospace, SFMono-Regular, Consolas, monospace";
+  context.fillText(text, 18, 44);
+  const texture = new THREE.CanvasTexture(canvas);
+  const material = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+  const sprite = new THREE.Sprite(material);
+  sprite.scale.set(1.35, 0.38, 1);
+  return sprite;
 }
 
 function memberColour(member, maxAbsForce) {
@@ -81,6 +120,34 @@ function makeMember(start, end, member, maxAbsForce) {
   return mesh;
 }
 
+function makeCylinderBetween(start, end, radius, colour) {
+  const direction = new THREE.Vector3().subVectors(end, start);
+  const length = direction.length();
+  const geometry = new THREE.CylinderGeometry(radius, radius, length, 12);
+  const material = new THREE.MeshStandardMaterial({
+    color: colour,
+    roughness: 0.42,
+    metalness: 0.08,
+  });
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.copy(start).add(end).multiplyScalar(0.5);
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
+  return mesh;
+}
+
+function makeConeAt(position, direction, radius, height, colour) {
+  const geometry = new THREE.ConeGeometry(radius, height, 18);
+  const material = new THREE.MeshStandardMaterial({
+    color: colour,
+    roughness: 0.4,
+    metalness: 0.08,
+  });
+  const cone = new THREE.Mesh(geometry, material);
+  cone.position.copy(position);
+  cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.clone().normalize());
+  return cone;
+}
+
 function addNodeMarker(position) {
   const geometry = new THREE.SphereGeometry(0.055, 14, 14);
   const material = new THREE.MeshStandardMaterial({ color: 0x12313f, roughness: 0.5 });
@@ -101,8 +168,19 @@ function clearTower() {
     object.geometry.dispose();
     object.material.dispose();
   }
+  for (const object of loadObjects) {
+    scene.remove(object);
+    object.traverse((child) => {
+      if (child.geometry) child.geometry.dispose();
+      if (child.material) {
+        if (child.material.map) child.material.map.dispose();
+        child.material.dispose();
+      }
+    });
+  }
   memberObjects.length = 0;
   nodeObjects.length = 0;
+  loadObjects.length = 0;
 }
 
 function updateModelBounds() {
@@ -157,6 +235,51 @@ function setCameraView(viewName) {
   setActiveViewButton(viewName);
 }
 
+function addLoadArrow(load, nodes, maxLoadMagnitude) {
+  const node = nodes.get(load.nodeId);
+  if (!node) return;
+  const direction = loadVector(load);
+  const magnitude = direction.length();
+  if (magnitude <= 0) return;
+
+  const origin = nodeVector(node);
+  const unitDirection = direction.clone().normalize();
+  const arrowLength = 0.72 + (magnitude / Math.max(maxLoadMagnitude, 0.001)) * 1.45;
+  const shaftLength = Math.max(arrowLength - 0.22, 0.2);
+  const shaftStart = origin.clone().add(unitDirection.clone().multiplyScalar(0.07));
+  const shaftEnd = origin.clone().add(unitDirection.clone().multiplyScalar(shaftLength));
+  const conePosition = origin.clone().add(unitDirection.clone().multiplyScalar(arrowLength));
+  const group = new THREE.Group();
+  const shaft = makeCylinderBetween(shaftStart, shaftEnd, 0.028, LOAD_COLOUR);
+  const head = makeConeAt(conePosition, unitDirection, 0.105, 0.24, LOAD_COLOUR);
+  group.add(shaft);
+  group.add(head);
+  if (viewer.clientWidth > 640) {
+    const label = makeLoadLabel(`${magnitude.toFixed(2)} kN`);
+    label.position.copy(conePosition).add(unitDirection.clone().multiplyScalar(0.22));
+    label.position.y += 0.2;
+    group.add(label);
+  }
+  group.userData.load = load;
+  scene.add(group);
+  loadObjects.push(group);
+}
+
+function renderLoads(data, nodes) {
+  const activeLoadCase = data.loadCases?.[0];
+  const loads = activeLoadCase?.loads ?? [];
+  const maxLoadMagnitude = Math.max(...loads.map((load) => loadVector(load).length()), 0);
+  for (const load of loads) {
+    addLoadArrow(load, nodes, maxLoadMagnitude);
+  }
+
+  const sumAppliedFx = loads.reduce((total, load) => total + Number(load.fxKN ?? 0), 0);
+  labels.loadTitle.textContent = activeLoadCase?.name ?? "No active load case";
+  labels.loadCount.textContent = String(loads.length);
+  labels.sumAppliedFx.textContent = `${sumAppliedFx.toFixed(3)} kN`;
+  labels.loadDirection.textContent = loads.length > 0 ? formatLoadVector(loads[0]) : "--";
+}
+
 function renderTower(data) {
   clearTower();
   const nodes = new Map(data.nodes.map((node) => [node.id, node]));
@@ -173,6 +296,7 @@ function renderTower(data) {
     scene.add(object);
     memberObjects.push(object);
   }
+  renderLoads(data, nodes);
 
   updateModelBounds();
   setCameraView(activeView);

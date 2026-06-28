@@ -10,6 +10,7 @@ This repository currently contains a mobile-friendly static digital twin prototy
 - Versioned JSON result output.
 - Static Three.js tower viewer.
 - Member colouring by axial force sign and magnitude.
+- Applied nodal load arrows with schematic display scale.
 - Member click or tap information panel.
 
 ## Generate Result Data
@@ -44,4 +45,4 @@ For phone testing on the same Wi-Fi network, replace `localhost` with the comput
 
 The viewer imports Three.js from a CDN. It is intentionally static so it can be published to GitHub Pages without a backend.
 
-The public prototype includes a small `sconmyway` watermark in the 3D viewer.
+The public prototype is titled `SC TOWERFLOW` and does not include a viewer watermark.

@@ -146,16 +146,32 @@ def build_geometry():
         {"nodeId": "N03", "ux": True, "uy": True, "uz": True},
     ]
 
+    load_rows = [
+        ("N21", 0.15),
+        ("N22", 0.15),
+        ("N23", 0.15),
+        ("N31", 0.20),
+        ("N32", 0.20),
+        ("N33", 0.20),
+        ("N41", 0.25),
+        ("N42", 0.25),
+        ("N43", 0.25),
+    ]
     loads = [
-        {"nodeId": "N21", "fxKN": 0.15, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N22", "fxKN": 0.15, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N23", "fxKN": 0.15, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N31", "fxKN": 0.2, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N32", "fxKN": 0.2, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N33", "fxKN": 0.2, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N41", "fxKN": 0.25, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N42", "fxKN": 0.25, "fyKN": 0.0, "fzKN": 0.0},
-        {"nodeId": "N43", "fxKN": 0.25, "fyKN": 0.0, "fzKN": 0.0},
+        {
+            "id": f"L-WIND-X-{index:02d}",
+            "type": "nodal wind load",
+            "nodeId": node_id,
+            "fxKN": fx_kn,
+            "fyKN": 0.0,
+            "fzKN": 0.0,
+            "display": {
+                "showArrow": True,
+                "arrowScale": "schematic",
+                "label": f"{fx_kn:.2f} kN",
+            },
+        }
+        for index, (node_id, fx_kn) in enumerate(load_rows, start=1)
     ]
 
     return nodes, members, supports, loads
@@ -310,6 +326,8 @@ def main():
             {
                 "id": "LC1",
                 "name": "Simplified wind in global X direction",
+                "description": "Phase 1 schematic nodal wind loads applied in global +X. Values are true SI kN loads; arrow lengths are display-scaled.",
+                "windDirectionDeg": 0,
                 "loads": loads,
             }
         ],

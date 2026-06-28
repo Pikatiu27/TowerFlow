@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TowerFlow Static Prototype</title>
+    <title>SC TOWERFLOW</title>
     <link rel="stylesheet" href="./src/styles.css" />
     <script type="importmap">
       {
@@ -18,11 +18,10 @@
     <main class="app-shell">
       <section class="viewer-section" aria-label="3D tower viewer">
         <div id="viewer" class="viewer"></div>
-        <div class="watermark" aria-label="sconmyway watermark">sconmyway</div>
         <div class="top-bar">
           <div>
-            <p class="eyebrow">TowerFlow Phase 1</p>
-            <h1>Static Digital Twin Prototype</h1>
+            <p class="eyebrow">Phase 1 Static Prototype</p>
+            <h1>SC TOWERFLOW</h1>
           </div>
           <button id="reset-view" type="button">Reset View</button>
         </div>
@@ -80,6 +79,10 @@
           <div class="legend-row">
             <span class="legend-swatch low-force"></span>
             <span>Low axial force</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-swatch load-arrow"></span>
+            <span>Applied nodal load</span>
           </div>
           <p class="legend-note">Colour intensity scales with absolute axial force.</p>
         </div>
@@ -156,6 +159,32 @@
               <dd id="force-balance">--</dd>
             </div>
           </dl>
+        </section>
+
+        <section>
+          <p class="eyebrow">Load Summary</p>
+          <h2 id="load-title">Loading...</h2>
+          <dl class="summary-grid">
+            <div>
+              <dt>Load Count</dt>
+              <dd id="load-count">--</dd>
+            </div>
+            <div>
+              <dt>Applied Fx</dt>
+              <dd id="sum-applied-fx">--</dd>
+            </div>
+            <div>
+              <dt>Direction</dt>
+              <dd id="load-direction">--</dd>
+            </div>
+            <div>
+              <dt>Arrow Scale</dt>
+              <dd>Schematic</dd>
+            </div>
+          </dl>
+          <p class="interpretation">
+            Orange arrows show applied nodal wind loads in the active load case. Arrow length is scaled for review only; values remain in kN.
+          </p>
         </section>
 
         <section>

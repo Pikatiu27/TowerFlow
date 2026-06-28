@@ -101,10 +101,10 @@ Interface style rules:
 - Keep information panels dense but readable, with no decorative card-heavy marketing layout.
 - Avoid hero-page, brochure, or landing-page patterns inside the application experience.
 - Maintain mobile-first readability:
-  - No overlapping title, buttons, watermark, or result panels.
+  - No overlapping title, buttons, load arrows, or result panels.
   - Controls must remain tappable.
   - Text must wrap within its container.
-- Public prototypes should include a subtle `sconmyway` watermark.
+- Public prototypes should use the `SC TOWERFLOW` product title and no viewer watermark unless a project release explicitly requests one.
 
 ## Planning Document Hierarchy
 
@@ -256,6 +256,138 @@ Phase 1 must include:
 
 Base detail, selected object framing, saved views, and orthographic/perspective switching can be added after the first static prototype is stable.
 
+## Drawing Scale, Dimensions, and Load Display
+
+TowerFlow must separate engineering model scale, screen zoom, and report drawing scale.
+
+Commercial structural software generally keeps the analytical model at true geometric size, while allowing the user to zoom, pan, rotate, filter, show loads, show deformed diagrams, show force diagrams, and prepare report views. TowerFlow should follow this logic.
+
+### Model Scale
+
+- The analytical model is always stored at real size in SI units.
+- A 30 m tower is stored as 30 m high, not as a drawing-scale object.
+- Screen zoom is not an engineering scale.
+- The 3D viewer may zoom freely, but this must not change model dimensions or result values.
+
+### Displayed Scale and Report Scale
+
+Interactive 3D views should show a scale aid rather than pretending to be a paper drawing.
+
+Required interactive scale aids:
+
+- Axis triad.
+- Height ticks or height grid.
+- Optional scale bar.
+- Optional tower height marker.
+
+Report or drawing snapshots may include drawing scales:
+
+- `Scale: Fit to View` for general 3D screenshots.
+- `Scale: 1:100` for elevation or plan snapshots only when the exported image/PDF geometry is actually generated to that scale.
+- `Not to Scale` when a diagram is schematic, force-scaled, or intentionally exaggerated.
+
+Rules:
+
+- Do not label an interactive 3D view as `1:100`.
+- Do not label a deformed shape as `1:100` unless deformation scale is also shown separately.
+- Elevation and plan report views may support selected scales such as `1:50`, `1:100`, `1:200`, or `Fit to Page`.
+- Every exported diagram must state one of:
+  - `Scale: 1:100`
+  - `Scale: Fit to View`
+  - `Not to Scale`
+  - `Deformation Scale: 100x`
+  - `Load Arrow Scale: schematic`
+
+### Dimension Display
+
+Dimension annotations must be controlled separately from result colours.
+
+Initial dimension toggles:
+
+- Overall tower height.
+- Panel height.
+- Base width.
+- Equipment mounting height.
+- Selected member length.
+- Selected node elevation.
+
+Later dimension toggles:
+
+- Face width by elevation.
+- Bolt spacing.
+- Base plate size.
+- Concrete block size.
+- Antenna offset and standoff distance.
+
+Rules:
+
+- Dimensions must use SI units by default.
+- Dimensions must remain readable in front, side, plan, and isometric views.
+- Dimension labels should not overlap critical result colours or selected-object labels.
+- If a source dimension comes from imperial manufacturer data, store the original value in metadata and display the SI converted value in the product view.
+
+### Load Display
+
+TowerFlow must make load application points visible and controllable.
+
+Load graphics must show:
+
+- Load type.
+- Load direction.
+- Load application point or region.
+- Load magnitude or scale context.
+- Active load case.
+
+Supported load display objects:
+
+- Nodal force arrow.
+- Member distributed load arrows.
+- Equipment wind load arrow.
+- Equipment gravity load arrow.
+- Global wind direction arrow.
+- Support reaction arrow.
+- Base moment symbol.
+
+Load display toggles:
+
+- Show loads.
+- Show wind direction.
+- Show equipment loads.
+- Show gravity loads.
+- Show member loads.
+- Show nodal loads.
+- Show support reactions.
+- Show load labels.
+- Show load values.
+
+Rules:
+
+- Loads must be attached to the object or coordinate where they are applied.
+- A nodal load arrow must originate at the node.
+- An equipment load arrow must originate at the equipment centroid or defined load application point.
+- A member load must be shown along the member or over its loaded segment.
+- A support reaction must be shown at the support node or base interface.
+- If an arrow is scaled for visibility, label the scale as schematic or show a load arrow scale factor.
+- Hiding load arrows must not remove the load from calculation; it only changes display.
+
+### Result Diagram Scaling
+
+Result diagrams need their own scale controls:
+
+- Deformed shape scale.
+- Load arrow scale.
+- Force colour scale.
+- Utilisation colour thresholds.
+- Reaction arrow scale.
+- Foundation pressure colour scale.
+
+Rules:
+
+- Deformation scale must be visible whenever deformed geometry is shown.
+- Load arrow scale is a visual scale and must not be confused with load magnitude.
+- Force and utilisation colour scales must update with the active result mode.
+- Fixed threshold scales are preferred for utilisation; auto scales may be used for exploratory force views.
+
 The first working chain should be:
 
 ```text
@@ -390,6 +522,12 @@ Prove the full chain from structural analysis data to interactive 3D web visuali
 - Add orbit controls, lighting, camera framing, and basic scene reset.
 - Add member selection by click or hover.
 - Use clear engineering graphics before advanced shader effects.
+- Add Phase 1 display controls for:
+  - Overall tower height or height reference.
+  - Base width or footprint reference where available.
+  - Wind load arrow visibility.
+  - Load application point visibility.
+  - Force legend visibility.
 - Follow only the Phase 1 subset of `docs/visualisation-outline.md`:
   - Tower geometry view.
   - Force flow view.
@@ -404,7 +542,7 @@ Prove the full chain from structural analysis data to interactive 3D web visuali
   - Deep graphite text.
   - Restrained cyan/green accents.
   - Compact engineering data hierarchy.
-  - Subtle `sconmyway` watermark for public prototypes.
+  - `SC TOWERFLOW` product title with no viewer watermark.
 - Show an English information panel with:
   - Member ID.
   - Force type.
@@ -438,7 +576,7 @@ Prove the full chain from structural analysis data to interactive 3D web visuali
 - Member colours match force signs and magnitudes.
 - At least one load case is manually checked for basic equilibrium.
 - The user can identify force flow through the tower visually.
-- The interface respects the project typography, colour, mobile, and watermark rules.
+- The interface respects the project typography, colour, mobile, load-display, and title rules.
 
 ## Phase 2: Parametric Analysis MVP
 

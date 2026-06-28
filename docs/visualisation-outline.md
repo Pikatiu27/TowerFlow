@@ -24,7 +24,7 @@ Current Phase 1 implementation baseline:
 - Axial force colour view.
 - Member selection with detail panel.
 - Case summary panel.
-- `sconmyway` public prototype watermark.
+- `SC TOWERFLOW` public prototype title.
 
 Phase 1 planned visual completion items:
 
@@ -717,6 +717,183 @@ A view mode is complete only when:
 - It has table or panel support.
 - It handles missing data.
 - It can be captured as a report-ready saved view.
+
+### 16. Scale, Dimension, and Load Display Logic
+
+TowerFlow must separate true model dimensions, screen zoom, report scale, and result diagram scale.
+
+Mature structural software generally follows this pattern:
+
+- The analysis model is stored at true size.
+- The graphics window allows free zoom, pan, rotate, and fit-to-view.
+- Loads, reactions, diagrams, labels, and dimensions have independent display switches.
+- Deformed shapes, force diagrams, and load arrows use explicit display scale factors.
+- Report or print views may carry drawing scale information, but interactive 3D review is usually fit-to-view rather than a fixed paper scale.
+
+TowerFlow should follow this pattern.
+
+#### Model Scale
+
+- Store all geometry at real size in SI units.
+- Do not scale model coordinates for display.
+- Use camera zoom to inspect the model.
+- Do not call a 3D interactive view `1:100`.
+
+#### Report Drawing Scale
+
+Supported report scale labels:
+
+- `Scale: Fit to View`.
+- `Scale: 1:50`.
+- `Scale: 1:100`.
+- `Scale: 1:200`.
+- `Not to Scale`.
+
+Rules:
+
+- Use `1:50`, `1:100`, or `1:200` only for generated elevation or plan report snapshots.
+- Use `Fit to View` for general 3D screenshots.
+- Use `Not to Scale` for schematic diagrams, force-flow diagrams, load arrows, and exaggerated deformed shapes.
+- If deformed geometry is shown, display deformation scale separately.
+
+Example:
+
+```text
+View: Front Elevation
+Drawing Scale: 1:100
+Result: Axial Force
+Load Case: Wind 60 deg
+Load Arrow Scale: schematic
+```
+
+#### Dimension Toggles
+
+Initial dimension display toggles:
+
+- Overall tower height.
+- Panel height.
+- Base width.
+- Selected member length.
+- Selected node elevation.
+- Equipment mounting height.
+
+Later dimension display toggles:
+
+- Face width.
+- Bolt spacing.
+- Base plate dimensions.
+- Concrete block dimensions.
+- Antenna offset.
+- Mount standoff distance.
+
+Rules:
+
+- Dimension annotations should be available in front, side, plan, and isometric views.
+- Dimensions must not cover critical member colours or warning labels.
+- Dimensions should use SI values in the UI.
+- Source imperial dimensions may be stored in metadata but should not dominate product display.
+
+#### Load Display Toggles
+
+Initial load display toggles:
+
+- Show loads.
+- Show wind direction.
+- Show nodal loads.
+- Show member loads.
+- Show equipment loads.
+- Show gravity loads.
+- Show support reactions.
+- Show load labels.
+- Show load values.
+
+Rules:
+
+- Loads must display where they are applied.
+- Nodal loads originate at nodes.
+- Equipment wind loads originate at the equipment centroid or defined load application point.
+- Gravity loads point downward from the equipment or node where they are applied.
+- Member loads appear along the loaded member or loaded segment.
+- Support reactions originate at support nodes or the base interface.
+- Base moments should use a clear curved-arrow symbol.
+- Load arrows may be scaled for readability, but their displayed values must remain numerically correct.
+- Hiding loads changes only the view state, not the analysis model.
+
+#### Load Application Detail Panel
+
+Clicking a load arrow should show:
+
+- Load ID.
+- Load type.
+- Load case.
+- Applied object.
+- Application coordinate.
+- Direction vector.
+- Magnitude.
+- Units.
+- Source or assumption.
+
+Example:
+
+```text
+Load ID: L-WIND-EQ-03
+Type: Equipment wind load
+Load Case: Wind 60 deg
+Applied To: Equipment EQ-03
+Application Point: Equipment centroid
+Direction: global +X
+Magnitude: 1.8 kN
+Units: kN
+```
+
+#### Diagram Scale Controls
+
+Required diagram scale controls:
+
+- Deformation scale.
+- Load arrow scale.
+- Reaction arrow scale.
+- Force colour scale.
+- Utilisation threshold scale.
+
+Rules:
+
+- Deformation scale must be visible whenever deformed shape is shown.
+- Load arrow scale should default to automatic visual scaling, but the load value labels remain true values.
+- Utilisation should default to fixed thresholds.
+- Axial force may use auto range or fixed project range, but the legend must state which mode is active.
+
+#### Display State Additions
+
+Suggested display state additions:
+
+```json
+{
+  "dimensions": {
+    "showOverallHeight": true,
+    "showPanelHeight": false,
+    "showBaseWidth": true,
+    "showSelectedMemberLength": true,
+    "showEquipmentMountingHeight": true
+  },
+  "loads": {
+    "showLoads": true,
+    "showWindDirection": true,
+    "showNodalLoads": true,
+    "showMemberLoads": false,
+    "showEquipmentLoads": true,
+    "showSupportReactions": false,
+    "showLoadLabels": true,
+    "showLoadValues": true
+  },
+  "scales": {
+    "reportDrawingScale": "Fit to View",
+    "deformationScale": 100,
+    "loadArrowScale": "automatic_schematic",
+    "reactionArrowScale": "automatic_schematic"
+  }
+}
+```
 
 ## Core Visual Types
 
