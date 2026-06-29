@@ -8,7 +8,7 @@
   --accent: #00a6b2;
   --accent-strong: #007f8a;
   --signal: #43a047;
-  --scene: #eef3f6;
+  --scene: #f4f6f8;
   color: var(--ink);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -28,31 +28,33 @@ body {
 }
 
 button {
-  min-height: 42px;
-  border: 1px solid rgba(0, 166, 178, 0.42);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.86);
-  color: var(--accent-strong);
+  min-height: 34px;
+  border: 1px solid #b8c2cc;
+  border-radius: 3px;
+  background: #f8fafc;
+  color: #1f2937;
   font: inherit;
-  font-size: 0.84rem;
-  font-weight: 760;
-  padding: 0 15px;
-  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+  font-size: 0.78rem;
+  font-weight: 720;
+  padding: 0 12px;
+  box-shadow: none;
 }
 
 .app-shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 382px;
+  height: 100svh;
   min-height: 100svh;
+  overflow: hidden;
 }
 
 .viewer-section {
   position: relative;
-  min-height: 100svh;
+  min-height: 0;
   overflow: hidden;
   background:
-    linear-gradient(rgba(17, 24, 39, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(17, 24, 39, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(17, 24, 39, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 24, 39, 0.045) 1px, transparent 1px),
     var(--scene);
   background-size: 32px 32px;
 }
@@ -84,11 +86,11 @@ button {
 .top-bar > div {
   min-width: 0;
   max-width: 470px;
-  border-left: 3px solid var(--accent);
-  background: rgba(255, 255, 255, 0.76);
-  padding: 12px 14px;
-  box-shadow: 0 14px 36px rgba(17, 24, 39, 0.08);
-  backdrop-filter: blur(12px);
+  border: 1px solid var(--line-strong);
+  border-left: 4px solid #64748b;
+  background: #ffffff;
+  padding: 10px 12px;
+  box-shadow: none;
 }
 
 .top-bar button {
@@ -110,18 +112,18 @@ button {
 
 .view-toolbar button {
   min-height: 34px;
-  border-color: rgba(95, 107, 122, 0.32);
-  background: rgba(255, 255, 255, 0.84);
+  border-color: #b8c2cc;
+  background: #ffffff;
   color: #263242;
   font-size: 0.76rem;
   padding: 0 11px;
-  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.06);
+  box-shadow: none;
 }
 
 .view-toolbar button.is-active {
-  border-color: rgba(0, 166, 178, 0.7);
-  background: rgba(0, 166, 178, 0.1);
-  color: var(--accent-strong);
+  border-color: #64748b;
+  background: #e2e8f0;
+  color: #111827;
 }
 
 .axis-gizmo {
@@ -131,27 +133,32 @@ button {
   z-index: 2;
   width: 92px;
   height: 92px;
-  border: 1px solid rgba(174, 186, 199, 0.62);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.76);
-  box-shadow: 0 10px 28px rgba(17, 24, 39, 0.08);
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  background: #ffffff;
+  box-shadow: none;
   pointer-events: none;
 }
 
-.grid-label {
+.grid-label,
+.scale-label {
   position: absolute;
   right: 18px;
   top: 202px;
   z-index: 2;
-  border: 1px solid rgba(174, 186, 199, 0.62);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  background: #ffffff;
   color: var(--muted);
   font-size: 0.72rem;
   font-weight: 760;
   padding: 7px 10px;
   pointer-events: none;
-  box-shadow: 0 10px 28px rgba(17, 24, 39, 0.08);
+  box-shadow: none;
+}
+
+.scale-label {
+  top: 238px;
 }
 
 .axis-gizmo svg {
@@ -204,11 +211,10 @@ button {
 .legend-panel {
   position: absolute;
   z-index: 2;
-  border: 1px solid rgba(174, 186, 199, 0.72);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 14px 38px rgba(17, 24, 39, 0.08);
-  backdrop-filter: blur(12px);
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  background: #ffffff;
+  box-shadow: none;
 }
 
 .view-context {
@@ -223,7 +229,7 @@ button {
 
 .view-context div {
   min-width: 0;
-  background: rgba(247, 250, 252, 0.86);
+  background: #f8fafc;
   padding: 10px 12px;
 }
 
@@ -284,7 +290,7 @@ button {
 }
 
 .legend-swatch.load-arrow {
-  background: #f59e0b;
+  background: #1f2937;
 }
 
 .legend-note {
@@ -330,7 +336,7 @@ h2 {
   background: var(--panel);
   padding: 22px;
   overflow-y: auto;
-  box-shadow: -18px 0 50px rgba(17, 24, 39, 0.06);
+  box-shadow: none;
 }
 
 .info-panel section {
@@ -356,7 +362,7 @@ h2 {
 .context-grid div {
   min-width: 0;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 3px;
   padding: 12px;
   background: var(--panel-soft);
 }
@@ -380,11 +386,37 @@ dd {
 
 .interpretation {
   margin: 18px 0 0;
-  border-left: 3px solid var(--signal);
+  border-left: 3px solid #94a3b8;
   color: #2d3748;
   font-size: 0.94rem;
   line-height: 1.55;
   padding-left: 12px;
+}
+
+.display-options {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.display-options label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--panel-soft);
+  color: #263242;
+  font-size: 0.88rem;
+  font-weight: 720;
+  padding: 7px 10px;
+}
+
+.display-options input {
+  width: 15px;
+  height: 15px;
+  accent-color: #475569;
 }
 
 .status-list {
@@ -423,7 +455,9 @@ dd {
   .app-shell {
     display: flex;
     flex-direction: column;
+    height: auto;
     min-height: 100svh;
+    overflow: visible;
   }
 
   .viewer-section {
@@ -460,7 +494,8 @@ dd {
     padding: 0 9px;
   }
 
-  .grid-label {
+  .grid-label,
+  .scale-label {
     display: none;
   }
 

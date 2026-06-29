@@ -4,6 +4,8 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 const viewer = document.querySelector("#viewer");
 const resetButton = document.querySelector("#reset-view");
 const viewButtons = Array.from(document.querySelectorAll("[data-view]"));
+const showLoadsToggle = document.querySelector("#show-loads");
+const showLoadLabelsToggle = document.querySelector("#show-load-labels");
 const labels = {
   caseTitle: document.querySelector("#case-title"),
   nodeCount: document.querySelector("#node-count"),
@@ -25,15 +27,16 @@ const labels = {
 };
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xeef3f6);
+scene.background = new THREE.Color(0xf4f6f8);
 
-const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+const camera = new THREE.OrthographicCamera(-8, 8, 8, -8, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 viewer.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
+controls.enableDamping = false;
+controls.screenSpacePanning = true;
 controls.target.set(0, 0, 7);
 
 const raycaster = new THREE.Raycaster();
@@ -48,14 +51,14 @@ let modelCenter = new THREE.Vector3(0, 6, 0);
 let modelRadius = 8;
 let activeView = "iso";
 const MEMBER_RADIUS_M = 0.018;
-const LOAD_COLOUR = 0xf59e0b;
+const LOAD_COLOUR = 0x1f2937;
 
-scene.add(new THREE.HemisphereLight(0xffffff, 0x9fb0bd, 2.75));
+scene.add(new THREE.HemisphereLight(0xffffff, 0xb9c4ce, 2.35));
 const sun = new THREE.DirectionalLight(0xffffff, 2.2);
 sun.position.set(8, -10, 18);
 scene.add(sun);
 
-const grid = new THREE.GridHelper(4, 8, 0x8fa0ae, 0xd5dee7);
+const grid = new THREE.GridHelper(4, 8, 0x94a3b8, 0xd6dde5);
 scene.add(grid);
 
 function nodeVector(node) {
@@ -80,13 +83,11 @@ function makeLoadLabel(text) {
   canvas.width = 256;
   canvas.height = 72;
   const context = canvas.getContext("2d");
-  context.fillStyle = "rgba(255, 255, 255, 0.86)";
-  context.strokeStyle = "rgba(245, 158, 11, 0.72)";
-  context.lineWidth = 4;
-  context.beginPath();
-  context.roundRect(4, 4, 248, 64, 10);
-  context.fill();
-  context.stroke();
+  context.fillStyle = "rgba(255, 255, 255, 0.96)";
+  context.strokeStyle = "rgba(100, 116, 139, 0.9)";
+  context.lineWidth = 3;
+  context.fillRect(6, 8, 244, 56);
+  context.strokeRect(6, 8, 244, 56);
   context.fillStyle = "#111827";
   context.font = "700 24px ui-monospace, SFMono-Regular, Consolas, monospace";
   context.fillText(text, 18, 44);
@@ -112,8 +113,8 @@ function makeMember(start, end, member, maxAbsForce) {
   const geometry = new THREE.CylinderGeometry(MEMBER_RADIUS_M, MEMBER_RADIUS_M, length, 10);
   const material = new THREE.MeshStandardMaterial({
     color: memberColour(member, maxAbsForce),
-    roughness: 0.48,
-    metalness: 0.05,
+    roughness: 0.72,
+    metalness: 0.0,
   });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.position.copy(start).add(end).multiplyScalar(0.5);
@@ -128,8 +129,8 @@ function makeCylinderBetween(start, end, radius, colour) {
   const geometry = new THREE.CylinderGeometry(radius, radius, length, 12);
   const material = new THREE.MeshStandardMaterial({
     color: colour,
-    roughness: 0.42,
-    metalness: 0.08,
+    roughness: 0.78,
+    metalness: 0.0,
   });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.position.copy(start).add(end).multiplyScalar(0.5);
@@ -141,8 +142,8 @@ function makeConeAt(position, direction, radius, height, colour) {
   const geometry = new THREE.ConeGeometry(radius, height, 18);
   const material = new THREE.MeshStandardMaterial({
     color: colour,
-    roughness: 0.4,
-    metalness: 0.08,
+    roughness: 0.78,
+    metalness: 0.0,
   });
   const cone = new THREE.Mesh(geometry, material);
   cone.position.copy(position);
@@ -152,7 +153,7 @@ function makeConeAt(position, direction, radius, height, colour) {
 
 function addNodeMarker(position) {
   const geometry = new THREE.SphereGeometry(0.055, 14, 14);
-  const material = new THREE.MeshStandardMaterial({ color: 0x12313f, roughness: 0.5 });
+  const material = new THREE.MeshStandardMaterial({ color: 0x22313f, roughness: 0.75 });
   const marker = new THREE.Mesh(geometry, material);
   marker.position.copy(position);
   scene.add(marker);
@@ -208,6 +209,18 @@ function setActiveViewButton(viewName) {
   }
 }
 
+function updateOrthoFrustum() {
+  const width = viewer.clientWidth || 1;
+  const height = viewer.clientHeight || 1;
+  const aspect = width / height;
+  const halfSize = Math.max(modelRadius * 1.65, 2.8);
+  camera.left = -halfSize * aspect;
+  camera.right = halfSize * aspect;
+  camera.top = halfSize;
+  camera.bottom = -halfSize;
+  camera.updateProjectionMatrix();
+}
+
 function setCameraView(viewName) {
   if (!modelBounds) {
     return;
@@ -225,13 +238,13 @@ function setCameraView(viewName) {
     camera.position.set(target.x, target.y + distance, target.z);
     camera.up.set(0, 0, -1);
   } else {
-    camera.position.set(target.x + distance * 0.45, target.y + distance * 0.18, target.z + distance * 0.78);
+    camera.position.set(target.x + distance * 0.55, target.y + distance * 0.28, target.z + distance * 0.82);
     viewName = "iso";
   }
 
   camera.near = Math.max(distance / 100, 0.05);
   camera.far = distance * 8;
-  camera.updateProjectionMatrix();
+  updateOrthoFrustum();
   controls.target.copy(target);
   controls.update();
   setActiveViewButton(viewName);
@@ -246,25 +259,40 @@ function addLoadArrow(load, nodes, maxLoadMagnitude) {
 
   const origin = nodeVector(node);
   const unitDirection = direction.clone().normalize();
-  const arrowLength = 0.72 + (magnitude / Math.max(maxLoadMagnitude, 0.001)) * 1.45;
-  const shaftLength = Math.max(arrowLength - 0.22, 0.2);
+  const arrowLength = 0.48 + (magnitude / Math.max(maxLoadMagnitude, 0.001)) * 0.78;
+  const shaftLength = Math.max(arrowLength - 0.16, 0.18);
   const shaftStart = origin.clone().add(unitDirection.clone().multiplyScalar(0.07));
   const shaftEnd = origin.clone().add(unitDirection.clone().multiplyScalar(shaftLength));
   const conePosition = origin.clone().add(unitDirection.clone().multiplyScalar(arrowLength));
   const group = new THREE.Group();
-  const shaft = makeCylinderBetween(shaftStart, shaftEnd, 0.028, LOAD_COLOUR);
-  const head = makeConeAt(conePosition, unitDirection, 0.105, 0.24, LOAD_COLOUR);
+  const shaft = makeCylinderBetween(shaftStart, shaftEnd, 0.015, LOAD_COLOUR);
+  const head = makeConeAt(conePosition, unitDirection, 0.062, 0.16, LOAD_COLOUR);
   group.add(shaft);
   group.add(head);
   if (viewer.clientWidth > 640) {
     const label = makeLoadLabel(`${magnitude.toFixed(2)} kN`);
     label.position.copy(conePosition).add(unitDirection.clone().multiplyScalar(0.22));
     label.position.y += 0.2;
+    label.userData.kind = "load-label";
     group.add(label);
   }
   group.userData.load = load;
   scene.add(group);
   loadObjects.push(group);
+  updateDisplayOptions();
+}
+
+function updateDisplayOptions() {
+  const showLoads = showLoadsToggle?.checked ?? true;
+  const showLoadLabels = showLoadLabelsToggle?.checked ?? true;
+  for (const object of loadObjects) {
+    object.visible = showLoads;
+    object.traverse((child) => {
+      if (child.userData?.kind === "load-label") {
+        child.visible = showLoads && showLoadLabels;
+      }
+    });
+  }
 }
 
 function renderLoads(data, nodes) {
@@ -364,9 +392,8 @@ function resetView() {
 function resize() {
   const width = viewer.clientWidth;
   const height = viewer.clientHeight;
-  camera.aspect = width / Math.max(height, 1);
-  camera.updateProjectionMatrix();
   renderer.setSize(width, height, false);
+  updateOrthoFrustum();
 }
 
 async function loadData() {
@@ -390,6 +417,8 @@ resetButton.addEventListener("click", resetView);
 for (const button of viewButtons) {
   button.addEventListener("click", () => setCameraView(button.dataset.view));
 }
+showLoadsToggle?.addEventListener("change", updateDisplayOptions);
+showLoadLabelsToggle?.addEventListener("change", updateDisplayOptions);
 
 resize();
 loadData().catch((error) => {

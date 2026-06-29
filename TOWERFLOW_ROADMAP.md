@@ -1,5 +1,11 @@
 # TowerFlow (Aussie Edition) Roadmap
 
+## Project Principles
+
+The project principles are defined in `docs/project-principles.md`.
+
+Those principles control product scope, calculation disclosure, load input philosophy, visualisation style, and Phase 1 boundaries. If a detailed visualisation or reference note conflicts with the principles, the principles take priority.
+
 ## Project Rule
 
 All product-facing outputs must be in English.

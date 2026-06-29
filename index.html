@@ -44,6 +44,7 @@
           </svg>
         </div>
         <div class="grid-label" aria-label="Grid reference">Ground reference grid: 0.5 m spacing</div>
+        <div class="scale-label" aria-label="Scale reference">Scale: Fit to View | Model: true SI dimensions</div>
         <div class="view-context" aria-label="Active result context">
           <div>
             <span>Mode</span>
@@ -98,6 +99,10 @@
               <dd>Results</dd>
             </div>
             <div>
+              <dt>Analysis Model</dt>
+              <dd>3D pin-jointed truss</dd>
+            </div>
+            <div>
               <dt>Result Type</dt>
               <dd>Axial force</dd>
             </div>
@@ -110,6 +115,21 @@
               <dd>SI</dd>
             </div>
           </dl>
+        </section>
+
+        <section>
+          <p class="eyebrow">Display Options</p>
+          <h2>Engineering Layers</h2>
+          <div class="display-options">
+            <label>
+              <input id="show-loads" type="checkbox" checked />
+              <span>Applied loads</span>
+            </label>
+            <label>
+              <input id="show-load-labels" type="checkbox" checked />
+              <span>Load values</span>
+            </label>
+          </div>
         </section>
 
         <section>
@@ -166,6 +186,10 @@
           <h2 id="load-title">Loading...</h2>
           <dl class="summary-grid">
             <div>
+              <dt>Type</dt>
+              <dd>Nodal wind load</dd>
+            </div>
+            <div>
               <dt>Load Count</dt>
               <dd id="load-count">--</dd>
             </div>
@@ -181,10 +205,45 @@
               <dt>Arrow Scale</dt>
               <dd>Schematic</dd>
             </div>
+            <div>
+              <dt>Locations</dt>
+              <dd>N21-N43</dd>
+            </div>
+            <div>
+              <dt>Source</dt>
+              <dd>Static JSON input</dd>
+            </div>
           </dl>
           <p class="interpretation">
-            Orange arrows show applied nodal wind loads in the active load case. Arrow length is scaled for review only; values remain in kN.
+            Dark arrows show applied nodal wind loads in the active load case. Arrow length is schematic; values remain in kN.
           </p>
+        </section>
+
+        <section>
+          <p class="eyebrow">Calculation Basis</p>
+          <h2>Phase 1 Solver</h2>
+          <div class="status-list">
+            <div>
+              <span class="status-dot"></span>
+              <p><strong>Method</strong> Linear elastic 3D pin-jointed truss stiffness analysis.</p>
+            </div>
+            <div>
+              <span class="status-dot"></span>
+              <p><strong>Loads</strong> Simplified static nodal loads in global +X.</p>
+            </div>
+            <div>
+              <span class="status-dot"></span>
+              <p><strong>Reference</strong> Demo geometry only; not an AS/NZS 1170.2 wind calculation.</p>
+            </div>
+            <div>
+              <span class="status-dot"></span>
+              <p><strong>Code checks</strong> Not calculated in Phase 1.</p>
+            </div>
+            <div>
+              <span class="status-dot"></span>
+              <p><strong>Certification</strong> Not for design certification.</p>
+            </div>
+          </div>
         </section>
 
         <section>
