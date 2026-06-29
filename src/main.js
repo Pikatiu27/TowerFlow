@@ -83,12 +83,12 @@ function makeLoadLabel(text) {
   canvas.height = 52;
   const context = canvas.getContext("2d");
   context.clearRect(0, 0, canvas.width, canvas.height);
-  context.font = "760 26px ui-monospace, SFMono-Regular, Consolas, monospace";
-  context.lineWidth = 5;
+  context.font = "650 22px ui-monospace, SFMono-Regular, Consolas, monospace";
+  context.lineWidth = 4;
   context.strokeStyle = "rgba(255, 255, 255, 0.92)";
-  context.strokeText(text, 8, 35);
+  context.strokeText(text, 8, 33);
   context.fillStyle = "#111827";
-  context.fillText(text, 8, 35);
+  context.fillText(text, 8, 33);
   const texture = new THREE.CanvasTexture(canvas);
   const material = new THREE.SpriteMaterial({
     map: texture,
@@ -96,7 +96,7 @@ function makeLoadLabel(text) {
     transparent: true,
   });
   const sprite = new THREE.Sprite(material);
-  sprite.scale.set(1.08, 0.27, 1);
+  sprite.scale.set(0.92, 0.23, 1);
   return sprite;
 }
 
@@ -109,9 +109,9 @@ function loadLabelVerticalOffset(load) {
 
 function memberColour(member, maxAbsForce) {
   const magnitude = Math.min(Math.abs(member.axialForceKN) / Math.max(maxAbsForce, 0.001), 1);
-  const low = new THREE.Color(0x9aa6b2);
-  const tension = new THREE.Color(0xd73d32);
-  const compression = new THREE.Color(0x007fbd);
+  const low = new THREE.Color(0x94a3b8);
+  const tension = new THREE.Color(0xc9342c);
+  const compression = new THREE.Color(0x1479a8);
   if (Math.abs(member.axialForceKN) < 0.05) return low;
   return low.clone().lerp(member.axialForceKN > 0 ? tension : compression, 0.35 + magnitude * 0.65);
 }

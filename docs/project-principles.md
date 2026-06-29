@@ -234,6 +234,65 @@ Phase 1 visual priorities:
 
 Animation is optional and must never replace numeric display.
 
+### Model Viewport Typography
+
+The model viewport must read like an engineering analysis workspace.
+
+Recommended viewport hierarchy:
+
+- Application title: 20-22 px, heavy weight, used only once.
+- Prototype or mode label: 10-11 px, uppercase, medium-heavy weight.
+- Toolbar buttons: 12 px, medium weight.
+- View context labels: 10 px, uppercase, grey.
+- View context values: 12 px, medium weight.
+- Legend title: 11 px, uppercase, medium-heavy weight.
+- Legend labels: 12 px, medium weight.
+- Legend note: 11 px, regular weight.
+- Grid, scale, and source labels: 11 px, regular or medium weight.
+- Load labels: 10-11 px, medium weight.
+- Axis labels: 11-12 px, medium-heavy weight.
+
+Viewport text rules:
+
+- Reduce large webpage-style titles inside the model window.
+- Avoid using the same heavy font weight for every label and value.
+- Keep engineering values readable, but do not make every value look like a primary result.
+- Use monospace only for compact engineering values, IDs, and numeric result fields.
+- Keep status bars compact so they behave like software chrome, not content cards.
+
+### Model Viewport Colour System
+
+The model window should use a restrained technical palette.
+
+Recommended viewport colours:
+
+- Canvas background: `#f3f5f7` or `#f5f6f8`.
+- Grid major/minor lines: `#cbd5e1` and `#e5eaf0`.
+- Floating panel background: `#ffffff`.
+- Panel border: `#cbd5e1`.
+- Primary text: `#111827`.
+- Secondary text: `#475569`.
+- Muted text: `#64748b`.
+- Active toolbar background: `#e2e8f0`.
+- Toolbar border: `#b8c2cc`.
+
+Structural result colours:
+
+- Tension: deep red, recommended `#c9342c`.
+- Compression: engineering blue, recommended `#1479a8`.
+- Low force or neutral state: `#94a3b8`.
+- Applied load: dark graphite, recommended `#1f2937`.
+- Selected member: preserve original force colour where possible; prefer outline, halo, or increased thickness over replacing the semantic colour.
+
+Viewport layout rules:
+
+- The viewport should feel like analysis software, not a landing-page hero.
+- Use a compact toolbar for view commands.
+- Use a compact legend, not a large explanatory card.
+- Use a bottom status bar for mode, case, result, units, and scale context.
+- Put `Scale: Fit to View` in the status context, not as a large floating content block unless needed for exported drawings.
+- Keep axis triad, grid reference, legend, and status context visible but visually secondary to the model.
+
 ## 11. Page Disclosure Rule
 
 Every TowerFlow page or prototype must disclose:
@@ -274,4 +333,3 @@ Before adding a new calculation feature:
 - Define output schema.
 - Add a verification case.
 - Show assumptions in the interface or documentation.
-

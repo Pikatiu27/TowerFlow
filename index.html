@@ -44,7 +44,6 @@
           </svg>
         </div>
         <div class="grid-label" aria-label="Grid reference">Ground reference grid: 0.5 m spacing</div>
-        <div class="scale-label" aria-label="Scale reference">Scale: Fit to View | Model: true SI dimensions</div>
         <div class="view-context" aria-label="Active result context">
           <div>
             <span>Mode</span>
@@ -65,6 +64,10 @@
           <div>
             <span>Units</span>
             <strong>SI</strong>
+          </div>
+          <div>
+            <span>Scale</span>
+            <strong>Fit to View</strong>
           </div>
         </div>
         <div class="legend-panel" aria-label="Axial force legend">
@@ -89,19 +92,20 @@
         </div>
       </section>
 
-      <aside class="info-panel" aria-label="Engineering result panel">
-        <section class="state-section">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">View State</p>
-              <h2>Current Result Context</h2>
-            </div>
-            <span class="state-badge">Static Demo</span>
+      <aside class="info-panel" aria-label="Engineering result inspector">
+        <header class="panel-header">
+          <div>
+            <p class="panel-kicker">Result Inspector</p>
+            <h2>Static Case Review</h2>
           </div>
+          <span class="state-badge">Phase 1</span>
+        </header>
 
-          <div class="state-primary" aria-label="Active result summary">
+        <section class="property-section">
+          <div class="section-bar">Active Context</div>
+          <div class="result-strip" aria-label="Active result summary">
             <div>
-              <span>Load Case</span>
+              <span>Case</span>
               <strong id="panel-load-case">LC1</strong>
             </div>
             <div>
@@ -113,8 +117,7 @@
               <strong>SI</strong>
             </div>
           </div>
-
-          <dl class="state-details">
+          <dl class="property-list">
             <div>
               <dt>Mode</dt>
               <dd>Results review</dd>
@@ -134,25 +137,21 @@
           </dl>
         </section>
 
-        <section>
-          <p class="eyebrow">Display</p>
-          <h2>Load Display</h2>
-          <div class="display-options">
-            <label>
-              <input id="show-loads" type="checkbox" checked />
-              <span>Applied load arrows and kN values</span>
-            </label>
-          </div>
+        <section class="property-section">
+          <div class="section-bar">Display</div>
+          <label class="compact-toggle">
+            <input id="show-loads" type="checkbox" checked />
+            <span>Applied load arrows and kN values</span>
+          </label>
         </section>
 
-        <section>
-          <p class="eyebrow">Selected Member</p>
-          <h2 id="member-title">No member selected</h2>
-          <dl class="member-grid">
-            <div>
-              <dt>Force State</dt>
-              <dd id="member-state">Select a member</dd>
-            </div>
+        <section class="property-section">
+          <div class="section-bar">Selected Member</div>
+          <div class="selection-summary">
+            <strong id="member-title">No member selected</strong>
+            <span id="member-state">Select a member</span>
+          </div>
+          <dl class="property-list">
             <div>
               <dt>Axial Force</dt>
               <dd id="member-force">--</dd>
@@ -166,15 +165,18 @@
               <dd id="member-group">--</dd>
             </div>
           </dl>
-          <p id="member-interpretation" class="interpretation">
-            Tap or click a tower member to review its axial force result.
+          <p id="member-interpretation" class="panel-note">
+            Click a tower member to review its axial force result.
           </p>
         </section>
 
-        <section>
-          <p class="eyebrow">Case Summary</p>
-          <h2 id="case-title">Loading...</h2>
-          <dl class="summary-grid">
+        <section class="property-section">
+          <div class="section-bar">Model Summary</div>
+          <dl class="property-list">
+            <div>
+              <dt>Case Title</dt>
+              <dd id="case-title">Loading...</dd>
+            </div>
             <div>
               <dt>Nodes</dt>
               <dd id="node-count">--</dd>
@@ -194,10 +196,13 @@
           </dl>
         </section>
 
-        <section>
-          <p class="eyebrow">Load Summary</p>
-          <h2 id="load-title">Loading...</h2>
-          <dl class="summary-grid">
+        <section class="property-section">
+          <div class="section-bar">Load Summary</div>
+          <dl class="property-list">
+            <div>
+              <dt>Load Case</dt>
+              <dd id="load-title">Loading...</dd>
+            </div>
             <div>
               <dt>Type</dt>
               <dd>Nodal wind load</dd>
@@ -227,55 +232,40 @@
               <dd>Static JSON input</dd>
             </div>
           </dl>
-          <p class="interpretation">
-            Dark arrows show applied nodal wind loads in the active load case. Arrow length is schematic; values remain in kN.
+          <p class="panel-note">
+            Load arrows and values are display-scaled only. The numeric values remain in kN.
           </p>
         </section>
 
-        <section>
-          <p class="eyebrow">Calculation Basis</p>
-          <h2>Phase 1 Solver</h2>
-          <div class="status-list">
+        <section class="property-section">
+          <div class="section-bar">Calculation Basis</div>
+          <dl class="property-list">
             <div>
-              <span class="status-dot"></span>
-              <p><strong>Method</strong> Linear elastic 3D pin-jointed truss stiffness analysis.</p>
+              <dt>Method</dt>
+              <dd>Linear elastic 3D truss stiffness analysis</dd>
             </div>
             <div>
-              <span class="status-dot"></span>
-              <p><strong>Loads</strong> Simplified static nodal loads in global +X.</p>
+              <dt>Loads</dt>
+              <dd>Simplified static nodal loads in global +X</dd>
             </div>
             <div>
-              <span class="status-dot"></span>
-              <p><strong>Reference</strong> Demo geometry only; not an AS/NZS 1170.2 wind calculation.</p>
+              <dt>Reference</dt>
+              <dd>Demo geometry only; not AS/NZS 1170.2 wind</dd>
             </div>
             <div>
-              <span class="status-dot"></span>
-              <p><strong>Code checks</strong> Not calculated in Phase 1.</p>
+              <dt>Use</dt>
+              <dd>Visual prototype, not design certification</dd>
             </div>
-            <div>
-              <span class="status-dot"></span>
-              <p><strong>Certification</strong> Not for design certification.</p>
-            </div>
-          </div>
+          </dl>
         </section>
 
-        <section>
-          <p class="eyebrow">Unavailable Checks</p>
-          <h2>Not calculated in Phase 1</h2>
-          <div class="status-list">
-            <div>
-              <span class="status-dot"></span>
-              <p><strong>Utilisation</strong> Member capacities are not defined.</p>
-            </div>
-            <div>
-              <span class="status-dot"></span>
-              <p><strong>Foundation</strong> Base plate, bolt, and concrete checks are out of scope.</p>
-            </div>
-            <div>
-              <span class="status-dot"></span>
-              <p><strong>Reliability</strong> Probabilistic inputs are not defined.</p>
-            </div>
-          </div>
+        <section class="property-section">
+          <div class="section-bar">Out of Scope</div>
+          <ul class="scope-list">
+            <li>AS 4100 utilisation checks</li>
+            <li>Foundation, base plate, and anchor bolt checks</li>
+            <li>Reliability or probability assessment</li>
+          </ul>
         </section>
       </aside>
     </main>
