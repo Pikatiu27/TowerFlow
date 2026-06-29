@@ -80,22 +80,32 @@ function formatLoadVector(load) {
 
 function makeLoadLabel(text) {
   const canvas = document.createElement("canvas");
-  canvas.width = 256;
-  canvas.height = 72;
+  canvas.width = 210;
+  canvas.height = 52;
   const context = canvas.getContext("2d");
-  context.fillStyle = "rgba(255, 255, 255, 0.96)";
-  context.strokeStyle = "rgba(100, 116, 139, 0.9)";
-  context.lineWidth = 3;
-  context.fillRect(6, 8, 244, 56);
-  context.strokeRect(6, 8, 244, 56);
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.font = "760 26px ui-monospace, SFMono-Regular, Consolas, monospace";
+  context.lineWidth = 5;
+  context.strokeStyle = "rgba(255, 255, 255, 0.92)";
+  context.strokeText(text, 8, 35);
   context.fillStyle = "#111827";
-  context.font = "700 24px ui-monospace, SFMono-Regular, Consolas, monospace";
-  context.fillText(text, 18, 44);
+  context.fillText(text, 8, 35);
   const texture = new THREE.CanvasTexture(canvas);
-  const material = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+  const material = new THREE.SpriteMaterial({
+    map: texture,
+    depthTest: false,
+    transparent: true,
+  });
   const sprite = new THREE.Sprite(material);
-  sprite.scale.set(1.35, 0.38, 1);
+  sprite.scale.set(1.08, 0.27, 1);
   return sprite;
+}
+
+function loadLabelVerticalOffset(load) {
+  const corner = Number(String(load.nodeId ?? "").slice(-1));
+  if (corner === 1) return 0.12;
+  if (corner === 3) return -0.12;
+  return 0;
 }
 
 function memberColour(member, maxAbsForce) {
@@ -271,8 +281,8 @@ function addLoadArrow(load, nodes, maxLoadMagnitude) {
   group.add(head);
   if (viewer.clientWidth > 640) {
     const label = makeLoadLabel(`${magnitude.toFixed(2)} kN`);
-    label.position.copy(conePosition).add(unitDirection.clone().multiplyScalar(0.22));
-    label.position.y += 0.2;
+    label.position.copy(conePosition).add(unitDirection.clone().multiplyScalar(0.26));
+    label.position.y += loadLabelVerticalOffset(load);
     label.userData.kind = "load-label";
     group.add(label);
   }
