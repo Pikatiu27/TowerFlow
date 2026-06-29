@@ -1,5 +1,117 @@
 # TowerFlow (Aussie Edition) Roadmap
 
+## Executive Outline
+
+TowerFlow is a lightweight web engineering visualisation and tower capacity screening platform for Australian communication and utility tower assets.
+
+The first product target is:
+
+> Australian tower equipment co-location capacity screening and visual engineering review.
+
+The product should help an engineer, asset owner, or operator understand:
+
+- Where loads are applied.
+- How forces flow through the tower.
+- Which member, load case, wind direction, or support reaction controls the result.
+- What the current analysis basis includes and excludes.
+- Whether a proposed co-location change deserves approval, strengthening, or full engineering review.
+
+TowerFlow must remain calculation-led. Visuals explain calculated engineering state; they must not imply calculations that have not been performed.
+
+### Non-negotiable Project Rules
+
+- All product-facing output is English.
+- All calculation, schema, UI, chart, report, and export values use SI units.
+- Engineering data uses a right-handed `X-Y-Z` coordinate system with `Z` upward.
+- The viewer may remap axes internally for Three.js, but all product-facing labels stay engineering `XYZ`.
+- Phase 1 is a static visual engineering prototype, not a certified structural design package.
+- TowerFlow borrows display discipline from commercial structural software, but it does not copy full design-suite scope in early phases.
+- Every page must disclose active analysis model, load case, result type, unit system, calculation basis, and out-of-scope checks.
+
+### Phase Map
+
+| Phase | Product State | Main Purpose | Primary Deliverable |
+| --- | --- | --- | --- |
+| Phase 0 | Project foundation | Lock rules, references, units, coordinates, and seed workflow | Roadmap, principles, reference registers, seed data |
+| Phase 1 | Static digital twin prototype | Prove offline calculation to JSON to professional 3D visual review | Static Three.js viewer with axial force, loads, supports, selection, and calculation disclosure |
+| Phase 2 | Parametric analysis MVP | Let users vary load and geometry inputs and re-solve quickly | FastAPI or browser-backed solver with parameter panel and result refresh |
+| Phase 3 | Australian code-check screening | Add AS/NZS 1170.2 wind path and AS 4100 member utilisation screening | Member utilisation view, code-basis disclosure, and governing member tables |
+| Phase 4 | Strengthening and scenario comparison | Compare equipment and strengthening options | Scenario manager, before/after utilisation, and lightweight approval support |
+| Phase 5 | Foundation and anchorage load path | Extend force path into base plate, bolts, grout, and concrete | Foundation view, bolt/base reaction table, and equilibrium audit panel |
+| Phase 6 | Reliability and portfolio risk | Move from deterministic checks to probability-informed risk | Reliability index, failure probability maps, and portfolio risk views |
+| Phase 7 | Utility and transmission tower expansion | Test transfer to utility-tower workflows | Conductor loads, broken-wire case inputs, and utility-specific validation cases |
+
+### Current Phase 1 Definition
+
+Phase 1 proves this working chain:
+
+```text
+offline Python truss analysis
+    -> versioned JSON result data
+    -> static web 3D viewer
+    -> axial force colouring
+    -> nodal load display
+    -> support display
+    -> member/node selection
+    -> calculation basis disclosure
+```
+
+Phase 1 currently uses:
+
+- A 3D pin-jointed truss stiffness model.
+- Three active translational DOF per node: `Ux`, `Uy`, and `Uz`.
+- No active rotational DOF in the solver.
+- Pinned translational base restraints.
+- Simplified static nodal loads in global `+X`.
+- Member axial force as the primary result.
+
+Phase 1 must not claim:
+
+- AS/NZS 1170.2 wind compliance.
+- AS 4100 capacity compliance.
+- Full frame-element behaviour.
+- Foundation, base plate, anchor bolt, or concrete design.
+- Certification-level output.
+- Reliability or probability assessment.
+
+### Current Professional Display Baseline
+
+The Phase 1 viewer should look like concise engineering software:
+
+- Desktop layout defaults to about `3/5` model viewport and `2/5` inspector panel.
+- The model window shows a dynamic global `XYZ` axis triad and global coordinate state.
+- View states include `3D`, `Front`, `Side`, `Plan`, and `Fit`.
+- The bottom status bar shows mode, scenario, load case, result type, units, scale context, coordinate system, and load direction.
+- Nodal loads are one display object: arrow and signed value appear together.
+- Load arrows start at the actual application node or object point.
+- Load labels show short signed values only, such as `+0.15 kN`; source, node ID, coordinate system, and vector components belong in the inspector.
+- Support symbols distinguish pinned translational support and future fixed frame support.
+- The support table shows six DOF for engineering context, while clearly stating that Phase 1 solves only translational truss DOF.
+- Clicking empty model space clears member selection and selected-object values become `-`.
+- Viewer typography follows the fixed screen hierarchy in `docs/project-principles.md`, with model load values treated as primary engineering annotations.
+- Interactive views use `Scale: Fit to View`; paper scales such as `1:100` belong only to generated elevation, plan, or report outputs.
+
+### Next Practical Release Target
+
+The next Phase 1 release should finish the professional review loop:
+
+- Keep the current static solver and JSON workflow stable.
+- Make load input display honest: type, direction, magnitude, location, case, and units.
+- Keep calculation basis visible in the interface.
+- Keep display controls compact and layer-based.
+- Add only visuals that are driven by result data or explicit input data.
+- Verify desktop and mobile readability before publishing.
+
+### Document Map
+
+- `TOWERFLOW_ROADMAP.md`: controlling product roadmap, phase scope, deliverables, exclusions, and release gates.
+- `docs/project-principles.md`: product rules, calculation-led principle, coordinate rule, load philosophy, visual style, and screen typography scale.
+- `docs/visualisation-outline.md`: detailed view-state, layer, display, scale, and saved-view behaviour.
+- `docs/result-schema.md`: Phase 1 JSON result and display schema rules.
+- `docs/units-policy.md`: SI unit and coordinate contract.
+- `references/software-calculation-references.md`: commercial and open-source software reference notes.
+- `references/manufacturer-tower-references.md`: manufacturer and seed tower reference notes.
+
 ## Project Principles
 
 The project principles are defined in `docs/project-principles.md`.
