@@ -15,6 +15,36 @@ The purpose is not to copy commercial manuals. The purpose is to keep a traceabl
 
 ## Commercial Software References
 
+### MStower V6
+
+Local reference:
+
+- `C:/Users/silin/Documents/Codex/Reference/Mst6 2008.pdf`
+
+Relevant manual scope:
+
+- Specialized tower, mast, and pole software for modelling, loading, analysis, plotting, results, and member checking.
+- Useful for tower-specific model vocabulary: tower profile, panels, faces, face bracing, plan bracing, hip bracing, cross-arms, user-defined panels, guys, ancillaries, load cases, and member classes.
+- Useful for understanding how mature tower software separates geometry (`Tower Data`) from loading (`Tower Loading`) and then from analysis/checking.
+
+TowerFlow relevance:
+
+- Strong reference for naming and model decomposition.
+- Use it to shape TowerFlow's future geometry schema and engineering UI vocabulary.
+- Do not use the manual as a source of design equations without separate code/reference verification.
+- Keep proprietary content out of the repository; use summaries and traceable citations only.
+
+Project extraction:
+
+- Human-readable summary: `references/mstower-modeling-taxonomy.md`
+- Machine-readable taxonomy: `references/mstower-modeling-taxonomy.json`
+
+Recommended TowerFlow takeaway:
+
+- Model a tower as a hierarchy of profile -> panels -> faces -> bracing systems -> nodes/members -> supports/guys/equipment -> load cases/results.
+- Store source panel codes where available, but expose normalized TowerFlow classes such as `leg`, `face_brace`, `plan_brace`, `hip_brace`, `cross_arm_member`, `equipment`, and `support`.
+- Keep Phase 1 truss behaviour clearly separated from future frame/beam-column behaviour.
+
 ### SPACE GASS
 
 Official links:
@@ -351,4 +381,3 @@ Read only for later advanced solver strategy:
 1. OpenSees/OpenSeesPy documentation.
 2. Code_Aster documentation.
 3. Dlubal RFEM/RSTAB and API documentation.
-

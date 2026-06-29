@@ -1,0 +1,324 @@
+{
+  "version": "0.1.0",
+  "status": "reference_taxonomy_not_for_design",
+  "source": {
+    "document": "Mst6 2008.pdf",
+    "local_path": "C:/Users/silin/Documents/Codex/Reference/Mst6 2008.pdf",
+    "source_role": "commercial tower software modeling vocabulary and workflow reference",
+    "not_a_design_code": true,
+    "citations": [
+      {
+        "topic": "scope_and_tower_types",
+        "document_section": "1:Introduction",
+        "pdf_pages": "13-16",
+        "printed_pages": "1-4"
+      },
+      {
+        "topic": "tower_data_blocks",
+        "document_section": "5:Tower Data",
+        "pdf_pages": "56-72",
+        "printed_pages": "44-60"
+      },
+      {
+        "topic": "standard_panel_families",
+        "document_section": "6:Standard Panels",
+        "pdf_pages": "84-89",
+        "printed_pages": "72-77"
+      },
+      {
+        "topic": "user_defined_panels",
+        "document_section": "7:User-Defined Panels",
+        "pdf_pages": "129-137",
+        "printed_pages": "117-125"
+      },
+      {
+        "topic": "loading_and_ancillaries",
+        "document_section": "9:Tower Loading",
+        "pdf_pages": "160-190",
+        "printed_pages": "148-178"
+      }
+    ]
+  },
+  "use_policy": [
+    "Use as TowerFlow vocabulary and model organization reference.",
+    "Do not use as a source for design equations.",
+    "Do not copy proprietary manual text or panel diagrams into product output.",
+    "Use Australian standards and TowerFlow calculation notes for calculation implementation."
+  ],
+  "tower_types": [
+    "self_supporting_lattice_tower",
+    "communication_tower",
+    "power_transmission_tower",
+    "guyed_mast",
+    "steel_monopole",
+    "rectangular_lattice_tower"
+  ],
+  "core_model_hierarchy": [
+    "tower",
+    "profile",
+    "level",
+    "panel",
+    "face",
+    "bracing_system",
+    "node",
+    "member",
+    "support",
+    "guy",
+    "section",
+    "material",
+    "connection",
+    "equipment",
+    "load_case",
+    "result"
+  ],
+  "tower_data_blocks": [
+    {
+      "mstower_block": "title",
+      "towerflow_concept": "metadata"
+    },
+    {
+      "mstower_block": "component",
+      "towerflow_concept": "customPanels"
+    },
+    {
+      "mstower_block": "profile",
+      "towerflow_concept": "towerProfile"
+    },
+    {
+      "mstower_block": "supports",
+      "towerflow_concept": "supports"
+    },
+    {
+      "mstower_block": "guys",
+      "towerflow_concept": "guys"
+    },
+    {
+      "mstower_block": "sections",
+      "towerflow_concept": "sections"
+    },
+    {
+      "mstower_block": "material",
+      "towerflow_concept": "materials"
+    },
+    {
+      "mstower_block": "bolt_data",
+      "towerflow_concept": "boltDefinitions"
+    }
+  ],
+  "profile_objects": [
+    "faceCount",
+    "baseWidthM",
+    "baseDepthM",
+    "baseElevationM",
+    "panel.heightM",
+    "panel.topWidthM",
+    "panel.topDepthM",
+    "panel.faceBracing",
+    "panel.faceYBracing",
+    "panel.planBracing",
+    "panel.hipBracing",
+    "panel.crossArms"
+  ],
+  "member_classes": {
+    "profile": [
+      {
+        "towerflow_class": "leg",
+        "source_label": "LEG"
+      },
+      {
+        "towerflow_class": "face_brace",
+        "source_label": "BR, BR1, BR2..."
+      },
+      {
+        "towerflow_class": "face_horizontal",
+        "source_label": "H, H1, H2..."
+      },
+      {
+        "towerflow_class": "face_redundant",
+        "source_label": "R, R1, R2..."
+      },
+      {
+        "towerflow_class": "plan_brace",
+        "source_label": "PB, PB1..."
+      },
+      {
+        "towerflow_class": "hip_brace",
+        "source_label": "HP, HP1..."
+      },
+      {
+        "towerflow_class": "cross_arm_member",
+        "source_label": "CR, CR1..."
+      }
+    ],
+    "user_defined_panel": [
+      {
+        "towerflow_class": "leg",
+        "source_label": "LEG"
+      },
+      {
+        "towerflow_class": "brace",
+        "source_label": "BRC"
+      },
+      {
+        "towerflow_class": "x_brace",
+        "source_label": "XBR"
+      },
+      {
+        "towerflow_class": "k_brace",
+        "source_label": "KBR"
+      },
+      {
+        "towerflow_class": "horizontal",
+        "source_label": "HOR"
+      },
+      {
+        "towerflow_class": "hip_brace",
+        "source_label": "HBR"
+      },
+      {
+        "towerflow_class": "plan_brace",
+        "source_label": "PBR"
+      },
+      {
+        "towerflow_class": "redundant",
+        "source_label": "RED"
+      },
+      {
+        "towerflow_class": "cross_arm_main",
+        "source_label": "CRM"
+      },
+      {
+        "towerflow_class": "tension_only_brace",
+        "source_label": "TBR"
+      },
+      {
+        "towerflow_class": "wind_only_member",
+        "source_label": "WND"
+      }
+    ]
+  },
+  "panel_families": {
+    "standard_panel_count_note": "The manual describes a standard panel library with more than 100 panel types; TowerFlow should store source panel codes but expose normalized bracing families.",
+    "face_families": [
+      {
+        "family": "D_V",
+        "examples": ["DL", "DR", "VL", "VR"]
+      },
+      {
+        "family": "X",
+        "examples": ["X", "XH", "XM", "XTR", "XV", "XU"]
+      },
+      {
+        "family": "K",
+        "examples": ["K", "KB", "K1", "K2", "KT", "KM", "KMG", "KV"]
+      },
+      {
+        "family": "M",
+        "examples": ["M", "M1", "M2", "MKM", "MG"]
+      },
+      {
+        "family": "W",
+        "examples": ["W4", "WS2", "WS3", "WD2"]
+      },
+      {
+        "family": "multi_panel_or_3d",
+        "examples": ["DM", "DMH", "DLM", "DRM", "KXM", "XDM", "XDMA", "XM", "XMA"]
+      }
+    ],
+    "plan_bracing_examples": [
+      "PLSM",
+      "PLD",
+      "PLX",
+      "PL1A",
+      "PL2A",
+      "PL3",
+      "PL4",
+      "PL5",
+      "PD",
+      "PDM",
+      "PWD",
+      "PLW",
+      "PP",
+      "PR",
+      "PT"
+    ],
+    "hip_bracing_examples": ["HK", "HS", "HT", "HWH", "HX2"],
+    "cross_arm_examples": ["CT", "CT1", "CR"]
+  },
+  "user_defined_panel_scopes": [
+    "PLANE",
+    "HALF",
+    "QUART",
+    "ADJA",
+    "3DIM"
+  ],
+  "support_concepts": [
+    "pinned",
+    "fixed",
+    "released_dof",
+    "translational_spring",
+    "rotational_spring"
+  ],
+  "loading_blocks": [
+    "parameters",
+    "terrain",
+    "velocity_profile",
+    "named_nodes",
+    "guy_list",
+    "external_factors",
+    "loads",
+    "panel",
+    "ancillaries"
+  ],
+  "load_case_types": [
+    "wind",
+    "dead",
+    "ice",
+    "miscellaneous",
+    "additional_nodal_load",
+    "additional_member_temperature",
+    "earthquake",
+    "combination"
+  ],
+  "equipment_or_ancillary_types": [
+    "linearEquipment",
+    "faceEquipment",
+    "largeEquipment",
+    "resistanceZone",
+    "guyInsulator"
+  ],
+  "towerflow_schema_recommendations": {
+    "future_member_fields": [
+      "memberId",
+      "startNodeId",
+      "endNodeId",
+      "referenceNodeId",
+      "panelId",
+      "faceId",
+      "memberClass",
+      "bracingSystem",
+      "sourcePanelType",
+      "sectionId",
+      "materialId",
+      "connectionClass",
+      "releaseStart",
+      "releaseEnd"
+    ],
+    "future_panel_fields": [
+      "panelId",
+      "levelBottomM",
+      "levelTopM",
+      "heightM",
+      "bottomWidthM",
+      "topWidthM",
+      "bottomDepthM",
+      "topDepthM",
+      "faceBracingType",
+      "planBracingType",
+      "hipBracingType",
+      "crossArmType",
+      "sourcePanelCode",
+      "customPanelId"
+    ]
+  }
+}
