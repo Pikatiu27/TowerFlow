@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const viewer = document.querySelector("#viewer");
+const axisGizmo = document.querySelector("#axis-gizmo");
 const resetButton = document.querySelector("#reset-view");
 const viewButtons = Array.from(document.querySelectorAll("[data-view]"));
 const showLoadsToggle = document.querySelector("#show-loads");
@@ -22,6 +23,7 @@ const labels = {
   memberGroup: document.querySelector("#member-group"),
   memberInterpretation: document.querySelector("#member-interpretation"),
   activeLoadCase: document.querySelector("#active-load-case"),
+  activeLoadDirection: document.querySelector("#active-load-direction"),
   panelLoadCase: document.querySelector("#panel-load-case"),
 };
 
@@ -43,6 +45,7 @@ const pointer = new THREE.Vector2();
 const memberObjects = [];
 const nodeObjects = [];
 const loadObjects = [];
+const originAxisObjects = [];
 let selectedObject = null;
 let towerData = null;
 let modelBounds = null;
@@ -51,6 +54,21 @@ let modelRadius = 8;
 let activeView = "iso";
 const MEMBER_RADIUS_M = 0.018;
 const LOAD_COLOUR = 0x1f2937;
+const AXIS_COLOURS = {
+  x: 0xc9342c,
+  y: 0x2f855a,
+  z: 0x1479a8,
+};
+const AXIS_LABEL_COLOURS = {
+  x: "#c9342c",
+  y: "#2f855a",
+  z: "#1479a8",
+};
+const ENGINEERING_AXIS_DIRECTIONS = {
+  x: new THREE.Vector3(1, 0, 0),
+  y: new THREE.Vector3(0, 0, -1),
+  z: new THREE.Vector3(0, 1, 0),
+};
 
 scene.add(new THREE.HemisphereLight(0xffffff, 0xb9c4ce, 2.35));
 const sun = new THREE.DirectionalLight(0xffffff, 2.2);
@@ -59,6 +77,19 @@ scene.add(sun);
 
 const grid = new THREE.GridHelper(4, 8, 0x94a3b8, 0xd6dde5);
 scene.add(grid);
+
+const axisScene = new THREE.Scene();
+const axisCamera = new THREE.OrthographicCamera(-1.45, 1.45, 1.45, -1.45, 0.1, 10);
+axisCamera.position.set(0, 0, 5);
+const axisRenderer = axisGizmo
+  ? new THREE.WebGLRenderer({ antialias: true, alpha: true })
+  : null;
+const axisGroup = new THREE.Group();
+axisScene.add(axisGroup);
+if (axisRenderer && axisGizmo) {
+  axisRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  axisGizmo.appendChild(axisRenderer.domElement);
+}
 
 function nodeVector(node) {
   // Engineering data is Z-up; Three.js renders Y-up. Keep this mapping local to the viewer.
@@ -77,18 +108,60 @@ function formatLoadVector(load) {
   return `Fx ${fx}, Fy ${fy}, Fz ${fz} kN`;
 }
 
-function makeLoadLabel(text) {
+function formatSigned(value) {
+  const number = Number(value ?? 0);
+  const sign = number >= 0 ? "+" : "-";
+  return `${sign}${Math.abs(number).toFixed(2)}`;
+}
+
+function dominantLoadComponent(load) {
+  const components = [
+    { axis: "X", value: Number(load.fxKN ?? 0) },
+    { axis: "Y", value: Number(load.fyKN ?? 0) },
+    { axis: "Z", value: Number(load.fzKN ?? 0) },
+  ];
+  return components.reduce((dominant, component) =>
+    Math.abs(component.value) > Math.abs(dominant.value) ? component : dominant
+  );
+}
+
+function formatLoadDirection(load) {
+  const dominant = dominantLoadComponent(load);
+  if (Math.abs(dominant.value) < 0.000001) return "--";
+  return `Global ${dominant.value >= 0 ? "+" : "-"}${dominant.axis}`;
+}
+
+function formatLoadArrowLabel(load) {
+  const dominant = dominantLoadComponent(load);
+  if (Math.abs(dominant.value) < 0.000001) return `${load.nodeId} 0.00 kN`;
+  return `${load.nodeId} F${dominant.axis} ${formatSigned(dominant.value)} kN`;
+}
+
+function makeTextSprite(text, options = {}) {
+  const {
+    width = 210,
+    height = 52,
+    font = "650 22px ui-monospace, SFMono-Regular, Consolas, monospace",
+    colour = "#111827",
+    strokeColour = "rgba(255, 255, 255, 0.92)",
+    strokeWidth = 4,
+    textX = 8,
+    textY = 33,
+    scale = [0.92, 0.23, 1],
+  } = options;
   const canvas = document.createElement("canvas");
-  canvas.width = 210;
-  canvas.height = 52;
+  canvas.width = width;
+  canvas.height = height;
   const context = canvas.getContext("2d");
   context.clearRect(0, 0, canvas.width, canvas.height);
-  context.font = "650 22px ui-monospace, SFMono-Regular, Consolas, monospace";
-  context.lineWidth = 4;
-  context.strokeStyle = "rgba(255, 255, 255, 0.92)";
-  context.strokeText(text, 8, 33);
-  context.fillStyle = "#111827";
-  context.fillText(text, 8, 33);
+  context.font = font;
+  context.lineWidth = strokeWidth;
+  if (strokeWidth > 0) {
+    context.strokeStyle = strokeColour;
+    context.strokeText(text, textX, textY);
+  }
+  context.fillStyle = colour;
+  context.fillText(text, textX, textY);
   const texture = new THREE.CanvasTexture(canvas);
   const material = new THREE.SpriteMaterial({
     map: texture,
@@ -96,8 +169,71 @@ function makeLoadLabel(text) {
     transparent: true,
   });
   const sprite = new THREE.Sprite(material);
-  sprite.scale.set(0.92, 0.23, 1);
+  sprite.scale.set(scale[0], scale[1], scale[2]);
   return sprite;
+}
+
+function makeLoadLabel(text) {
+  return makeTextSprite(text, {
+    width: 270,
+    height: 52,
+    scale: [1.18, 0.23, 1],
+  });
+}
+
+function makeAxisLabel(text, colour, scale = [0.24, 0.13, 1]) {
+  return makeTextSprite(text, {
+    width: 64,
+    height: 48,
+    font: "800 28px ui-monospace, SFMono-Regular, Consolas, monospace",
+    colour,
+    strokeColour: "rgba(255, 255, 255, 0.95)",
+    strokeWidth: 5,
+    textX: 10,
+    textY: 34,
+    scale,
+  });
+}
+
+function makeAxisArrow(direction, length, colour, headLength = 0.16, headWidth = 0.075) {
+  const arrow = new THREE.ArrowHelper(
+    direction.clone().normalize(),
+    new THREE.Vector3(0, 0, 0),
+    length,
+    colour,
+    headLength,
+    headWidth
+  );
+  arrow.line.material.depthTest = false;
+  arrow.cone.material.depthTest = false;
+  return arrow;
+}
+
+function buildViewportAxisGizmo() {
+  for (const [axis, direction] of Object.entries(ENGINEERING_AXIS_DIRECTIONS)) {
+    const arrow = makeAxisArrow(direction, 1.05, AXIS_COLOURS[axis], 0.22, 0.1);
+    const label = makeAxisLabel(axis.toUpperCase(), AXIS_LABEL_COLOURS[axis], [0.22, 0.12, 1]);
+    label.position.copy(direction).multiplyScalar(1.28);
+    axisGroup.add(arrow);
+    axisGroup.add(label);
+  }
+}
+
+function addGlobalOriginAxes() {
+  const group = new THREE.Group();
+  group.position.copy(nodeVector({ x: 0, y: 0, z: 0 }));
+  const length = 0.72;
+
+  for (const [axis, direction] of Object.entries(ENGINEERING_AXIS_DIRECTIONS)) {
+    const arrow = makeAxisArrow(direction, length, AXIS_COLOURS[axis], 0.13, 0.055);
+    const label = makeAxisLabel(axis.toUpperCase(), AXIS_LABEL_COLOURS[axis], [0.18, 0.1, 1]);
+    label.position.copy(direction).multiplyScalar(length + 0.17);
+    group.add(arrow);
+    group.add(label);
+  }
+
+  scene.add(group);
+  originAxisObjects.push(group);
 }
 
 function loadLabelVerticalOffset(load) {
@@ -169,6 +305,20 @@ function addNodeMarker(position) {
   nodeObjects.push(marker);
 }
 
+function disposeRenderableTree(object) {
+  scene.remove(object);
+  object.traverse((child) => {
+    if (child.geometry) child.geometry.dispose();
+    if (child.material) {
+      const materials = Array.isArray(child.material) ? child.material : [child.material];
+      for (const material of materials) {
+        if (material.map) material.map.dispose();
+        material.dispose();
+      }
+    }
+  });
+}
+
 function clearTower() {
   for (const object of memberObjects) {
     scene.remove(object);
@@ -181,18 +331,15 @@ function clearTower() {
     object.material.dispose();
   }
   for (const object of loadObjects) {
-    scene.remove(object);
-    object.traverse((child) => {
-      if (child.geometry) child.geometry.dispose();
-      if (child.material) {
-        if (child.material.map) child.material.map.dispose();
-        child.material.dispose();
-      }
-    });
+    disposeRenderableTree(object);
+  }
+  for (const object of originAxisObjects) {
+    disposeRenderableTree(object);
   }
   memberObjects.length = 0;
   nodeObjects.length = 0;
   loadObjects.length = 0;
+  originAxisObjects.length = 0;
 }
 
 function updateModelBounds() {
@@ -279,7 +426,7 @@ function addLoadArrow(load, nodes, maxLoadMagnitude) {
   group.add(shaft);
   group.add(head);
   if (viewer.clientWidth > 640) {
-    const label = makeLoadLabel(`${magnitude.toFixed(2)} kN`);
+    const label = makeLoadLabel(formatLoadArrowLabel(load));
     label.position.copy(conePosition).add(unitDirection.clone().multiplyScalar(0.26));
     label.position.y += loadLabelVerticalOffset(load);
     label.userData.kind = "load-label";
@@ -310,7 +457,9 @@ function renderLoads(data, nodes) {
   labels.loadTitle.textContent = activeLoadCase?.name ?? "No active load case";
   labels.loadCount.textContent = String(loads.length);
   labels.sumAppliedFx.textContent = `${sumAppliedFx.toFixed(3)} kN`;
-  labels.loadDirection.textContent = loads.length > 0 ? formatLoadVector(loads[0]) : "--";
+  const loadDirection = loads.length > 0 ? formatLoadDirection(loads[0]) : "--";
+  labels.loadDirection.textContent = loads.length > 0 ? `${loadDirection} (${formatLoadVector(loads[0])})` : "--";
+  labels.activeLoadDirection.textContent = loadDirection;
 }
 
 function renderTower(data) {
@@ -332,6 +481,7 @@ function renderTower(data) {
   renderLoads(data, nodes);
 
   updateModelBounds();
+  addGlobalOriginAxes();
   setCameraView(activeView);
 
   labels.caseTitle.textContent = data.title;
@@ -396,6 +546,10 @@ function resize() {
   const width = viewer.clientWidth;
   const height = viewer.clientHeight;
   renderer.setSize(width, height, false);
+  if (axisRenderer && axisGizmo) {
+    const size = axisGizmo.clientWidth || 92;
+    axisRenderer.setSize(size, size, false);
+  }
   updateOrthoFrustum();
 }
 
@@ -411,6 +565,10 @@ async function loadData() {
 function animate() {
   controls.update();
   renderer.render(scene, camera);
+  if (axisRenderer) {
+    axisGroup.quaternion.copy(camera.quaternion).invert();
+    axisRenderer.render(axisScene, axisCamera);
+  }
   requestAnimationFrame(animate);
 }
 
@@ -423,6 +581,7 @@ for (const button of viewButtons) {
 showLoadsToggle?.addEventListener("change", updateDisplayOptions);
 
 resize();
+buildViewportAxisGizmo();
 loadData().catch((error) => {
   labels.caseTitle.textContent = "Result data failed to load";
   labels.memberInterpretation.textContent = error.message;

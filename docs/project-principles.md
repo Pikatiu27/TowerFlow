@@ -73,6 +73,42 @@ Member local axis rule:
 
 The web viewer may internally remap axes for Three.js, but the engineering schema must remain `Z`-up.
 
+### Coordinate Axis and View Orientation Rule
+
+Coordinate axes are engineering state, not decoration.
+
+TowerFlow must follow the mature structural software pattern checked against Dlubal RFEM 6 official help:
+
+- The default model coordinate system is global `XYZ` tied to the global axes and the origin.
+- User-defined coordinate systems may be introduced later, but they must be explicit and must not replace the global model basis.
+- Loads must state both coordinate system and load direction. A load arrow without a coordinate basis is not a valid engineering input.
+- The view orientation control must communicate the current camera orientation relative to global `X`, `Y`, and `Z`.
+
+TowerFlow viewer rules:
+
+- Show a dynamic viewport axis triad in every 3D model view.
+- The triad must update when the user rotates, pans, changes preset view, or resets the view.
+- Show the model-origin global axes at or near `X = 0`, `Y = 0`, `Z = 0` unless the axis layer is intentionally hidden.
+- Do not use a static SVG axis icon for a rotatable model.
+- Do not label viewer axes using internal Three.js coordinates.
+- The bottom view status must state `Coord: Global XYZ`.
+- The load status must state the active global load direction, such as `Load Dir: Global +X`.
+
+Standard view meanings:
+
+- `3D`: default isometric engineering review.
+- `Front`: `X-Z` elevation, looking along global `-Y`.
+- `Side`: `Y-Z` elevation, looking along global `-X`.
+- `Plan`: `X-Y` plan, looking down global `-Z`.
+- `Fit`: preserve the active engineering context while refitting the model extents.
+
+Load display rules:
+
+- Applied force arrows must start at the actual node or object application point.
+- Load labels should show the node/object reference and dominant force component, for example `N21 FX +0.15 kN`.
+- Numeric load components remain in global engineering coordinates even if the camera view is rotated.
+- Hiding the load layer may hide arrows and labels together, but must not change the active load case or calculation result.
+
 ## 5. Calculation-led Product Rule
 
 TowerFlow must be calculation-led, not animation-led.

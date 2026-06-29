@@ -32,17 +32,7 @@
           <button type="button" data-view="plan">Plan</button>
           <button type="button" data-view="fit">Fit</button>
         </div>
-        <div class="axis-gizmo" aria-label="XYZ coordinate axes">
-          <svg viewBox="0 0 92 92" role="img" aria-hidden="true">
-            <line class="axis-line axis-x" x1="28" y1="64" x2="74" y2="64" />
-            <line class="axis-line axis-z" x1="28" y1="64" x2="28" y2="18" />
-            <line class="axis-line axis-y" x1="28" y1="64" x2="12" y2="80" />
-            <circle class="axis-origin" cx="28" cy="64" r="3" />
-            <text class="axis-label axis-x-text" x="78" y="68">X</text>
-            <text class="axis-label axis-z-text" x="23" y="14">Z</text>
-            <text class="axis-label axis-y-text" x="2" y="89">Y</text>
-          </svg>
-        </div>
+        <div id="axis-gizmo" class="axis-gizmo" aria-label="Viewport global XYZ orientation"></div>
         <div class="grid-label" aria-label="Grid reference">Ground reference grid: 0.5 m spacing</div>
         <div class="view-context" aria-label="Active result context">
           <div>
@@ -68,6 +58,14 @@
           <div>
             <span>Scale</span>
             <strong>Fit to View</strong>
+          </div>
+          <div>
+            <span>Coord</span>
+            <strong>Global XYZ</strong>
+          </div>
+          <div>
+            <span>Load Dir</span>
+            <strong id="active-load-direction">Global +X</strong>
           </div>
         </div>
         <div class="legend-panel" aria-label="Axial force legend">
