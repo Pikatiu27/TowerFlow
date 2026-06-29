@@ -10,19 +10,19 @@ E_MODULUS_KPA = 200_000_000.0
 AREA_M2 = 0.0025
 
 DEMO_TOWER = {
-    "id": "fec-type-aa-20m-demo",
-    "name": "FEC Type AA triangular lattice tower demo",
+    "id": "fec-type-aa-full-elevation-demo",
+    "name": "FEC Type AA full-height triangular lattice tower demo",
     "manufacturerReference": "FEC Triangular SS Tower Type AA audit sheet",
     "unitPolicy": "TowerFlow calculation and product values are SI. Source values in this seed are read as metric values from the audit sheet.",
     "geometryBasis": [
         "Triangular self-supporting lattice tower based on the FEC Type AA audit-sheet typical details.",
-        "Nominal model: 20 m Type AA tower.",
-        "Actual tower height used in demo: 21.30 m.",
+        "Nominal model: full Type AA typical elevation to the nominal 50 m row.",
+        "Actual tower height used in demo: 50.35 m.",
         "Typical module height read from sheet: 4.80 m.",
         "Top face width read from sheet: 1.50 m.",
-        "Face width at K-point for nominal 20 m tower: 2.984 m.",
-        "Demo levels are idealised at 0.00, 4.80, 9.60, 14.40, 19.20, and 21.30 m.",
-        "Face width is linearly tapered from 2.984 m at the base/K-point reference to 1.500 m at the top.",
+        "Face width control points follow the PDF schedule: 2.984 m at 21.30 m, 3.336 m at 25.20 m, 3.772 m at 30.05 m, 4.294 m at 35.85 m, 4.554 m at 38.75 m, 5.076 m at 44.55 m, and 5.598 m at 50.35 m.",
+        "The model uses dense 1.50 m visual panel levels and single zig-zag bracing per face to match the PDF elevation more closely.",
+        "This is still an idealised 3D truss representation of the PDF elevation, not a complete manufacturer model.",
     ],
     "sourceReferences": [
         {
@@ -83,35 +83,65 @@ def triangular_level(level_index, z, radius):
     return nodes
 
 
-def section_for_group(group):
-    sections = {
-        "leg": {
-            "sectionDesignation": "CHS 48 x 5.4",
+def section_for_group(group, z_mid=0.0):
+    height_below_top = 50.35 - z_mid
+    if group == "leg":
+        if height_below_top <= 9.6:
+            designation = "CHS 48 x 5.4"
+        elif height_below_top <= 21.3:
+            designation = "Round bar dia 50"
+        elif height_below_top <= 35.85:
+            designation = "Round bar dia 65"
+        elif height_below_top <= 44.55:
+            designation = "Round bar dia 80"
+        else:
+            designation = "Round bar dia 90"
+        return {
+            "sectionDesignation": designation,
             "sectionFamily": "CHS",
             "sectionSourceNote": "Demo section read from FEC Type AA typical details; verify against source PDF before engineering use.",
-        },
-        "diagonal bracing": {
-            "sectionDesignation": "CHS 42 x 3.2",
+        }
+    if group == "diagonal bracing":
+        if height_below_top <= 9.6:
+            designation = "CHS 27 x 3.2"
+        elif height_below_top <= 25.2:
+            designation = "CHS 42 x 3.2"
+        elif height_below_top <= 35.85:
+            designation = "CHS 48 x 3.2"
+        elif height_below_top <= 44.55:
+            designation = "CHS 60 x 3.6"
+        else:
+            designation = "CHS 60 x 3.6"
+        return {
+            "sectionDesignation": designation,
             "sectionFamily": "CHS",
             "sectionSourceNote": "Demo section read from FEC Type AA typical details; verify against source PDF before engineering use.",
-        },
-        "plan bracing": {
-            "sectionDesignation": "Round bar dia 14",
+        }
+    if group == "horizontal bracing":
+        if height_below_top <= 21.3:
+            designation = "Round bar dia 14"
+        elif height_below_top <= 30.05:
+            designation = "Round bar dia 18"
+        elif height_below_top <= 35.85:
+            designation = "Round bar dia 22"
+        elif height_below_top <= 44.55:
+            designation = "Round bar dia 24"
+        else:
+            designation = "Round bar dia 24"
+        return {
+            "sectionDesignation": designation,
             "sectionFamily": "round bar",
             "sectionSourceNote": "Demo horizontal/secondary section from FEC Type AA typical details; verify against source PDF before engineering use.",
-        },
+        }
+    return {
+        "sectionDesignation": "Section not assigned",
+        "sectionFamily": "unknown",
+        "sectionSourceNote": "No demo section metadata assigned.",
     }
-    return sections.get(
-        group,
-        {
-            "sectionDesignation": "Section not assigned",
-            "sectionFamily": "unknown",
-            "sectionSourceNote": "No demo section metadata assigned.",
-        },
-    )
 
 
-def member(member_id, start, end, group):
+def member(member_id, start, end, group, node_lookup):
+    z_mid = (node_lookup[start]["z"] + node_lookup[end]["z"]) / 2.0
     return {
         "id": member_id,
         "startNodeId": start,
@@ -119,24 +149,43 @@ def member(member_id, start, end, group):
         "group": group,
         "areaM2": AREA_M2,
         "elasticModulusKPa": E_MODULUS_KPA,
-        **section_for_group(group),
+        **section_for_group(group, z_mid),
     }
 
 
 def build_geometry():
-    actual_height_m = 21.30
-    module_height_m = 4.80
-    base_face_width_m = 2.984
+    actual_height_m = 50.35
     top_face_width_m = 1.500
-    heights = [0.0, 4.80, 9.60, 14.40, 19.20, actual_height_m]
-    face_widths = [
-        base_face_width_m - (base_face_width_m - top_face_width_m) * (height / actual_height_m)
-        for height in heights
+    panel_height_m = 1.50
+    schedule = [
+        (0.0, 5.598),
+        (actual_height_m - 44.55, 5.076),
+        (actual_height_m - 38.75, 4.554),
+        (actual_height_m - 35.85, 4.294),
+        (actual_height_m - 30.05, 3.772),
+        (actual_height_m - 25.20, 3.336),
+        (actual_height_m - 21.30, 2.984),
+        (actual_height_m, top_face_width_m),
     ]
+
+    def face_width_at(z):
+        for index in range(len(schedule) - 1):
+            z0, w0 = schedule[index]
+            z1, w1 = schedule[index + 1]
+            if z0 <= z <= z1:
+                ratio = 0.0 if z1 == z0 else (z - z0) / (z1 - z0)
+                return w0 + (w1 - w0) * ratio
+        return top_face_width_m
+
+    heights = [round(panel_height_m * level, 3) for level in range(int(actual_height_m // panel_height_m) + 1)]
+    if heights[-1] < actual_height_m:
+        heights.append(actual_height_m)
+    face_widths = [face_width_at(height) for height in heights]
     radii = [face_width / math.sqrt(3.0) for face_width in face_widths]
     nodes = []
     for level_index, (z, radius) in enumerate(zip(heights, radii)):
         nodes.extend(triangular_level(level_index, z, radius))
+    node_lookup = {node["id"]: node for node in nodes}
 
     members = []
     next_id = 1
@@ -145,24 +194,26 @@ def build_geometry():
         for corner in range(3):
             start = f"N{level_index}{corner + 1}"
             end = f"N{level_index}{((corner + 1) % 3) + 1}"
-            members.append(member(f"M{next_id:03d}", start, end, "plan bracing"))
+            members.append(member(f"M{next_id:03d}", start, end, "horizontal bracing", node_lookup))
             next_id += 1
 
     for level_index in range(len(heights) - 1):
         for corner in range(3):
             start = f"N{level_index}{corner + 1}"
             end = f"N{level_index + 1}{corner + 1}"
-            members.append(member(f"M{next_id:03d}", start, end, "leg"))
+            members.append(member(f"M{next_id:03d}", start, end, "leg", node_lookup))
             next_id += 1
 
         for corner in range(3):
-            lower = f"N{level_index}{corner + 1}"
-            upper_next = f"N{level_index + 1}{((corner + 1) % 3) + 1}"
-            upper_same = f"N{level_index + 1}{corner + 1}"
-            lower_next = f"N{level_index}{((corner + 1) % 3) + 1}"
-            members.append(member(f"M{next_id:03d}", lower, upper_next, "diagonal bracing"))
-            next_id += 1
-            members.append(member(f"M{next_id:03d}", lower_next, upper_same, "diagonal bracing"))
+            lower_a = f"N{level_index}{corner + 1}"
+            lower_b = f"N{level_index}{((corner + 1) % 3) + 1}"
+            upper_a = f"N{level_index + 1}{corner + 1}"
+            upper_b = f"N{level_index + 1}{((corner + 1) % 3) + 1}"
+            if level_index % 2 == 0:
+                start, end = lower_a, upper_b
+            else:
+                start, end = lower_b, upper_a
+            members.append(member(f"M{next_id:03d}", start, end, "diagonal bracing", node_lookup))
             next_id += 1
 
     supports = [
@@ -199,17 +250,10 @@ def build_geometry():
     ]
 
     load_rows = []
-    for level_index, height in enumerate(heights[1:], start=1):
-        if height <= module_height_m:
-            fx_kn = 0.20
-        elif height <= module_height_m * 2:
-            fx_kn = 0.25
-        elif height <= module_height_m * 3:
-            fx_kn = 0.30
-        elif height <= module_height_m * 4:
-            fx_kn = 0.35
-        else:
-            fx_kn = 0.18
+    load_level_indices = [index for index, height in enumerate(heights) if index > 0 and (index % 4 == 0 or height == actual_height_m)]
+    for level_index in load_level_indices:
+        height = heights[level_index]
+        fx_kn = round(0.12 + 0.015 * height, 3)
         for corner in range(3):
             load_rows.append((f"N{level_index}{corner + 1}", fx_kn))
     loads = [
