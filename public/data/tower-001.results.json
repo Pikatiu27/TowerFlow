@@ -43,6 +43,8 @@
   },
   "analysisBoundary": [
     "3D pin-jointed truss model",
+    "Three translational degrees of freedom per node: ux, uy, uz",
+    "Rotational degrees of freedom rx, ry, rz are listed for support display context only and are not active in the Phase 1 truss stiffness matrix",
     "Steel tower superstructure only",
     "One simplified horizontal wind load case",
     "Reference-derived demo dimensions only",
@@ -1136,21 +1138,33 @@
   "supports": [
     {
       "nodeId": "N01",
+      "supportType": "pinned-translational",
       "ux": true,
       "uy": true,
-      "uz": true
+      "uz": true,
+      "rx": false,
+      "ry": false,
+      "rz": false
     },
     {
       "nodeId": "N02",
+      "supportType": "pinned-translational",
       "ux": true,
       "uy": true,
-      "uz": true
+      "uz": true,
+      "rx": false,
+      "ry": false,
+      "rz": false
     },
     {
       "nodeId": "N03",
+      "supportType": "pinned-translational",
       "ux": true,
       "uy": true,
-      "uz": true
+      "uz": true,
+      "rx": false,
+      "ry": false,
+      "rz": false
     }
   ],
   "loadCases": [
@@ -1170,7 +1184,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.20 kN"
+            "label": "+0.20 kN"
           }
         },
         {
@@ -1183,7 +1197,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.20 kN"
+            "label": "+0.20 kN"
           }
         },
         {
@@ -1196,7 +1210,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.20 kN"
+            "label": "+0.20 kN"
           }
         },
         {
@@ -1209,7 +1223,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.25 kN"
+            "label": "+0.25 kN"
           }
         },
         {
@@ -1222,7 +1236,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.25 kN"
+            "label": "+0.25 kN"
           }
         },
         {
@@ -1235,7 +1249,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.25 kN"
+            "label": "+0.25 kN"
           }
         },
         {
@@ -1248,7 +1262,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.35 kN"
+            "label": "+0.35 kN"
           }
         },
         {
@@ -1261,7 +1275,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.35 kN"
+            "label": "+0.35 kN"
           }
         },
         {
@@ -1274,7 +1288,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.35 kN"
+            "label": "+0.35 kN"
           }
         },
         {
@@ -1287,7 +1301,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.35 kN"
+            "label": "+0.35 kN"
           }
         },
         {
@@ -1300,7 +1314,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.35 kN"
+            "label": "+0.35 kN"
           }
         },
         {
@@ -1313,7 +1327,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.35 kN"
+            "label": "+0.35 kN"
           }
         },
         {
@@ -1326,7 +1340,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.18 kN"
+            "label": "+0.18 kN"
           }
         },
         {
@@ -1339,7 +1353,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.18 kN"
+            "label": "+0.18 kN"
           }
         },
         {
@@ -1352,7 +1366,7 @@
           "display": {
             "showArrow": true,
             "arrowScale": "schematic",
-            "label": "0.18 kN"
+            "label": "+0.18 kN"
           }
         }
       ]

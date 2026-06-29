@@ -166,9 +166,36 @@ def build_geometry():
             next_id += 1
 
     supports = [
-        {"nodeId": "N01", "ux": True, "uy": True, "uz": True},
-        {"nodeId": "N02", "ux": True, "uy": True, "uz": True},
-        {"nodeId": "N03", "ux": True, "uy": True, "uz": True},
+        {
+            "nodeId": "N01",
+            "supportType": "pinned-translational",
+            "ux": True,
+            "uy": True,
+            "uz": True,
+            "rx": False,
+            "ry": False,
+            "rz": False,
+        },
+        {
+            "nodeId": "N02",
+            "supportType": "pinned-translational",
+            "ux": True,
+            "uy": True,
+            "uz": True,
+            "rx": False,
+            "ry": False,
+            "rz": False,
+        },
+        {
+            "nodeId": "N03",
+            "supportType": "pinned-translational",
+            "ux": True,
+            "uy": True,
+            "uz": True,
+            "rx": False,
+            "ry": False,
+            "rz": False,
+        },
     ]
 
     load_rows = []
@@ -196,7 +223,7 @@ def build_geometry():
             "display": {
                 "showArrow": True,
                 "arrowScale": "schematic",
-                "label": f"{fx_kn:.2f} kN",
+                "label": f"{fx_kn:+.2f} kN",
             },
         }
         for index, (node_id, fx_kn) in enumerate(load_rows, start=1)
@@ -344,6 +371,8 @@ def main():
         },
         "analysisBoundary": [
             "3D pin-jointed truss model",
+            "Three translational degrees of freedom per node: ux, uy, uz",
+            "Rotational degrees of freedom rx, ry, rz are listed for support display context only and are not active in the Phase 1 truss stiffness matrix",
             "Steel tower superstructure only",
             "One simplified horizontal wind load case",
             "Reference-derived demo dimensions only",

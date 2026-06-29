@@ -1,14 +1,14 @@
 :root {
   --ink: #111827;
-  --muted: #5f6b7a;
+  --muted: #475569;
   --panel: #ffffff;
-  --panel-soft: #f7fafc;
-  --line: #d8e0e8;
+  --panel-soft: #f8fbff;
+  --line: #cfd9e5;
   --line-strong: #aebac7;
   --accent: #00a6b2;
-  --accent-strong: #007f8a;
-  --signal: #43a047;
-  --scene: #f4f6f8;
+  --accent-strong: #006b75;
+  --signal: #16a34a;
+  --scene: #f7fbff;
   color: var(--ink);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -42,7 +42,7 @@ button {
 
 .app-shell {
   display: grid;
-  grid-template-columns: minmax(420px, 1fr) 8px var(--inspector-width, 398px);
+  grid-template-columns: minmax(0, 3fr) 8px minmax(360px, var(--inspector-width, 2fr));
   height: 100svh;
   min-height: 100svh;
   overflow: hidden;
@@ -82,8 +82,8 @@ button {
   min-height: 0;
   overflow: hidden;
   background:
-    linear-gradient(rgba(17, 24, 39, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(17, 24, 39, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(20, 121, 168, 0.065) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 121, 168, 0.065) 1px, transparent 1px),
     var(--scene);
   background-size: 32px 32px;
 }
@@ -116,7 +116,7 @@ button {
   min-width: 0;
   max-width: 330px;
   border: 1px solid var(--line-strong);
-  border-left: 4px solid #64748b;
+  border-left: 4px solid #1479a8;
   background: #ffffff;
   padding: 8px 10px;
   box-shadow: none;
@@ -151,9 +151,9 @@ button {
 }
 
 .view-toolbar button.is-active {
-  border-color: #64748b;
-  background: #e2e8f0;
-  color: #111827;
+  border-color: #1479a8;
+  background: #e0f2fe;
+  color: #0f172a;
 }
 
 .axis-gizmo {
@@ -283,19 +283,19 @@ button {
 }
 
 .legend-swatch.tension {
-  background: #c9342c;
+  background: #e11d48;
 }
 
 .legend-swatch.compression {
-  background: #1479a8;
+  background: #006bd6;
 }
 
 .legend-swatch.low-force {
-  background: #94a3b8;
+  background: #64748b;
 }
 
 .legend-swatch.load-arrow {
-  background: #1f2937;
+  background: #ff8a00;
 }
 
 .legend-note {
@@ -805,7 +805,7 @@ select {
 
 .support-row {
   display: grid;
-  grid-template-columns: 58px repeat(3, minmax(0, 1fr));
+  grid-template-columns: 56px repeat(6, minmax(0, 1fr));
   align-items: center;
   min-height: 34px;
   border-bottom: 1px solid #edf1f5;
@@ -838,7 +838,15 @@ select {
 .support-row input {
   width: 13px;
   height: 13px;
-  accent-color: #475569;
+  accent-color: #1479a8;
+}
+
+.support-row input:disabled {
+  opacity: 0.62;
+}
+
+.support-row label.is-rotational {
+  color: #7c3aed;
 }
 
 .compact-toggle input {

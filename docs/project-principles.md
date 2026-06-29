@@ -105,9 +105,38 @@ Standard view meanings:
 Load display rules:
 
 - Applied force arrows must start at the actual node or object application point.
-- Load labels should show the node/object reference and dominant force component, for example `N21 FX +0.15 kN`.
+- 3D viewport load labels should show only the signed value, for example `+0.15 kN`, to avoid crowding the model.
+- Node/object reference, force component, coordinate system, and direction belong in the panel or table.
 - Numeric load components remain in global engineering coordinates even if the camera view is rotated.
 - Hiding the load layer may hide arrows and labels together, but must not change the active load case or calculation result.
+
+### DOF and Boundary Condition Rule
+
+Boundary conditions must be displayed with the same discipline as loads and results.
+
+Reference basis:
+
+- Dlubal RFEM 6 Nodal Supports: `https://www.dlubal.com/en/downloads-and-information/documents/online-manuals/rfem-6/000006`.
+- Dlubal RFEM 6 Nodal Loads: `https://www.dlubal.com/en/downloads-and-information/documents/online-manuals/rfem-6/000267`.
+- Dlubal RFEM 6 Coordinate Systems: `https://www.dlubal.com/en/downloads-and-information/documents/online-manuals/rfem-6/000124`.
+- Dlubal RFEM 6 Nodal Supports separates support conditions into translational and rotational degrees of freedom.
+- A checked support degree of freedom means the corresponding displacement or rotation is blocked.
+- Dlubal RFEM 6 Nodal Loads requires a coordinate system and load direction for nodal loads.
+
+TowerFlow DOF rules:
+
+- A full 3D frame model should expose six nodal degrees of freedom: `Ux`, `Uy`, `Uz`, `Rx`, `Ry`, and `Rz`.
+- The current Phase 1 solver is not a full 3D frame model. It is a 3D pin-jointed truss stiffness model.
+- Phase 1 active node DOF are only `Ux`, `Uy`, and `Uz`.
+- `Rx`, `Ry`, and `Rz` may be shown in the interface for engineering context, but they must be labelled as not active in the Phase 1 truss solver.
+- Phase 1 must not call its support condition a fully fixed 6DOF base unless rotational stiffness and frame elements have been implemented.
+
+Support display rules:
+
+- Pinned translational support: use a triangular green support symbol. It means `Ux`, `Uy`, and `Uz` are restrained in the Phase 1 truss model.
+- Fixed frame support: use a purple block or clamp symbol. It is a future 6DOF frame-model condition unless the solver actually includes rotational DOF.
+- The support table should show all six DOF columns so engineers can see the distinction between active truss DOF and future frame DOF.
+- Browser-side support edits are input/display state only until the solver is re-run and the result JSON is regenerated.
 
 ## 5. Calculation-led Product Rule
 
@@ -168,10 +197,11 @@ The current Phase 1 prototype uses:
 
 - A small offline Python solver.
 - A 3D pin-jointed truss stiffness method.
-- Translational degrees of freedom only.
+- Three active translational degrees of freedom per node: `Ux`, `Uy`, and `Uz`.
+- Rotational degrees of freedom `Rx`, `Ry`, and `Rz` are not active in the Phase 1 stiffness matrix.
 - Axial member stiffness only.
 - Linear elastic material behaviour.
-- Fixed translational restraints at the three base nodes.
+- Pinned translational restraints at the three base nodes: `Ux`, `Uy`, and `Uz` restrained.
 - One simplified nodal wind load case in global `+X`.
 - Equal member area and elastic modulus in the demo model.
 
@@ -243,6 +273,7 @@ What TowerFlow should avoid in Phase 1:
 - Full load-combination management.
 - Overloaded result envelopes.
 - FEA-style stress contours without a real FEA model.
+- Fixed-base or moment-frame behaviour while using a truss-only solver.
 
 ## 10. Visualisation Rule
 
@@ -252,11 +283,17 @@ Visual style:
 
 - Orthographic engineering views where practical.
 - Clear model work area.
-- Low-saturation grey technical background.
+- Light technical background with clear high-contrast model colours.
 - Compact control panels.
 - Stable tables and labels.
 - Limited shadows and decorative effects.
 - Clear legend and active result context.
+
+Default page layout:
+
+- The model viewport should occupy about `3/5` of the desktop width.
+- The explanation or result inspector panel should occupy about `2/5` of the desktop width.
+- A resizer may allow review-specific adjustment, but the default should favour the model without starving the data panel.
 
 Phase 1 visual priorities:
 
@@ -298,12 +335,12 @@ Viewport text rules:
 
 ### Model Viewport Colour System
 
-The model window should use a restrained technical palette.
+The model window should use a clear technical palette. It should not be so grey that the engineering state is hard to read.
 
 Recommended viewport colours:
 
-- Canvas background: `#f3f5f7` or `#f5f6f8`.
-- Grid major/minor lines: `#cbd5e1` and `#e5eaf0`.
+- Canvas background: `#f7fbff`.
+- Grid major/minor lines: `#7dd3fc` and `#dbeafe`.
 - Floating panel background: `#ffffff`.
 - Panel border: `#cbd5e1`.
 - Primary text: `#111827`.
@@ -314,10 +351,12 @@ Recommended viewport colours:
 
 Structural result colours:
 
-- Tension: deep red, recommended `#c9342c`.
-- Compression: engineering blue, recommended `#1479a8`.
-- Low force or neutral state: `#94a3b8`.
-- Applied load: dark graphite, recommended `#1f2937`.
+- Tension: vivid red, recommended `#e11d48`.
+- Compression: vivid engineering blue, recommended `#006bd6`.
+- Low force or neutral state: `#64748b`.
+- Applied nodal load: orange, recommended `#ff8a00`.
+- Pinned support: green, recommended `#16a34a`.
+- Fixed support preview: purple, recommended `#7c3aed`.
 - Selected member: preserve original force colour where possible; prefer outline, halo, or increased thickness over replacing the semantic colour.
 
 Viewport layout rules:
@@ -328,6 +367,28 @@ Viewport layout rules:
 - Use a bottom status bar for mode, case, result, units, and scale context.
 - Put `Scale: Fit to View` in the status context, not as a large floating content block unless needed for exported drawings.
 - Keep axis triad, grid reference, legend, and status context visible but visually secondary to the model.
+
+### 3D View Layer Stack
+
+TowerFlow 3D views should be built as ordered engineering layers, similar to mature analysis software display logic:
+
+1. Scene background, grid, and ground/reference plane.
+2. Global coordinate axes and viewport orientation triad.
+3. Boundary condition symbols and base/support nodes.
+4. Structural topology: nodes and members.
+5. Applied loads, shown as one `Nodal loads` layer containing arrows and signed values together.
+6. Analysis result mapping, such as axial force colour.
+7. Selection and hover feedback.
+8. Labels, dimensions, legends, and status context.
+9. Inspector panels and numerical tables.
+
+Layer rules:
+
+- Layers may be shown or hidden, but hiding a layer must not change the calculation model.
+- Support symbols should remain visible when reviewing loads and reactions.
+- Load arrows must not obscure support symbols at the same node.
+- Result colour should remain the dominant model information in a result view.
+- Clicking empty model space clears member selection and selected-member values become `-`.
 
 ## 11. Page Disclosure Rule
 
@@ -345,6 +406,7 @@ For Phase 1, the page must clearly state:
 
 ```text
 Calculation basis: linear elastic 3D pin-jointed truss stiffness analysis.
+DOF basis: 3 translational DOF per node; rotations not solved in Phase 1.
 Load basis: simplified user/static nodal loads in global +X.
 Code checks: not calculated in Phase 1.
 Certification: not for design certification.

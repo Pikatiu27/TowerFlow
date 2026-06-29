@@ -8,7 +8,6 @@ const splitResizer = document.querySelector("#split-resizer");
 const resetButton = document.querySelector("#reset-view");
 const viewButtons = Array.from(document.querySelectorAll("[data-view]"));
 const showLoadsToggle = document.querySelector("#show-loads");
-const showLoadLabelsToggle = document.querySelector("#show-load-labels");
 const supportPreset = document.querySelector("#support-preset");
 const supportTable = document.querySelector("#support-table");
 const resultTabButtons = Array.from(document.querySelectorAll("[data-result-tab]"));
@@ -48,7 +47,7 @@ const labels = {
 };
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xf4f6f8);
+scene.background = new THREE.Color(0xf7fbff);
 
 const camera = new THREE.OrthographicCamera(-8, 8, 8, -8, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -76,18 +75,19 @@ let modelRadius = 8;
 let activeView = "iso";
 let activeResultTab = "load";
 let currentSupports = [];
+let nodeMap = new Map();
 const MEMBER_RADIUS_M = 0.018;
 const MEMBER_PICK_RADIUS_M = 0.085;
-const LOAD_COLOUR = 0x1f2937;
+const LOAD_COLOUR = 0xff8a00;
 const AXIS_COLOURS = {
-  x: 0xc9342c,
-  y: 0x2f855a,
-  z: 0x1479a8,
+  x: 0xe11d48,
+  y: 0x16a34a,
+  z: 0x006bd6,
 };
 const AXIS_LABEL_COLOURS = {
-  x: "#c9342c",
-  y: "#2f855a",
-  z: "#1479a8",
+  x: "#e11d48",
+  y: "#16a34a",
+  z: "#006bd6",
 };
 const ENGINEERING_AXIS_DIRECTIONS = {
   x: new THREE.Vector3(1, 0, 0),
@@ -100,7 +100,7 @@ const sun = new THREE.DirectionalLight(0xffffff, 2.2);
 sun.position.set(8, -10, 18);
 scene.add(sun);
 
-const grid = new THREE.GridHelper(4, 8, 0x94a3b8, 0xd6dde5);
+const grid = new THREE.GridHelper(4, 8, 0x7dd3fc, 0xdbeafe);
 scene.add(grid);
 
 const axisScene = new THREE.Scene();
@@ -158,8 +158,8 @@ function formatLoadDirection(load) {
 
 function formatLoadArrowLabel(load) {
   const dominant = dominantLoadComponent(load);
-  if (Math.abs(dominant.value) < 0.000001) return `${load.nodeId} 0.00 kN`;
-  return `${load.nodeId} F${dominant.axis} ${formatSigned(dominant.value)} kN`;
+  if (Math.abs(dominant.value) < 0.000001) return "0.00 kN";
+  return `${formatSigned(dominant.value)} kN`;
 }
 
 function makeTextSprite(text, options = {}) {
@@ -200,9 +200,11 @@ function makeTextSprite(text, options = {}) {
 
 function makeLoadLabel(text) {
   return makeTextSprite(text, {
-    width: 270,
+    width: 150,
     height: 52,
-    scale: [1.18, 0.23, 1],
+    font: "760 24px ui-monospace, SFMono-Regular, Consolas, monospace",
+    colour: "#b45309",
+    scale: [0.68, 0.23, 1],
   });
 }
 
@@ -270,11 +272,11 @@ function loadLabelVerticalOffset(load) {
 
 function memberColour(member, maxAbsForce) {
   const magnitude = Math.min(Math.abs(member.axialForceKN) / Math.max(maxAbsForce, 0.001), 1);
-  const low = new THREE.Color(0x94a3b8);
-  const tension = new THREE.Color(0xc9342c);
-  const compression = new THREE.Color(0x1479a8);
+  const low = new THREE.Color(0x64748b);
+  const tension = new THREE.Color(0xe11d48);
+  const compression = new THREE.Color(0x006bd6);
   if (Math.abs(member.axialForceKN) < 0.05) return low;
-  return low.clone().lerp(member.axialForceKN > 0 ? tension : compression, 0.35 + magnitude * 0.65);
+  return low.clone().lerp(member.axialForceKN > 0 ? tension : compression, 0.45 + magnitude * 0.55);
 }
 
 function makeMember(start, end, member, maxAbsForce) {
@@ -335,7 +337,7 @@ function makeConeAt(position, direction, radius, height, colour) {
 
 function addNodeMarker(position) {
   const geometry = new THREE.SphereGeometry(0.055, 14, 14);
-  const material = new THREE.MeshStandardMaterial({ color: 0x22313f, roughness: 0.75 });
+  const material = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.68 });
   const marker = new THREE.Mesh(geometry, material);
   marker.position.copy(position);
   scene.add(marker);
@@ -357,6 +359,7 @@ function disposeRenderableTree(object) {
 }
 
 function clearTower() {
+  selectedObject = null;
   for (const object of memberObjects) {
     scene.remove(object);
     object.geometry.dispose();
@@ -487,14 +490,8 @@ function addLoadArrow(load, nodes, maxLoadMagnitude) {
 
 function updateDisplayOptions() {
   const showLoads = showLoadsToggle?.checked ?? true;
-  const showLoadLabels = showLoadLabelsToggle?.checked ?? true;
   for (const object of loadObjects) {
     object.visible = showLoads;
-    object.traverse((child) => {
-      if (child.userData?.kind === "load-label") {
-        child.visible = showLoads && showLoadLabels;
-      }
-    });
   }
 }
 
@@ -633,33 +630,84 @@ function updateSummaryTab(tabName) {
   labels.sumAppliedFx.textContent = `${Number(towerData.checks.sumAppliedFxKN ?? 0).toFixed(3)} kN`;
   const loadDirection = loads.length > 0 ? formatLoadDirection(loads[0]) : "--";
   labels.loadDirection.textContent = loads.length > 0 ? `${loadDirection} (${formatLoadVector(loads[0])})` : "--";
-  labels.summaryDisplay.textContent = "Schematic arrows";
+  labels.summaryDisplay.textContent = "Arrows + signed values";
   labels.summaryEnvelope.textContent = loads.length > 0 ? `${loads[0].nodeId}-${loads[loads.length - 1].nodeId}` : "--";
   labels.summarySource.textContent = "Static JSON input";
 }
 
 function addSupportMarker(node, support) {
   const position = nodeVector(node);
-  const geometry = new THREE.BoxGeometry(0.28, 0.14, 0.28);
-  const material = new THREE.MeshStandardMaterial({
-    color: support.ux && support.uy && support.uz ? 0x475569 : 0x94a3b8,
-    roughness: 0.78,
-  });
-  const marker = new THREE.Mesh(geometry, material);
-  marker.position.copy(position).add(new THREE.Vector3(0, -0.14, 0));
-  marker.userData.support = support;
-  scene.add(marker);
-  supportObjects.push(marker);
+  const preset = supportPreset?.value ?? "pinned";
+  const group = new THREE.Group();
+  group.position.copy(position);
+  group.userData.support = support;
+
+  if (preset === "fixed") {
+    const blockMaterial = new THREE.MeshStandardMaterial({ color: 0x7c3aed, roughness: 0.58 });
+    const base = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.16, 0.34), blockMaterial);
+    base.position.set(0, -0.16, 0);
+    const clamp = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.24, 0.2), blockMaterial);
+    clamp.position.set(0, -0.01, 0);
+    const label = makeTextSprite("FIX", {
+      width: 92,
+      height: 44,
+      font: "800 22px ui-monospace, SFMono-Regular, Consolas, monospace",
+      colour: "#5b21b6",
+      textY: 30,
+      scale: [0.28, 0.13, 1],
+    });
+    label.position.set(0.18, 0.12, 0.02);
+    group.add(base, clamp, label);
+  } else {
+    const pinMaterial = new THREE.MeshStandardMaterial({ color: 0x16a34a, roughness: 0.62 });
+    const cone = new THREE.Mesh(new THREE.ConeGeometry(0.19, 0.28, 3), pinMaterial);
+    cone.position.set(0, -0.16, 0);
+    cone.rotation.y = Math.PI / 6;
+    const base = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.035, 0.34), pinMaterial);
+    base.position.set(0, -0.31, 0);
+    const label = makeTextSprite("PIN", {
+      width: 92,
+      height: 44,
+      font: "800 22px ui-monospace, SFMono-Regular, Consolas, monospace",
+      colour: "#15803d",
+      textY: 30,
+      scale: [0.28, 0.13, 1],
+    });
+    label.position.set(0.18, 0.1, 0.02);
+    group.add(cone, base, label);
+  }
+
+  scene.add(group);
+  supportObjects.push(group);
+}
+
+function clearSupportMarkers() {
+  for (const object of supportObjects) {
+    disposeRenderableTree(object);
+  }
+  supportObjects.length = 0;
+}
+
+function renderSupportMarkers() {
+  clearSupportMarkers();
+  for (const support of currentSupports) {
+    const node = nodeMap.get(support.nodeId);
+    if (node) addSupportMarker(node, support);
+  }
 }
 
 function setSupportPreset(preset) {
   currentSupports = (towerData?.supports ?? []).map((support) => {
-    if (preset === "fixed" || preset === "pinned") {
-      return { ...support, ux: true, uy: true, uz: true };
+    if (preset === "fixed") {
+      return { ...support, supportType: "fixed-frame-preview", ux: true, uy: true, uz: true, rx: true, ry: true, rz: true };
+    }
+    if (preset === "pinned") {
+      return { ...support, supportType: "pinned-translational", ux: true, uy: true, uz: true, rx: false, ry: false, rz: false };
     }
     return { ...support };
   });
   renderSupportTable();
+  renderSupportMarkers();
 }
 
 function renderSupportTable() {
@@ -671,14 +719,20 @@ function renderSupportTable() {
     const node = document.createElement("strong");
     node.textContent = support.nodeId;
     row.appendChild(node);
-    for (const component of ["ux", "uy", "uz"]) {
+    for (const component of ["ux", "uy", "uz", "rx", "ry", "rz"]) {
       const label = document.createElement("label");
+      if (component.startsWith("r")) label.className = "is-rotational";
       const input = document.createElement("input");
       input.type = "checkbox";
       input.checked = Boolean(support[component]);
+      if (component.startsWith("r")) {
+        input.disabled = true;
+        input.title = "Rotational DOF are shown for 6DOF context but are not active in the Phase 1 truss solver.";
+      }
       input.addEventListener("change", () => {
         support[component] = input.checked;
         if (supportPreset) supportPreset.value = "custom";
+        renderSupportMarkers();
       });
       label.appendChild(input);
       label.append(component.toUpperCase());
@@ -691,6 +745,7 @@ function renderSupportTable() {
 function renderTower(data) {
   clearTower();
   const nodes = new Map(data.nodes.map((node) => [node.id, node]));
+  nodeMap = nodes;
   const maxAbsForce = data.checks.maxAbsAxialForceKN ?? Math.max(...data.members.map((member) => Math.abs(member.axialForceKN)));
 
   for (const node of data.nodes) {
@@ -706,10 +761,7 @@ function renderTower(data) {
     memberObjects.push(mesh);
     memberPickObjects.push(pickMesh);
   }
-  for (const support of data.supports ?? []) {
-    const node = nodes.get(support.nodeId);
-    if (node) addSupportMarker(node, support);
-  }
+  setSupportPreset(supportPreset?.value ?? "pinned");
   renderLoads(data, nodes);
 
   updateModelBounds();
@@ -724,7 +776,6 @@ function renderTower(data) {
   labels.memberCount.textContent = String(data.members.length);
   labels.maxForce.textContent = `${maxAbsForce.toFixed(2)} kN`;
   labels.forceBalance.textContent = `${Number(data.checks.forceBalanceFxKN ?? 0).toFixed(4)} kN`;
-  setSupportPreset(supportPreset?.value ?? "pinned");
   updateSummaryTab(activeResultTab);
 }
 
@@ -755,8 +806,23 @@ function selectMember(object) {
   labels.memberForce.textContent = `${member.axialForceKN.toFixed(3)} kN`;
   labels.memberLength.textContent = `${member.lengthM.toFixed(3)} m`;
   labels.memberGroup.textContent = member.group;
-  labels.memberSection.textContent = member.sectionDesignation ?? "--";
+  labels.memberSection.textContent = member.sectionDesignation ?? "-";
   labels.memberInterpretation.textContent = interpretation(member);
+  if (activeResultTab === "member") updateSummaryTab("member");
+}
+
+function clearMemberSelection() {
+  if (selectedObject) {
+    selectedObject.material.color.copy(selectedObject.userData.baseColour);
+  }
+  selectedObject = null;
+  labels.memberTitle.textContent = "No member selected";
+  labels.memberState.textContent = "No selection";
+  labels.memberForce.textContent = "-";
+  labels.memberLength.textContent = "-";
+  labels.memberGroup.textContent = "-";
+  labels.memberSection.textContent = "-";
+  labels.memberInterpretation.textContent = "Click a tower member to review its axial force result.";
   if (activeResultTab === "member") updateSummaryTab("member");
 }
 
@@ -772,7 +838,9 @@ function pickMember(event) {
   const hits = raycaster.intersectObjects(memberPickObjects, false);
   if (hits.length > 0) {
     selectMember(hits[0].object);
+    return;
   }
+  clearMemberSelection();
 }
 
 function resetView() {
@@ -845,7 +913,6 @@ for (const button of viewButtons) {
   button.addEventListener("click", () => setCameraView(button.dataset.view));
 }
 showLoadsToggle?.addEventListener("change", updateDisplayOptions);
-showLoadLabelsToggle?.addEventListener("change", updateDisplayOptions);
 supportPreset?.addEventListener("change", () => setSupportPreset(supportPreset.value));
 for (const button of resultTabButtons) {
   button.addEventListener("click", () => updateSummaryTab(button.dataset.resultTab));

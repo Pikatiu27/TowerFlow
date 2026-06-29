@@ -131,7 +131,7 @@
             </div>
             <div>
               <dt>Model</dt>
-              <dd>3D pin-jointed truss</dd>
+              <dd>3D truss, 3 DOF/node</dd>
             </div>
             <div>
               <dt>Solver</dt>
@@ -145,7 +145,7 @@
         </section>
 
         <section class="property-section">
-          <div class="section-bar">Load Display</div>
+          <div class="section-bar">Nodal Loads Display</div>
           <div class="control-row">
             <label for="load-display-type">Load Object</label>
             <select id="load-display-type">
@@ -157,11 +157,7 @@
           <div class="toggle-grid">
             <label class="compact-toggle">
               <input id="show-loads" type="checkbox" checked />
-              <span>Nodal load arrows</span>
-            </label>
-            <label class="compact-toggle">
-              <input id="show-load-labels" type="checkbox" checked />
-              <span>Nodal load values</span>
+              <span>Nodal loads: arrows and signed values</span>
             </label>
             <label class="compact-toggle is-disabled">
               <input id="show-member-loads" type="checkbox" disabled />
@@ -179,19 +175,19 @@
           <dl class="property-list">
             <div>
               <dt>Axial Force</dt>
-              <dd id="member-force">--</dd>
+              <dd id="member-force">-</dd>
             </div>
             <div>
               <dt>Length</dt>
-              <dd id="member-length">--</dd>
+              <dd id="member-length">-</dd>
             </div>
             <div>
               <dt>Group</dt>
-              <dd id="member-group">--</dd>
+              <dd id="member-group">-</dd>
             </div>
             <div>
               <dt>Section</dt>
-              <dd id="member-section">--</dd>
+              <dd id="member-section">-</dd>
             </div>
           </dl>
           <p id="member-interpretation" class="panel-note">
@@ -256,7 +252,7 @@
             </div>
             <div>
               <dt id="summary-row-f-label">Display</dt>
-              <dd id="summary-display">Schematic arrows</dd>
+              <dd id="summary-display">Arrows + signed values</dd>
             </div>
             <div>
               <dt id="summary-row-g-label">Envelope</dt>
@@ -277,14 +273,14 @@
           <div class="boundary-toolbar">
             <label for="support-preset">Preset</label>
             <select id="support-preset">
-              <option value="pinned" selected>Pinned base nodes</option>
-              <option value="fixed">Fixed base nodes</option>
+              <option value="pinned" selected>Pinned translational base - solved</option>
+              <option value="fixed">Fixed frame base - display preview</option>
               <option value="custom">Custom display state</option>
             </select>
           </div>
           <div id="support-table" class="support-table" aria-label="Support restraints"></div>
           <p id="support-note" class="panel-note">
-            Current solved case uses translational restraints at all three base nodes. Browser edits are an input-state preview until the solver is re-run.
+            Current solved case is a 3D truss: Ux, Uy, and Uz are restrained at the three base nodes. Rx, Ry, and Rz are not active solver DOF in Phase 1.
           </p>
         </section>
 
@@ -294,6 +290,10 @@
             <div>
               <dt>Method</dt>
               <dd>Linear elastic 3D truss stiffness analysis</dd>
+            </div>
+            <div>
+              <dt>DOF Basis</dt>
+              <dd>3 translational DOF/node; rotations not solved</dd>
             </div>
             <div>
               <dt>Loads</dt>
