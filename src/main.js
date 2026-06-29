@@ -28,6 +28,10 @@ const labels = {
   memberGroup: document.querySelector("#member-group"),
   memberSection: document.querySelector("#member-section"),
   memberInterpretation: document.querySelector("#member-interpretation"),
+  selectionRowA: document.querySelector("#selection-row-a-label"),
+  selectionRowB: document.querySelector("#selection-row-b-label"),
+  selectionRowC: document.querySelector("#selection-row-c-label"),
+  selectionRowD: document.querySelector("#selection-row-d-label"),
   activeLoadCase: document.querySelector("#active-load-case"),
   activeLoadDirection: document.querySelector("#active-load-direction"),
   activeResultType: document.querySelector("#active-result-type"),
@@ -335,11 +339,12 @@ function makeConeAt(position, direction, radius, height, colour) {
   return cone;
 }
 
-function addNodeMarker(position) {
-  const geometry = new THREE.SphereGeometry(0.055, 14, 14);
+function addNodeMarker(node) {
+  const geometry = new THREE.SphereGeometry(0.13, 18, 18);
   const material = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.68 });
   const marker = new THREE.Mesh(geometry, material);
-  marker.position.copy(position);
+  marker.position.copy(nodeVector(node));
+  marker.userData.node = node;
   scene.add(marker);
   nodeObjects.push(marker);
 }
@@ -749,7 +754,7 @@ function renderTower(data) {
   const maxAbsForce = data.checks.maxAbsAxialForceKN ?? Math.max(...data.members.map((member) => Math.abs(member.axialForceKN)));
 
   for (const node of data.nodes) {
-    addNodeMarker(nodeVector(node));
+    addNodeMarker(node);
   }
 
   for (const member of data.members) {
@@ -801,6 +806,10 @@ function selectMember(object) {
   visualObject.material.color.set(0x111827);
 
   const member = visualObject.userData.member;
+  labels.selectionRowA.textContent = "Axial Force";
+  labels.selectionRowB.textContent = "Length";
+  labels.selectionRowC.textContent = "Group";
+  labels.selectionRowD.textContent = "Section";
   labels.memberTitle.textContent = member.id;
   labels.memberState.textContent = member.forceState;
   labels.memberForce.textContent = `${member.axialForceKN.toFixed(3)} kN`;
@@ -811,18 +820,49 @@ function selectMember(object) {
   if (activeResultTab === "member") updateSummaryTab("member");
 }
 
-function clearMemberSelection() {
+function selectNode(object) {
+  if (selectedObject) {
+    selectedObject.material.color.copy(selectedObject.userData.baseColour);
+  }
+  selectedObject = object;
+  if (!object.userData.baseColour) {
+    object.userData.baseColour = object.material.color.clone();
+  }
+  object.material.color.set(0xff8a00);
+
+  const node = object.userData.node;
+  const displacement = node.displacementM ?? {};
+  labels.selectionRowA.textContent = "X";
+  labels.selectionRowB.textContent = "Y";
+  labels.selectionRowC.textContent = "Z";
+  labels.selectionRowD.textContent = "Displacement";
+  labels.memberTitle.textContent = node.id;
+  labels.memberState.textContent = "node";
+  labels.memberForce.textContent = `${Number(node.x ?? 0).toFixed(3)} m`;
+  labels.memberLength.textContent = `${Number(node.y ?? 0).toFixed(3)} m`;
+  labels.memberGroup.textContent = `${Number(node.z ?? 0).toFixed(3)} m`;
+  labels.memberSection.textContent = `Ux ${Number(displacement.ux ?? 0).toFixed(6)}, Uy ${Number(displacement.uy ?? 0).toFixed(6)}, Uz ${Number(displacement.uz ?? 0).toFixed(6)} m`;
+  labels.memberInterpretation.textContent =
+    "Node coordinates are global engineering coordinates in SI units. The viewer maps engineering Z-up coordinates into the Three.js display frame.";
+}
+
+function clearSelection() {
   if (selectedObject) {
     selectedObject.material.color.copy(selectedObject.userData.baseColour);
   }
   selectedObject = null;
-  labels.memberTitle.textContent = "No member selected";
+  labels.selectionRowA.textContent = "Axial Force";
+  labels.selectionRowB.textContent = "Length";
+  labels.selectionRowC.textContent = "Group";
+  labels.selectionRowD.textContent = "Section";
+  labels.memberTitle.textContent = "No object selected";
   labels.memberState.textContent = "No selection";
   labels.memberForce.textContent = "-";
   labels.memberLength.textContent = "-";
   labels.memberGroup.textContent = "-";
   labels.memberSection.textContent = "-";
-  labels.memberInterpretation.textContent = "Click a tower member to review its axial force result.";
+  labels.memberInterpretation.textContent =
+    "Click a tower member to review member results, or click a node to review global coordinates.";
   if (activeResultTab === "member") updateSummaryTab("member");
 }
 
@@ -835,12 +875,17 @@ function updatePointer(event) {
 function pickMember(event) {
   updatePointer(event);
   raycaster.setFromCamera(pointer, camera);
+  const nodeHits = raycaster.intersectObjects(nodeObjects, false);
+  if (nodeHits.length > 0) {
+    selectNode(nodeHits[0].object);
+    return;
+  }
   const hits = raycaster.intersectObjects(memberPickObjects, false);
   if (hits.length > 0) {
     selectMember(hits[0].object);
     return;
   }
-  clearMemberSelection();
+  clearSelection();
 }
 
 function resetView() {
