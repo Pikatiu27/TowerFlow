@@ -2,41 +2,38 @@
 
 ## Selected Demo Geometry
 
-The first TowerFlow demo uses a `ROHN 25G-inspired triangular mast` geometry.
+The current TowerFlow demo uses an `FEC Type AA triangular lattice tower` geometry.
 
-This is not a certified ROHN model and is not a construction drawing. It is a reference-derived demo geometry used to make the first structural JSON and 3D viewer more realistic than a purely arbitrary tower.
+This is not a certified FEC model and is not a construction drawing. It is an audit-sheet-derived demo geometry used to make the first structural JSON and 3D viewer more realistic than a purely arbitrary tower.
 
 ## Why This Geometry Was Chosen
 
-The requested Australian/common manufacturers such as Roam, Rocla, LeBLANC, and Transfield did not have an easily verifiable public dimension sheet available during the initial search. Their tower drawings and standard details are likely commercial project documents.
+The local Reference library contains `FEC Type AA - Lattice Tower Audit Sheets.pdf`, with enough Type AA schedule information to build a better first demo than the earlier generic/ROHN-inspired seed.
 
-ROHN 25G product-family information is publicly visible through official ROHN pages and distributor product pages, and its simple triangular mast format is suitable for a first data-chain demonstration.
+The FEC sheet gives a triangular self-supporting tower family, a typical module height, a top face width, and nominal tower heights with corresponding actual heights and K-point face widths. That makes it suitable for a Phase 1 visualisation and data-chain demonstration.
 
 ## Geometry Basis
 
-- Nominal section height: 3.048 m.
-- Nominal triangular face width: 0.3175 m.
-- Demo height: four sections = 12.192 m.
-- Tower type: triangular lattice mast.
+- Tower type: triangular self-supporting lattice tower.
+- Selected schedule row: nominal 20 m Type AA tower.
+- Actual demo height: 21.30 m.
+- Typical module height: 4.80 m.
+- Top face width: 1.50 m.
+- Face width at K-point: 2.984 m.
+- Demo levels: 0.00 m, 4.80 m, 9.60 m, 14.40 m, 19.20 m, and 21.30 m.
+- Face width idealisation: linear taper from 2.984 m at the base/K-point reference to 1.500 m at the top.
 - Model idealisation: 3D pin-jointed truss.
 
-Original source values were in imperial units and are retained only as reference metadata:
-
-- Section height source note: 10 ft.
-- Face width source note: 12.5 in.
-- Demo height source note: 40 ft.
+All TowerFlow calculation and display values remain SI.
 
 ## Source Reference
 
-- ROHN product catalogue:
-  - https://rohnnet.com/product-catalog/
-  - Accessed: 2026-06-28
-- ROHN 25GSS assembly drawing:
-  - https://rohnnet.com/wp-content/uploads/2025/08/Assembly-25GSS.pdf
-  - Accessed: 2026-06-28
-- DX Engineering ROHN 25G tower section product page:
-  - https://www.dxengineering.com/parts/roh-25g10
-  - Accessed: 2026-06-28
+- Local PDF:
+  - `C:/Users/silin/Documents/Codex/Reference/FEC Type AA - Lattice Tower Audit Sheets.pdf`
+  - Accessed: 2026-06-29
+- Codex reference extraction pack:
+  - `C:/Users/silin/Documents/Codex/Reference/_codex_reference_packs/fec-type-aa-lattice-tower-audit-sheets/`
+  - Accessed: 2026-06-29
 
 ## Engineering Use
 
@@ -49,4 +46,4 @@ Do not use this model for:
 - Australian Standards capacity certification.
 - Foundation, guy wire, or connection design.
 
-If an authorized Roam, Rocla, LeBLANC, Transfield, or other manufacturer drawing becomes available, this demo geometry should be replaced with a properly sourced tower definition.
+If an authorized manufacturer drawing, project drawing, or full digital tower schedule becomes available, this demo geometry should be replaced with a properly sourced tower definition.

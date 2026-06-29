@@ -8,46 +8,37 @@ OUTPUT_PATH = ROOT / "public" / "data" / "tower-001.results.json"
 
 E_MODULUS_KPA = 200_000_000.0
 AREA_M2 = 0.0025
-FT_TO_M = 0.3048
-IN_TO_M = 0.0254
 
 DEMO_TOWER = {
-    "id": "rohn-25g-inspired-demo",
-    "name": "ROHN 25G-inspired triangular mast demo",
-    "manufacturerReference": "ROHN 25G 10 ft tower section product family",
-    "unitPolicy": "TowerFlow calculation and product values are SI. Original imperial source values are retained only in reference metadata.",
+    "id": "fec-type-aa-20m-demo",
+    "name": "FEC Type AA triangular lattice tower demo",
+    "manufacturerReference": "FEC Triangular SS Tower Type AA audit sheet",
+    "unitPolicy": "TowerFlow calculation and product values are SI. Source values in this seed are read as metric values from the audit sheet.",
     "geometryBasis": [
-        "Triangular lattice mast inspired by public ROHN 25G product information.",
-        "Nominal section height: 3.048 m.",
-        "Nominal face width: 0.3175 m.",
-        "Five levels are used to create a four-section 12.192 m demo mast.",
-    ],
-    "sourceOriginalUnits": [
-        "Original source section height reference: 10 ft.",
-        "Original source face width reference: 12.5 in.",
-        "Original source total demo height reference: 40 ft.",
+        "Triangular self-supporting lattice tower based on the FEC Type AA audit-sheet typical details.",
+        "Nominal model: 20 m Type AA tower.",
+        "Actual tower height used in demo: 21.30 m.",
+        "Typical module height read from sheet: 4.80 m.",
+        "Top face width read from sheet: 1.50 m.",
+        "Face width at K-point for nominal 20 m tower: 2.984 m.",
+        "Demo levels are idealised at 0.00, 4.80, 9.60, 14.40, 19.20, and 21.30 m.",
+        "Face width is linearly tapered from 2.984 m at the base/K-point reference to 1.500 m at the top.",
     ],
     "sourceReferences": [
         {
-            "label": "ROHN product catalogue",
-            "url": "https://rohnnet.com/product-catalog/",
-            "accessDate": "2026-06-28",
-            "use": "Official product-family reference for ROHN tower systems.",
+            "label": "FEC Type AA - Lattice Tower Audit Sheets.pdf",
+            "url": "C:/Users/silin/Documents/Codex/Reference/FEC Type AA - Lattice Tower Audit Sheets.pdf",
+            "accessDate": "2026-06-29",
+            "use": "Local reference PDF for Type AA typical details, height schedule, module height, and face-width values.",
         },
         {
-            "label": "ROHN 25GSS assembly drawing",
-            "url": "https://rohnnet.com/wp-content/uploads/2025/08/Assembly-25GSS.pdf",
-            "accessDate": "2026-06-28",
-            "use": "Official public assembly drawing reference for 25GSS height/module context.",
-        },
-        {
-            "label": "DX Engineering ROHN 25G tower section product page",
-            "url": "https://www.dxengineering.com/parts/roh-25g10",
-            "accessDate": "2026-06-28",
-            "use": "Public distributor product reference for nominal 25G section context.",
+            "label": "Codex reference extraction pack",
+            "url": "C:/Users/silin/Documents/Codex/Reference/_codex_reference_packs/fec-type-aa-lattice-tower-audit-sheets/",
+            "accessDate": "2026-06-29",
+            "use": "Searchable text extraction used to locate the Type AA values before source-PDF verification.",
         }
     ],
-    "disclaimer": "Reference-derived demo geometry only. Not a construction drawing, certified design, or manufacturer-approved model.",
+    "disclaimer": "Audit-sheet-derived demo geometry only. Not a construction drawing, certified design, or manufacturer-approved model.",
 }
 
 
@@ -104,11 +95,16 @@ def member(member_id, start, end, group):
 
 
 def build_geometry():
-    section_height_m = 10.0 * FT_TO_M
-    face_width_m = 12.5 * IN_TO_M
-    radius_m = face_width_m / math.sqrt(3.0)
-    heights = [round(section_height_m * level, 3) for level in range(5)]
-    radii = [radius_m for _ in heights]
+    actual_height_m = 21.30
+    module_height_m = 4.80
+    base_face_width_m = 2.984
+    top_face_width_m = 1.500
+    heights = [0.0, 4.80, 9.60, 14.40, 19.20, actual_height_m]
+    face_widths = [
+        base_face_width_m - (base_face_width_m - top_face_width_m) * (height / actual_height_m)
+        for height in heights
+    ]
+    radii = [face_width / math.sqrt(3.0) for face_width in face_widths]
     nodes = []
     for level_index, (z, radius) in enumerate(zip(heights, radii)):
         nodes.extend(triangular_level(level_index, z, radius))
@@ -146,17 +142,20 @@ def build_geometry():
         {"nodeId": "N03", "ux": True, "uy": True, "uz": True},
     ]
 
-    load_rows = [
-        ("N21", 0.15),
-        ("N22", 0.15),
-        ("N23", 0.15),
-        ("N31", 0.20),
-        ("N32", 0.20),
-        ("N33", 0.20),
-        ("N41", 0.25),
-        ("N42", 0.25),
-        ("N43", 0.25),
-    ]
+    load_rows = []
+    for level_index, height in enumerate(heights[1:], start=1):
+        if height <= module_height_m:
+            fx_kn = 0.20
+        elif height <= module_height_m * 2:
+            fx_kn = 0.25
+        elif height <= module_height_m * 3:
+            fx_kn = 0.30
+        elif height <= module_height_m * 4:
+            fx_kn = 0.35
+        else:
+            fx_kn = 0.18
+        for corner in range(3):
+            load_rows.append((f"N{level_index}{corner + 1}", fx_kn))
     loads = [
         {
             "id": f"L-WIND-X-{index:02d}",
@@ -297,12 +296,15 @@ def main():
     solved_nodes, solved_members, reactions = solve_truss(nodes, members, supports, loads)
     total_load_x = sum(load["fxKN"] for load in loads)
     total_reaction_x = sum(item["valueKN"] for item in reactions if item["component"] == "fxKN")
+    force_balance_x = round(total_load_x + total_reaction_x, 6)
+    if abs(force_balance_x) < 1e-9:
+        force_balance_x = 0.0
 
     result = {
         "schemaVersion": "0.1.0",
         "project": "TowerFlow",
         "caseId": "tower-001-static-wind-x",
-        "title": "ROHN 25G-inspired triangular mast static wind prototype",
+        "title": "FEC Type AA triangular lattice tower static wind prototype",
         "towerReference": DEMO_TOWER,
         "units": {
             "length": "m",
@@ -335,7 +337,7 @@ def main():
         "checks": {
             "sumAppliedFxKN": round(total_load_x, 3),
             "sumReactionFxKN": round(total_reaction_x, 3),
-            "forceBalanceFxKN": round(total_load_x + total_reaction_x, 6),
+            "forceBalanceFxKN": force_balance_x,
             "maxAbsAxialForceKN": round(max(abs(member["axialForceKN"]) for member in solved_members), 3),
         },
     }

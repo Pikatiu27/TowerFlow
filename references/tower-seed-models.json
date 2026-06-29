@@ -9,6 +9,76 @@
   },
   "seeds": [
     {
+      "seed_id": "fec_type_aa_20m_local_audit_sheet_demo",
+      "manufacturer_reference": "FEC",
+      "source_type": "local audit sheet reference PDF",
+      "source_links": [
+        "C:/Users/silin/Documents/Codex/Reference/FEC Type AA - Lattice Tower Audit Sheets.pdf",
+        "C:/Users/silin/Documents/Codex/Reference/_codex_reference_packs/fec-type-aa-lattice-tower-audit-sheets/"
+      ],
+      "geometry_status": "partial_audit_sheet_reference",
+      "tower_type": "self_supporting_triangular_lattice",
+      "selected_demo": {
+        "model": "Type AA nominal 20 m",
+        "actual_height_m": 21.3,
+        "module_height_m": 4.8,
+        "top_face_width_m": 1.5,
+        "face_width_at_k_point_m": 2.984,
+        "demo_level_heights_m": [
+          0.0,
+          4.8,
+          9.6,
+          14.4,
+          19.2,
+          21.3
+        ]
+      },
+      "height_options": [
+        {
+          "model": "Nominal 20 m",
+          "height_m": 21.3,
+          "face_width_at_k_point_m": 2.984
+        },
+        {
+          "model": "Nominal 25 m",
+          "height_m": 25.2,
+          "face_width_at_k_point_m": 3.336
+        },
+        {
+          "model": "Nominal 30 m",
+          "height_m": 30.05,
+          "face_width_at_k_point_m": 3.772
+        },
+        {
+          "model": "Nominal 35 m",
+          "height_m": 35.85,
+          "face_width_at_k_point_m": 4.294
+        },
+        {
+          "model": "Nominal 40 m",
+          "height_m": 38.75,
+          "face_width_at_k_point_m": 4.554
+        },
+        {
+          "model": "Nominal 45 m",
+          "height_m": 44.55,
+          "face_width_at_k_point_m": 5.076
+        },
+        {
+          "model": "Nominal 50 m",
+          "height_m": 50.35,
+          "face_width_at_k_point_m": 5.598
+        }
+      ],
+      "towerflow_use": "current Phase 1 demo geometry, visualisation, and solver-verification seed only",
+      "not_for_certification": true,
+      "limitations": [
+        "Audit sheet extraction is sufficient for demo geometry but not a full manufacturer design model.",
+        "Member sizes, connection details, K-point definition, and full geometry must be verified against the source PDF and project drawings before engineering use.",
+        "The TowerFlow demo linearly tapers face width between the available reference widths for visualisation only."
+      ]
+    },
+    {
       "seed_id": "triangular_lattice_rohn_style_25g_public_reference",
       "manufacturer_reference": "ROHN Products",
       "source_type": "public manufacturer drawings",
