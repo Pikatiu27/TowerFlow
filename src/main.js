@@ -7,6 +7,7 @@ const appShell = document.querySelector(".app-shell");
 const splitResizer = document.querySelector("#split-resizer");
 const resetButton = document.querySelector("#reset-view");
 const viewButtons = Array.from(document.querySelectorAll("[data-view]"));
+const displayModeButtons = Array.from(document.querySelectorAll("[data-display-mode]"));
 const showLoadsToggle = document.querySelector("#show-loads");
 const supportPreset = document.querySelector("#support-preset");
 const supportTable = document.querySelector("#support-table");
@@ -34,6 +35,8 @@ const labels = {
   selectionRowD: document.querySelector("#selection-row-d-label"),
   activeLoadCase: document.querySelector("#active-load-case"),
   activeLoadDirection: document.querySelector("#active-load-direction"),
+  activeDisplayMode: document.querySelector("#active-display-mode"),
+  panelDisplayMode: document.querySelector("#panel-display-mode"),
   activeResultType: document.querySelector("#active-result-type"),
   panelLoadCase: document.querySelector("#panel-load-case"),
   summaryType: document.querySelector("#summary-type"),
@@ -77,11 +80,13 @@ let modelBounds = null;
 let modelCenter = new THREE.Vector3(0, 6, 0);
 let modelRadius = 8;
 let activeView = "front";
+let displayMode = "geometry";
 let activeResultTab = "load";
 let currentSupports = [];
 let nodeMap = new Map();
 const MEMBER_RADIUS_M = 0.018;
 const MEMBER_PICK_RADIUS_M = 0.085;
+const GEOMETRY_COLOUR = 0x111827;
 const LOAD_COLOUR = 0xff8a00;
 const AXIS_COLOURS = {
   x: 0xe11d48,
@@ -285,12 +290,18 @@ function memberColour(member, maxAbsForce) {
   return low.clone().lerp(member.axialForceKN > 0 ? tension : compression, 0.45 + magnitude * 0.55);
 }
 
+function currentMemberColour(member) {
+  if (displayMode === "geometry") return new THREE.Color(GEOMETRY_COLOUR);
+  const maxAbsForce = towerData?.checks?.maxAbsAxialForceKN ?? 0;
+  return memberColour(member, maxAbsForce);
+}
+
 function makeMember(start, end, member, maxAbsForce) {
   const direction = new THREE.Vector3().subVectors(end, start);
   const length = direction.length();
   const geometry = new THREE.CylinderGeometry(MEMBER_RADIUS_M, MEMBER_RADIUS_M, length, 10);
   const material = new THREE.MeshStandardMaterial({
-    color: memberColour(member, maxAbsForce),
+    color: displayMode === "geometry" ? GEOMETRY_COLOUR : memberColour(member, maxAbsForce),
     roughness: 0.72,
     metalness: 0.0,
   });
@@ -416,7 +427,7 @@ function updateModelBounds() {
 }
 
 function setActiveViewButton(viewName) {
-  activeView = viewName === "fit" ? "iso" : viewName;
+  activeView = viewName === "fit" ? "front" : viewName;
   for (const button of viewButtons) {
     button.classList.toggle("is-active", button.dataset.view === activeView);
   }
@@ -426,7 +437,16 @@ function updateOrthoFrustum() {
   const width = viewer.clientWidth || 1;
   const height = viewer.clientHeight || 1;
   const aspect = width / height;
-  const halfSize = Math.max(modelRadius * 1.65, 2.8);
+  const isMobileViewer = width <= 640;
+  const viewScale =
+    activeView === "front" || activeView === "side"
+      ? isMobileViewer
+        ? 1.55
+        : 1.16
+      : activeView === "plan"
+        ? 1.28
+        : 1.52;
+  const halfSize = Math.max(modelRadius * viewScale, 2.8);
   camera.left = -halfSize * aspect;
   camera.right = halfSize * aspect;
   camera.top = halfSize;
@@ -496,10 +516,34 @@ function addLoadArrow(load, nodes, maxLoadMagnitude) {
 }
 
 function updateDisplayOptions() {
-  const showLoads = showLoadsToggle?.checked ?? true;
+  const showLoads = displayMode === "results" && (showLoadsToggle?.checked ?? true);
   for (const object of loadObjects) {
     object.visible = showLoads;
   }
+}
+
+function applyDisplayMode() {
+  for (const button of displayModeButtons) {
+    button.classList.toggle("is-active", button.dataset.displayMode === displayMode);
+  }
+  if (labels.activeDisplayMode) labels.activeDisplayMode.textContent = displayMode === "geometry" ? "Geometry" : "Results";
+  if (labels.panelDisplayMode) labels.panelDisplayMode.textContent = displayMode === "geometry" ? "Geometry" : "Results";
+  for (const object of memberObjects) {
+    if (object !== selectedObject) {
+      object.material.color.copy(currentMemberColour(object.userData.member));
+    }
+  }
+  for (const object of nodeObjects) {
+    if (object !== selectedObject) {
+      object.material.color.set(displayMode === "geometry" ? 0x111827 : 0x0f172a);
+    }
+  }
+  updateDisplayOptions();
+}
+
+function setDisplayMode(mode) {
+  displayMode = mode === "results" ? "results" : "geometry";
+  applyDisplayMode();
 }
 
 function renderLoads(data, nodes) {
@@ -783,6 +827,7 @@ function renderTower(data) {
   labels.memberCount.textContent = String(data.members.length);
   labels.maxForce.textContent = `${maxAbsForce.toFixed(2)} kN`;
   labels.forceBalance.textContent = `${Number(data.checks.forceBalanceFxKN ?? 0).toFixed(4)} kN`;
+  applyDisplayMode();
   updateSummaryTab(activeResultTab);
 }
 
@@ -891,7 +936,7 @@ function pickMember(event) {
 }
 
 function resetView() {
-  setCameraView("iso");
+  setCameraView("front");
 }
 
 function setInspectorWidth(width) {
@@ -958,6 +1003,9 @@ splitResizer?.addEventListener("pointerdown", startSplitResize);
 resetButton.addEventListener("click", resetView);
 for (const button of viewButtons) {
   button.addEventListener("click", () => setCameraView(button.dataset.view));
+}
+for (const button of displayModeButtons) {
+  button.addEventListener("click", () => setDisplayMode(button.dataset.displayMode));
 }
 showLoadsToggle?.addEventListener("change", updateDisplayOptions);
 supportPreset?.addEventListener("change", () => setSupportPreset(supportPreset.value));

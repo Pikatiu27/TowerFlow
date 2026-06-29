@@ -145,6 +145,16 @@ button {
   pointer-events: auto;
 }
 
+.mode-toolbar {
+  position: absolute;
+  top: 136px;
+  left: 16px;
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
 .view-toolbar button {
   min-height: 32px;
   border-color: #b8c2cc;
@@ -156,10 +166,21 @@ button {
   box-shadow: none;
 }
 
-.view-toolbar button.is-active {
+.view-toolbar button.is-active,
+.mode-toolbar button.is-active {
   border-color: #1479a8;
   background: #e0f2fe;
   color: #0f172a;
+}
+
+.mode-toolbar button {
+  min-height: 32px;
+  border-color: #b8c2cc;
+  background: #ffffff;
+  color: #263242;
+  font-size: var(--type-ui);
+  font-weight: 720;
+  padding: 0 10px;
 }
 
 .axis-gizmo {
@@ -930,14 +951,29 @@ select {
   .view-toolbar {
     top: 92px;
     left: 12px;
-    right: 12px;
+    right: 96px;
     gap: 6px;
   }
 
   .view-toolbar button {
-    min-height: 32px;
+    min-height: 30px;
     font-size: var(--type-caption);
-    padding: 0 9px;
+    padding: 0 8px;
+  }
+
+  .mode-toolbar {
+    top: 128px;
+    left: 12px;
+    right: 112px;
+    gap: 6px;
+  }
+
+  .mode-toolbar button {
+    min-height: 30px;
+    flex: 1 1 0;
+    min-width: 0;
+    font-size: var(--type-caption);
+    padding: 0 7px;
   }
 
   .grid-label,
@@ -947,7 +983,7 @@ select {
 
   .axis-gizmo {
     right: 12px;
-    top: 134px;
+    top: 92px;
     width: 74px;
     height: 74px;
   }
@@ -1025,5 +1061,21 @@ select {
 
   button {
     padding: 0 10px;
+  }
+
+  .top-bar > div {
+    max-width: calc(100% - 102px);
+  }
+
+  .view-toolbar {
+    right: 82px;
+  }
+
+  .view-toolbar button {
+    padding: 0 6px;
+  }
+
+  .mode-toolbar {
+    right: 96px;
   }
 }

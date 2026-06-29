@@ -32,12 +32,16 @@
           <button type="button" data-view="plan">Plan</button>
           <button type="button" data-view="fit">Fit</button>
         </div>
+        <div class="mode-toolbar" aria-label="Display mode controls">
+          <button type="button" class="is-active" data-display-mode="geometry">Geometry</button>
+          <button type="button" data-display-mode="results">Results</button>
+        </div>
         <div id="axis-gizmo" class="axis-gizmo" aria-label="Viewport global XYZ orientation"></div>
         <div class="grid-label" aria-label="Grid reference">Ground reference grid: 0.5 m spacing</div>
         <div class="view-context" aria-label="Active result context">
           <div>
             <span>Mode</span>
-            <strong>Results</strong>
+            <strong id="active-display-mode">Geometry</strong>
           </div>
           <div>
             <span>Scenario</span>
@@ -126,8 +130,12 @@
           </div>
           <dl class="property-list">
             <div>
+              <dt>Display</dt>
+              <dd id="panel-display-mode">Geometry</dd>
+            </div>
+            <div>
               <dt>Mode</dt>
-              <dd>Results review</dd>
+              <dd>Visual review</dd>
             </div>
             <div>
               <dt>Model</dt>
