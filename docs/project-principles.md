@@ -311,27 +311,44 @@ Animation is optional and must never replace numeric display.
 
 The model viewport must read like an engineering analysis workspace.
 
-Recommended viewport hierarchy:
+Reference basis:
 
-- Application title: 20-22 px, heavy weight, used only once.
-- Prototype or mode label: 10-11 px, uppercase, medium-heavy weight.
-- Toolbar buttons: 12 px, medium weight.
-- View context labels: 10 px, uppercase, grey.
-- View context values: 12 px, medium weight.
-- Legend title: 11 px, uppercase, medium-heavy weight.
-- Legend labels: 12 px, medium weight.
-- Legend note: 11 px, regular weight.
-- Grid, scale, and source labels: 11 px, regular or medium weight.
-- Load labels: 10-11 px, medium weight.
-- Axis labels: 11-12 px, medium-heavy weight.
+- Dlubal RFEM 6 Nodal Loads: shifted load display and load-arrow size are graphical display settings, not calculation changes: `https://www.dlubal.com/en/downloads-and-information/documents/online-manuals/rfem-6/000267`.
+- Dlubal RFEM 6 Graphics Control: model graphics, display state, navigator objects, tables, and views are separate software concepts: `https://www.dlubal.com/en/downloads-and-information/documents/online-manuals/rfem-6/000020`.
+- Autodesk AutoCAD TEXTSIZE: text height is a drawing object setting saved in the drawing: `https://help.autodesk.com/cloudhelp/2027/ENG/AutoCAD-Core/files/GUID-DD548317-95BA-4AEA-B54D-0D917F10D3C1.htm`.
+- Autodesk AutoCAD Annotation Scaling: annotation objects may be represented at different output scales: `https://help.autodesk.com/cloudhelp/2026/ENU/AutoCAD-LT-DidYouKnow/files/GUID-C33D5B68-5A3F-4AF6-9AFB-F74DAB8B6722.htm`.
+
+TowerFlow inference:
+
+- Screen labels and future plotted drawing text are different systems.
+- Phase 1 screen labels should use fixed UI typography, not drawing-scale text heights.
+- Future drawing export may map the same semantic hierarchy to plotted text heights such as 2.5 mm body text, but the live viewer remains `Fit to View`.
+
+Recommended screen hierarchy:
+
+| Layer | Use | Size |
+| --- | --- | --- |
+| Page title | Application name only | 20-22 px |
+| Panel heading | Inspector title | 15-16 px |
+| Section bar | Panel section names | 11-12 px |
+| UI command | Toolbar buttons, tabs, toggles | 12-13 px |
+| Label | Context labels, property labels | 10.5-11.5 px |
+| Value | Table values, status values | 13-14 px |
+| Reading text | Notes and short explanations | 14 px |
+| Model load value | Signed load labels beside arrows | 14 px visual equivalent |
+| Support symbol label | `PIN`, `FIX` labels | 11-12 px visual equivalent |
+| Axis label | `X`, `Y`, `Z`, `GLOBAL` | 11-12 px visual equivalent |
 
 Viewport text rules:
 
 - Reduce large webpage-style titles inside the model window.
 - Avoid using the same heavy font weight for every label and value.
-- Keep engineering values readable, but do not make every value look like a primary result.
+- Make values one step larger or stronger than their labels.
+- Model load values are primary engineering annotations and must not be smaller than legend or status-bar values.
 - Use monospace only for compact engineering values, IDs, and numeric result fields.
 - Keep status bars compact so they behave like software chrome, not content cards.
+- Do not scale font size with viewport width; use fixed typography steps and hide secondary overlays on small screens when necessary.
+- Keep 3D labels short: the model shows signed values, while node ID, coordinate system, direction, and source are shown in the inspector.
 
 ### Model Viewport Colour System
 

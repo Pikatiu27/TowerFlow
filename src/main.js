@@ -204,11 +204,13 @@ function makeTextSprite(text, options = {}) {
 
 function makeLoadLabel(text) {
   return makeTextSprite(text, {
-    width: 150,
-    height: 52,
-    font: "760 24px ui-monospace, SFMono-Regular, Consolas, monospace",
-    colour: "#b45309",
-    scale: [0.68, 0.23, 1],
+    width: 190,
+    height: 60,
+    font: "780 32px ui-monospace, SFMono-Regular, Consolas, monospace",
+    colour: "#92400e",
+    strokeWidth: 5,
+    textY: 40,
+    scale: [1.02, 0.32, 1],
   });
 }
 
@@ -656,10 +658,10 @@ function addSupportMarker(node, support) {
     const label = makeTextSprite("FIX", {
       width: 92,
       height: 44,
-      font: "800 22px ui-monospace, SFMono-Regular, Consolas, monospace",
+      font: "800 24px ui-monospace, SFMono-Regular, Consolas, monospace",
       colour: "#5b21b6",
       textY: 30,
-      scale: [0.28, 0.13, 1],
+      scale: [0.32, 0.15, 1],
     });
     label.position.set(0.18, 0.12, 0.02);
     group.add(base, clamp, label);
@@ -673,10 +675,10 @@ function addSupportMarker(node, support) {
     const label = makeTextSprite("PIN", {
       width: 92,
       height: 44,
-      font: "800 22px ui-monospace, SFMono-Regular, Consolas, monospace",
+      font: "800 24px ui-monospace, SFMono-Regular, Consolas, monospace",
       colour: "#15803d",
       textY: 30,
-      scale: [0.28, 0.13, 1],
+      scale: [0.32, 0.15, 1],
     });
     label.position.set(0.18, 0.1, 0.02);
     group.add(cone, base, label);
