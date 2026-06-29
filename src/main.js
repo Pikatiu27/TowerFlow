@@ -5,7 +5,6 @@ const viewer = document.querySelector("#viewer");
 const resetButton = document.querySelector("#reset-view");
 const viewButtons = Array.from(document.querySelectorAll("[data-view]"));
 const showLoadsToggle = document.querySelector("#show-loads");
-const showLoadLabelsToggle = document.querySelector("#show-load-labels");
 const labels = {
   caseTitle: document.querySelector("#case-title"),
   nodeCount: document.querySelector("#node-count"),
@@ -294,14 +293,8 @@ function addLoadArrow(load, nodes, maxLoadMagnitude) {
 
 function updateDisplayOptions() {
   const showLoads = showLoadsToggle?.checked ?? true;
-  const showLoadLabels = showLoadLabelsToggle?.checked ?? true;
   for (const object of loadObjects) {
     object.visible = showLoads;
-    object.traverse((child) => {
-      if (child.userData?.kind === "load-label") {
-        child.visible = showLoads && showLoadLabels;
-      }
-    });
   }
 }
 
@@ -428,7 +421,6 @@ for (const button of viewButtons) {
   button.addEventListener("click", () => setCameraView(button.dataset.view));
 }
 showLoadsToggle?.addEventListener("change", updateDisplayOptions);
-showLoadLabelsToggle?.addEventListener("change", updateDisplayOptions);
 
 resize();
 loadData().catch((error) => {

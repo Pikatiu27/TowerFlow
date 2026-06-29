@@ -328,6 +328,27 @@ h2 {
   font-weight: 780;
 }
 
+.section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.state-badge {
+  flex: 0 0 auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.68rem;
+  font-weight: 820;
+  letter-spacing: 0;
+  line-height: 1;
+  padding: 6px 8px;
+  text-transform: uppercase;
+}
+
 .info-panel {
   display: grid;
   align-content: start;
@@ -346,6 +367,74 @@ h2 {
 
 .info-panel section:last-child {
   border-bottom: 0;
+}
+
+.state-primary {
+  display: grid;
+  grid-template-columns: 1.05fr 1.15fr 0.7fr;
+  margin-top: 16px;
+  border: 1px solid #b8c2cc;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.state-primary div {
+  min-width: 0;
+  border-right: 1px solid #d8e0e8;
+  padding: 11px 12px;
+}
+
+.state-primary div:last-child {
+  border-right: 0;
+}
+
+.state-primary span,
+.state-details dt {
+  display: block;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 820;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.state-primary strong {
+  display: block;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+  color: #111827;
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", ui-monospace, monospace;
+  font-size: 0.98rem;
+  font-weight: 820;
+}
+
+.state-details {
+  display: grid;
+  gap: 0;
+  margin: 12px 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.state-details div {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  min-width: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 8px 0;
+}
+
+.state-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #263242;
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", ui-monospace, monospace;
+  font-size: 0.86rem;
+  font-weight: 720;
 }
 
 .member-grid,
@@ -523,6 +612,19 @@ dd {
 
   .view-context strong {
     font-size: 0.76rem;
+  }
+
+  .state-primary {
+    grid-template-columns: 1fr;
+  }
+
+  .state-primary div {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .state-primary div:last-child {
+    border-bottom: 0;
   }
 
   .legend-panel {

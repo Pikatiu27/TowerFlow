@@ -90,44 +90,57 @@
       </section>
 
       <aside class="info-panel" aria-label="Engineering result panel">
-        <section>
-          <p class="eyebrow">View State</p>
-          <h2>Phase 1 Result Review</h2>
-          <dl class="context-grid">
+        <section class="state-section">
+          <div class="section-heading">
             <div>
-              <dt>Task Mode</dt>
-              <dd>Results</dd>
+              <p class="eyebrow">View State</p>
+              <h2>Current Result Context</h2>
+            </div>
+            <span class="state-badge">Static Demo</span>
+          </div>
+
+          <div class="state-primary" aria-label="Active result summary">
+            <div>
+              <span>Load Case</span>
+              <strong id="panel-load-case">LC1</strong>
             </div>
             <div>
-              <dt>Analysis Model</dt>
+              <span>Result</span>
+              <strong>Axial Force</strong>
+            </div>
+            <div>
+              <span>Units</span>
+              <strong>SI</strong>
+            </div>
+          </div>
+
+          <dl class="state-details">
+            <div>
+              <dt>Mode</dt>
+              <dd>Results review</dd>
+            </div>
+            <div>
+              <dt>Model</dt>
               <dd>3D pin-jointed truss</dd>
             </div>
             <div>
-              <dt>Result Type</dt>
-              <dd>Axial force</dd>
+              <dt>Solver</dt>
+              <dd>Offline Python stiffness method</dd>
             </div>
             <div>
-              <dt>Load Case</dt>
-              <dd id="panel-load-case">LC1</dd>
-            </div>
-            <div>
-              <dt>Unit System</dt>
-              <dd>SI</dd>
+              <dt>Scale</dt>
+              <dd>Fit to View</dd>
             </div>
           </dl>
         </section>
 
         <section>
-          <p class="eyebrow">Display Options</p>
-          <h2>Engineering Layers</h2>
+          <p class="eyebrow">Display</p>
+          <h2>Load Display</h2>
           <div class="display-options">
             <label>
               <input id="show-loads" type="checkbox" checked />
-              <span>Applied loads</span>
-            </label>
-            <label>
-              <input id="show-load-labels" type="checkbox" checked />
-              <span>Load values</span>
+              <span>Applied load arrows and kN values</span>
             </label>
           </div>
         </section>
