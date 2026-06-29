@@ -792,7 +792,7 @@ function setInspectorWidth(width) {
 function startSplitResize(event) {
   if (!appShell || window.matchMedia("(max-width: 800px)").matches) return;
   event.preventDefault();
-  splitResizer.setPointerCapture?.(event.pointerId);
+  splitResizer?.setPointerCapture?.(event.pointerId);
   appShell.classList.add("is-resizing");
   const move = (moveEvent) => {
     const rect = appShell.getBoundingClientRect();

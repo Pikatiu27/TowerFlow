@@ -879,7 +879,7 @@ select {
   background: #94a3b8;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1040px) {
   .app-shell {
     display: flex;
     flex-direction: column;
@@ -893,7 +893,7 @@ select {
   }
 
   .viewer-section {
-    min-height: 62svh;
+    min-height: 100svh;
   }
 
   .top-bar {
@@ -939,22 +939,7 @@ select {
   }
 
   .view-context {
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .view-context div {
-    padding: 8px 9px;
-  }
-
-  .view-context span {
-    font-size: 0.62rem;
-  }
-
-  .view-context strong {
-    font-size: 0.76rem;
+    display: none;
   }
 
   .state-primary {
@@ -1009,14 +994,13 @@ select {
   .info-panel {
     border-left: 0;
     border-top: 1px solid var(--line);
-    padding: 16px;
     box-shadow: 0 -14px 34px rgba(17, 24, 39, 0.06);
   }
 }
 
 @media (max-width: 430px) {
   .viewer-section {
-    min-height: 58svh;
+    min-height: 100svh;
   }
 
   .member-grid,
