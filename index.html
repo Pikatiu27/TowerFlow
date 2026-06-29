@@ -90,6 +90,15 @@
         </div>
       </section>
 
+      <div
+        id="split-resizer"
+        class="split-resizer"
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize viewer and inspector panels"
+        tabindex="0"
+      ></div>
+
       <aside class="info-panel" aria-label="Engineering result inspector">
         <header class="panel-header">
           <div>
@@ -108,7 +117,7 @@
             </div>
             <div>
               <span>Result</span>
-              <strong>Axial Force</strong>
+              <strong id="active-result-type">Axial Force</strong>
             </div>
             <div>
               <span>Units</span>
@@ -136,11 +145,29 @@
         </section>
 
         <section class="property-section">
-          <div class="section-bar">Display</div>
-          <label class="compact-toggle">
-            <input id="show-loads" type="checkbox" checked />
-            <span>Applied load arrows and kN values</span>
-          </label>
+          <div class="section-bar">Load Display</div>
+          <div class="control-row">
+            <label for="load-display-type">Load Object</label>
+            <select id="load-display-type">
+              <option value="nodal" selected>Nodal loads</option>
+              <option value="member" disabled>Member loads - next phase</option>
+              <option value="area" disabled>Area / panel loads - next phase</option>
+            </select>
+          </div>
+          <div class="toggle-grid">
+            <label class="compact-toggle">
+              <input id="show-loads" type="checkbox" checked />
+              <span>Nodal load arrows</span>
+            </label>
+            <label class="compact-toggle">
+              <input id="show-load-labels" type="checkbox" checked />
+              <span>Nodal load values</span>
+            </label>
+            <label class="compact-toggle is-disabled">
+              <input id="show-member-loads" type="checkbox" disabled />
+              <span>Member distributed loads</span>
+            </label>
+          </div>
         </section>
 
         <section class="property-section">
@@ -161,6 +188,10 @@
             <div>
               <dt>Group</dt>
               <dd id="member-group">--</dd>
+            </div>
+            <div>
+              <dt>Section</dt>
+              <dd id="member-section">--</dd>
             </div>
           </dl>
           <p id="member-interpretation" class="panel-note">
@@ -195,43 +226,65 @@
         </section>
 
         <section class="property-section">
-          <div class="section-bar">Load Summary</div>
+          <div class="section-bar">Calculation Summary</div>
+          <div class="tab-row" role="tablist" aria-label="Result summary type">
+            <button type="button" class="is-active" data-result-tab="load">Load</button>
+            <button type="button" data-result-tab="member">Member</button>
+            <button type="button" data-result-tab="displacement">Displacement</button>
+            <button type="button" data-result-tab="reaction">Reaction</button>
+          </div>
           <dl class="property-list">
             <div>
-              <dt>Load Case</dt>
+              <dt id="summary-row-a-label">Load Case</dt>
               <dd id="load-title">Loading...</dd>
             </div>
             <div>
-              <dt>Type</dt>
-              <dd>Nodal wind load</dd>
+              <dt id="summary-row-b-label">Object Type</dt>
+              <dd id="summary-type">Nodal load</dd>
             </div>
             <div>
-              <dt>Load Count</dt>
+              <dt id="summary-row-c-label">Load Count</dt>
               <dd id="load-count">--</dd>
             </div>
             <div>
-              <dt>Applied Fx</dt>
+              <dt id="summary-row-d-label">Applied Fx</dt>
               <dd id="sum-applied-fx">--</dd>
             </div>
             <div>
-              <dt>Direction</dt>
+              <dt id="summary-row-e-label">Direction</dt>
               <dd id="load-direction">--</dd>
             </div>
             <div>
-              <dt>Arrow Scale</dt>
-              <dd>Schematic</dd>
+              <dt id="summary-row-f-label">Display</dt>
+              <dd id="summary-display">Schematic arrows</dd>
             </div>
             <div>
-              <dt>Locations</dt>
-              <dd>N21-N43</dd>
+              <dt id="summary-row-g-label">Envelope</dt>
+              <dd id="summary-envelope">--</dd>
             </div>
             <div>
-              <dt>Source</dt>
-              <dd>Static JSON input</dd>
+              <dt id="summary-row-h-label">Source</dt>
+              <dd id="summary-source">Static JSON input</dd>
             </div>
           </dl>
           <p class="panel-note">
-            Load arrows and values are display-scaled only. The numeric values remain in kN.
+            Summary tabs follow common analysis-output workflow. Phase 1 reads solved values from the static JSON result file.
+          </p>
+        </section>
+
+        <section class="property-section">
+          <div class="section-bar">Boundary Conditions</div>
+          <div class="boundary-toolbar">
+            <label for="support-preset">Preset</label>
+            <select id="support-preset">
+              <option value="pinned" selected>Pinned base nodes</option>
+              <option value="fixed">Fixed base nodes</option>
+              <option value="custom">Custom display state</option>
+            </select>
+          </div>
+          <div id="support-table" class="support-table" aria-label="Support restraints"></div>
+          <p id="support-note" class="panel-note">
+            Current solved case uses translational restraints at all three base nodes. Browser edits are an input-state preview until the solver is re-run.
           </p>
         </section>
 

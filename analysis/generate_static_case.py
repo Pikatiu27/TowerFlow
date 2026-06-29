@@ -83,6 +83,34 @@ def triangular_level(level_index, z, radius):
     return nodes
 
 
+def section_for_group(group):
+    sections = {
+        "leg": {
+            "sectionDesignation": "CHS 48 x 5.4",
+            "sectionFamily": "CHS",
+            "sectionSourceNote": "Demo section read from FEC Type AA typical details; verify against source PDF before engineering use.",
+        },
+        "diagonal bracing": {
+            "sectionDesignation": "CHS 42 x 3.2",
+            "sectionFamily": "CHS",
+            "sectionSourceNote": "Demo section read from FEC Type AA typical details; verify against source PDF before engineering use.",
+        },
+        "plan bracing": {
+            "sectionDesignation": "Round bar dia 14",
+            "sectionFamily": "round bar",
+            "sectionSourceNote": "Demo horizontal/secondary section from FEC Type AA typical details; verify against source PDF before engineering use.",
+        },
+    }
+    return sections.get(
+        group,
+        {
+            "sectionDesignation": "Section not assigned",
+            "sectionFamily": "unknown",
+            "sectionSourceNote": "No demo section metadata assigned.",
+        },
+    )
+
+
 def member(member_id, start, end, group):
     return {
         "id": member_id,
@@ -91,6 +119,7 @@ def member(member_id, start, end, group):
         "group": group,
         "areaM2": AREA_M2,
         "elasticModulusKPa": E_MODULUS_KPA,
+        **section_for_group(group),
     }
 
 

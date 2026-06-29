@@ -3,9 +3,15 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const viewer = document.querySelector("#viewer");
 const axisGizmo = document.querySelector("#axis-gizmo");
+const appShell = document.querySelector(".app-shell");
+const splitResizer = document.querySelector("#split-resizer");
 const resetButton = document.querySelector("#reset-view");
 const viewButtons = Array.from(document.querySelectorAll("[data-view]"));
 const showLoadsToggle = document.querySelector("#show-loads");
+const showLoadLabelsToggle = document.querySelector("#show-load-labels");
+const supportPreset = document.querySelector("#support-preset");
+const supportTable = document.querySelector("#support-table");
+const resultTabButtons = Array.from(document.querySelectorAll("[data-result-tab]"));
 const labels = {
   caseTitle: document.querySelector("#case-title"),
   nodeCount: document.querySelector("#node-count"),
@@ -21,10 +27,24 @@ const labels = {
   memberForce: document.querySelector("#member-force"),
   memberLength: document.querySelector("#member-length"),
   memberGroup: document.querySelector("#member-group"),
+  memberSection: document.querySelector("#member-section"),
   memberInterpretation: document.querySelector("#member-interpretation"),
   activeLoadCase: document.querySelector("#active-load-case"),
   activeLoadDirection: document.querySelector("#active-load-direction"),
+  activeResultType: document.querySelector("#active-result-type"),
   panelLoadCase: document.querySelector("#panel-load-case"),
+  summaryType: document.querySelector("#summary-type"),
+  summaryDisplay: document.querySelector("#summary-display"),
+  summaryEnvelope: document.querySelector("#summary-envelope"),
+  summarySource: document.querySelector("#summary-source"),
+  summaryRowA: document.querySelector("#summary-row-a-label"),
+  summaryRowB: document.querySelector("#summary-row-b-label"),
+  summaryRowC: document.querySelector("#summary-row-c-label"),
+  summaryRowD: document.querySelector("#summary-row-d-label"),
+  summaryRowE: document.querySelector("#summary-row-e-label"),
+  summaryRowF: document.querySelector("#summary-row-f-label"),
+  summaryRowG: document.querySelector("#summary-row-g-label"),
+  summaryRowH: document.querySelector("#summary-row-h-label"),
 };
 
 const scene = new THREE.Scene();
@@ -43,16 +63,21 @@ controls.target.set(0, 0, 7);
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const memberObjects = [];
+const memberPickObjects = [];
 const nodeObjects = [];
 const loadObjects = [];
 const originAxisObjects = [];
+const supportObjects = [];
 let selectedObject = null;
 let towerData = null;
 let modelBounds = null;
 let modelCenter = new THREE.Vector3(0, 6, 0);
 let modelRadius = 8;
 let activeView = "iso";
+let activeResultTab = "load";
+let currentSupports = [];
 const MEMBER_RADIUS_M = 0.018;
+const MEMBER_PICK_RADIUS_M = 0.085;
 const LOAD_COLOUR = 0x1f2937;
 const AXIS_COLOURS = {
   x: 0xc9342c,
@@ -265,7 +290,19 @@ function makeMember(start, end, member, maxAbsForce) {
   mesh.position.copy(start).add(end).multiplyScalar(0.5);
   mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
   mesh.userData.member = member;
-  return mesh;
+
+  const pickGeometry = new THREE.CylinderGeometry(MEMBER_PICK_RADIUS_M, MEMBER_PICK_RADIUS_M, length, 8);
+  const pickMaterial = new THREE.MeshBasicMaterial({
+    transparent: true,
+    opacity: 0,
+    depthWrite: false,
+  });
+  const pickMesh = new THREE.Mesh(pickGeometry, pickMaterial);
+  pickMesh.position.copy(mesh.position);
+  pickMesh.quaternion.copy(mesh.quaternion);
+  pickMesh.userData.member = member;
+  pickMesh.userData.visualObject = mesh;
+  return { mesh, pickMesh };
 }
 
 function makeCylinderBetween(start, end, radius, colour) {
@@ -325,6 +362,11 @@ function clearTower() {
     object.geometry.dispose();
     object.material.dispose();
   }
+  for (const object of memberPickObjects) {
+    scene.remove(object);
+    object.geometry.dispose();
+    object.material.dispose();
+  }
   for (const object of nodeObjects) {
     scene.remove(object);
     object.geometry.dispose();
@@ -336,10 +378,15 @@ function clearTower() {
   for (const object of originAxisObjects) {
     disposeRenderableTree(object);
   }
+  for (const object of supportObjects) {
+    disposeRenderableTree(object);
+  }
   memberObjects.length = 0;
+  memberPickObjects.length = 0;
   nodeObjects.length = 0;
   loadObjects.length = 0;
   originAxisObjects.length = 0;
+  supportObjects.length = 0;
 }
 
 function updateModelBounds() {
@@ -440,8 +487,14 @@ function addLoadArrow(load, nodes, maxLoadMagnitude) {
 
 function updateDisplayOptions() {
   const showLoads = showLoadsToggle?.checked ?? true;
+  const showLoadLabels = showLoadLabelsToggle?.checked ?? true;
   for (const object of loadObjects) {
     object.visible = showLoads;
+    object.traverse((child) => {
+      if (child.userData?.kind === "load-label") {
+        child.visible = showLoads && showLoadLabels;
+      }
+    });
   }
 }
 
@@ -462,6 +515,179 @@ function renderLoads(data, nodes) {
   labels.activeLoadDirection.textContent = loadDirection;
 }
 
+function maxDisplacement(nodes) {
+  return nodes.reduce(
+    (maxValue, node) => {
+      const displacement = node.displacementM ?? {};
+      const magnitude = Math.hypot(
+        Number(displacement.ux ?? 0),
+        Number(displacement.uy ?? 0),
+        Number(displacement.uz ?? 0)
+      );
+      return magnitude > maxValue.magnitude ? { nodeId: node.id, magnitude } : maxValue;
+    },
+    { nodeId: "--", magnitude: 0 }
+  );
+}
+
+function maxReaction(reactions) {
+  return reactions.reduce(
+    (maxValue, reaction) => {
+      const magnitude = Math.abs(Number(reaction.valueKN ?? 0));
+      return magnitude > maxValue.magnitude
+        ? { nodeId: reaction.nodeId, component: reaction.component, magnitude, value: reaction.valueKN }
+        : maxValue;
+    },
+    { nodeId: "--", component: "--", magnitude: 0, value: 0 }
+  );
+}
+
+function updateSummaryTab(tabName) {
+  activeResultTab = tabName;
+  for (const button of resultTabButtons) {
+    button.classList.toggle("is-active", button.dataset.resultTab === tabName);
+  }
+  if (!towerData) return;
+
+  const loadCase = towerData.loadCases?.[0];
+  const loads = loadCase?.loads ?? [];
+  const maxAbsForce = towerData.checks.maxAbsAxialForceKN ?? 0;
+  const displacement = maxDisplacement(towerData.nodes ?? []);
+  const reaction = maxReaction(towerData.supportReactions ?? []);
+
+  if (tabName === "member") {
+    labels.activeResultType.textContent = "Member Axial";
+    labels.summaryRowA.textContent = "Result Case";
+    labels.summaryRowB.textContent = "Object Type";
+    labels.summaryRowC.textContent = "Member Count";
+    labels.summaryRowD.textContent = "Max |Axial|";
+    labels.summaryRowE.textContent = "Colour Map";
+    labels.summaryRowF.textContent = "Displayed Result";
+    labels.summaryRowG.textContent = "Selection";
+    labels.summaryRowH.textContent = "Source";
+    labels.loadTitle.textContent = loadCase?.id ?? "LC1";
+    labels.summaryType.textContent = "Truss member";
+    labels.loadCount.textContent = String(towerData.members?.length ?? 0);
+    labels.sumAppliedFx.textContent = `${maxAbsForce.toFixed(3)} kN`;
+    labels.loadDirection.textContent = "Tension / compression sign";
+    labels.summaryDisplay.textContent = "Axial force colour contour";
+    labels.summaryEnvelope.textContent = selectedObject ? selectedObject.userData.member.id : "Click member";
+    labels.summarySource.textContent = "Solved member forces";
+    return;
+  }
+
+  if (tabName === "displacement") {
+    labels.activeResultType.textContent = "Displacement";
+    labels.summaryRowA.textContent = "Result Case";
+    labels.summaryRowB.textContent = "Object Type";
+    labels.summaryRowC.textContent = "Node Count";
+    labels.summaryRowD.textContent = "Max |U|";
+    labels.summaryRowE.textContent = "Node";
+    labels.summaryRowF.textContent = "Display";
+    labels.summaryRowG.textContent = "Shape";
+    labels.summaryRowH.textContent = "Source";
+    labels.loadTitle.textContent = loadCase?.id ?? "LC1";
+    labels.summaryType.textContent = "Nodal displacement";
+    labels.loadCount.textContent = String(towerData.nodes?.length ?? 0);
+    labels.sumAppliedFx.textContent = `${displacement.magnitude.toFixed(6)} m`;
+    labels.loadDirection.textContent = displacement.nodeId;
+    labels.summaryDisplay.textContent = "Undeformed geometry";
+    labels.summaryEnvelope.textContent = "Deformed shape next phase";
+    labels.summarySource.textContent = "Solved nodal displacement";
+    return;
+  }
+
+  if (tabName === "reaction") {
+    labels.activeResultType.textContent = "Support Reaction";
+    labels.summaryRowA.textContent = "Result Case";
+    labels.summaryRowB.textContent = "Object Type";
+    labels.summaryRowC.textContent = "Support Nodes";
+    labels.summaryRowD.textContent = "Max Reaction";
+    labels.summaryRowE.textContent = "Component";
+    labels.summaryRowF.textContent = "Fx Balance";
+    labels.summaryRowG.textContent = "Envelope";
+    labels.summaryRowH.textContent = "Source";
+    labels.loadTitle.textContent = loadCase?.id ?? "LC1";
+    labels.summaryType.textContent = "Support reaction";
+    labels.loadCount.textContent = String(towerData.supports?.length ?? 0);
+    labels.sumAppliedFx.textContent = `${Number(reaction.value ?? 0).toFixed(3)} kN`;
+    labels.loadDirection.textContent = `${reaction.nodeId} ${reaction.component}`;
+    labels.summaryDisplay.textContent = `${Number(towerData.checks.forceBalanceFxKN ?? 0).toFixed(4)} kN`;
+    labels.summaryEnvelope.textContent = "Base support reactions";
+    labels.summarySource.textContent = "Solved reaction vector";
+    return;
+  }
+
+  labels.activeResultType.textContent = "Nodal Load";
+  labels.summaryRowA.textContent = "Load Case";
+  labels.summaryRowB.textContent = "Object Type";
+  labels.summaryRowC.textContent = "Load Count";
+  labels.summaryRowD.textContent = "Applied Fx";
+  labels.summaryRowE.textContent = "Direction";
+  labels.summaryRowF.textContent = "Display";
+  labels.summaryRowG.textContent = "Locations";
+  labels.summaryRowH.textContent = "Source";
+  labels.loadTitle.textContent = loadCase?.name ?? "No active load case";
+  labels.summaryType.textContent = "Nodal load";
+  labels.loadCount.textContent = String(loads.length);
+  labels.sumAppliedFx.textContent = `${Number(towerData.checks.sumAppliedFxKN ?? 0).toFixed(3)} kN`;
+  const loadDirection = loads.length > 0 ? formatLoadDirection(loads[0]) : "--";
+  labels.loadDirection.textContent = loads.length > 0 ? `${loadDirection} (${formatLoadVector(loads[0])})` : "--";
+  labels.summaryDisplay.textContent = "Schematic arrows";
+  labels.summaryEnvelope.textContent = loads.length > 0 ? `${loads[0].nodeId}-${loads[loads.length - 1].nodeId}` : "--";
+  labels.summarySource.textContent = "Static JSON input";
+}
+
+function addSupportMarker(node, support) {
+  const position = nodeVector(node);
+  const geometry = new THREE.BoxGeometry(0.28, 0.14, 0.28);
+  const material = new THREE.MeshStandardMaterial({
+    color: support.ux && support.uy && support.uz ? 0x475569 : 0x94a3b8,
+    roughness: 0.78,
+  });
+  const marker = new THREE.Mesh(geometry, material);
+  marker.position.copy(position).add(new THREE.Vector3(0, -0.14, 0));
+  marker.userData.support = support;
+  scene.add(marker);
+  supportObjects.push(marker);
+}
+
+function setSupportPreset(preset) {
+  currentSupports = (towerData?.supports ?? []).map((support) => {
+    if (preset === "fixed" || preset === "pinned") {
+      return { ...support, ux: true, uy: true, uz: true };
+    }
+    return { ...support };
+  });
+  renderSupportTable();
+}
+
+function renderSupportTable() {
+  if (!supportTable) return;
+  supportTable.replaceChildren();
+  for (const support of currentSupports) {
+    const row = document.createElement("div");
+    row.className = "support-row";
+    const node = document.createElement("strong");
+    node.textContent = support.nodeId;
+    row.appendChild(node);
+    for (const component of ["ux", "uy", "uz"]) {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.checked = Boolean(support[component]);
+      input.addEventListener("change", () => {
+        support[component] = input.checked;
+        if (supportPreset) supportPreset.value = "custom";
+      });
+      label.appendChild(input);
+      label.append(component.toUpperCase());
+      row.appendChild(label);
+    }
+    supportTable.appendChild(row);
+  }
+}
+
 function renderTower(data) {
   clearTower();
   const nodes = new Map(data.nodes.map((node) => [node.id, node]));
@@ -474,9 +700,15 @@ function renderTower(data) {
   for (const member of data.members) {
     const start = nodeVector(nodes.get(member.startNodeId));
     const end = nodeVector(nodes.get(member.endNodeId));
-    const object = makeMember(start, end, member, maxAbsForce);
-    scene.add(object);
-    memberObjects.push(object);
+    const { mesh, pickMesh } = makeMember(start, end, member, maxAbsForce);
+    scene.add(mesh);
+    scene.add(pickMesh);
+    memberObjects.push(mesh);
+    memberPickObjects.push(pickMesh);
+  }
+  for (const support of data.supports ?? []) {
+    const node = nodes.get(support.nodeId);
+    if (node) addSupportMarker(node, support);
   }
   renderLoads(data, nodes);
 
@@ -492,6 +724,8 @@ function renderTower(data) {
   labels.memberCount.textContent = String(data.members.length);
   labels.maxForce.textContent = `${maxAbsForce.toFixed(2)} kN`;
   labels.forceBalance.textContent = `${Number(data.checks.forceBalanceFxKN ?? 0).toFixed(4)} kN`;
+  setSupportPreset(supportPreset?.value ?? "pinned");
+  updateSummaryTab(activeResultTab);
 }
 
 function interpretation(member) {
@@ -505,22 +739,25 @@ function interpretation(member) {
 }
 
 function selectMember(object) {
+  const visualObject = object.userData.visualObject ?? object;
   if (selectedObject) {
     selectedObject.material.color.copy(selectedObject.userData.baseColour);
   }
-  selectedObject = object;
-  if (!object.userData.baseColour) {
-    object.userData.baseColour = object.material.color.clone();
+  selectedObject = visualObject;
+  if (!visualObject.userData.baseColour) {
+    visualObject.userData.baseColour = visualObject.material.color.clone();
   }
-  object.material.color.set(0x111827);
+  visualObject.material.color.set(0x111827);
 
-  const member = object.userData.member;
+  const member = visualObject.userData.member;
   labels.memberTitle.textContent = member.id;
   labels.memberState.textContent = member.forceState;
   labels.memberForce.textContent = `${member.axialForceKN.toFixed(3)} kN`;
   labels.memberLength.textContent = `${member.lengthM.toFixed(3)} m`;
   labels.memberGroup.textContent = member.group;
+  labels.memberSection.textContent = member.sectionDesignation ?? "--";
   labels.memberInterpretation.textContent = interpretation(member);
+  if (activeResultTab === "member") updateSummaryTab("member");
 }
 
 function updatePointer(event) {
@@ -532,7 +769,7 @@ function updatePointer(event) {
 function pickMember(event) {
   updatePointer(event);
   raycaster.setFromCamera(pointer, camera);
-  const hits = raycaster.intersectObjects(memberObjects, false);
+  const hits = raycaster.intersectObjects(memberPickObjects, false);
   if (hits.length > 0) {
     selectMember(hits[0].object);
   }
@@ -540,6 +777,34 @@ function pickMember(event) {
 
 function resetView() {
   setCameraView("iso");
+}
+
+function setInspectorWidth(width) {
+  if (!appShell) return;
+  const shellWidth = appShell.clientWidth || 0;
+  const minWidth = 320;
+  const maxWidth = Math.max(360, shellWidth - 420);
+  const clamped = Math.min(Math.max(width, minWidth), maxWidth);
+  appShell.style.setProperty("--inspector-width", `${clamped}px`);
+  window.requestAnimationFrame(resize);
+}
+
+function startSplitResize(event) {
+  if (!appShell || window.matchMedia("(max-width: 800px)").matches) return;
+  event.preventDefault();
+  splitResizer.setPointerCapture?.(event.pointerId);
+  appShell.classList.add("is-resizing");
+  const move = (moveEvent) => {
+    const rect = appShell.getBoundingClientRect();
+    setInspectorWidth(rect.right - moveEvent.clientX - 8);
+  };
+  const stop = () => {
+    appShell.classList.remove("is-resizing");
+    window.removeEventListener("pointermove", move);
+    window.removeEventListener("pointerup", stop);
+  };
+  window.addEventListener("pointermove", move);
+  window.addEventListener("pointerup", stop, { once: true });
 }
 
 function resize() {
@@ -574,11 +839,17 @@ function animate() {
 
 window.addEventListener("resize", resize);
 renderer.domElement.addEventListener("pointerup", pickMember);
+splitResizer?.addEventListener("pointerdown", startSplitResize);
 resetButton.addEventListener("click", resetView);
 for (const button of viewButtons) {
   button.addEventListener("click", () => setCameraView(button.dataset.view));
 }
 showLoadsToggle?.addEventListener("change", updateDisplayOptions);
+showLoadLabelsToggle?.addEventListener("change", updateDisplayOptions);
+supportPreset?.addEventListener("change", () => setSupportPreset(supportPreset.value));
+for (const button of resultTabButtons) {
+  button.addEventListener("click", () => updateSummaryTab(button.dataset.resultTab));
+}
 
 resize();
 buildViewportAxisGizmo();

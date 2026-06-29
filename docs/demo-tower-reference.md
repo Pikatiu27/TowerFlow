@@ -23,6 +23,10 @@ The FEC sheet gives a triangular self-supporting tower family, a typical module 
 - Demo levels: 0.00 m, 4.80 m, 9.60 m, 14.40 m, 19.20 m, and 21.30 m.
 - Face width idealisation: linear taper from 2.984 m at the base/K-point reference to 1.500 m at the top.
 - Model idealisation: 3D pin-jointed truss.
+- Demo section labels used by the viewer:
+  - Legs: CHS 48 x 5.4.
+  - Diagonal bracing: CHS 42 x 3.2.
+  - Plan/horizontal bracing: round bar dia 14.
 
 All TowerFlow calculation and display values remain SI.
 
