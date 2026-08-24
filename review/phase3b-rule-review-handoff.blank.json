@@ -1,0 +1,405 @@
+{
+  "schemaVersion": "0.1.0-source-control",
+  "handoffId": "P3B-RULE-REVIEW-001",
+  "status": "blank_source_review",
+  "prepared": {
+    "preparedBy": "TowerFlow Phase 3B implementation",
+    "preparedDate": "2026-08-12",
+    "purpose": "Control the AS 4100 source and independently review future CM-3 rule data, implementation and verification."
+  },
+  "controlledSource": {
+    "publication": "AS 4100:2020",
+    "title": "Steel structures",
+    "incorporatedAmendments": [
+      "Amendment No. 1 (September 2021)"
+    ],
+    "catalogueUrl": "https://store.standards.org.au/product/as-4100-2020",
+    "sourceFingerprintStatus": "held_outside_public_repository",
+    "licensedSourceBundled": false,
+    "reviewerMustUseControlledCopy": true
+  },
+  "ruleExtraction": {
+    "status": "not_started",
+    "ruleArtifactIds": [],
+    "calculationImplementationStatus": "not_implemented",
+    "webUtilisationModeStatus": "not_implemented"
+  },
+  "artifacts": [
+    {
+      "artifactId": "P3B-A01",
+      "path": "docs/phase-3b-member-screening-specification.md",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "54714fa1f151854d54f54419b9160f56ae0c68180cda95eb22e6283ced79d661",
+      "role": "governance"
+    },
+    {
+      "artifactId": "P3B-A02",
+      "path": "schemas/phase-3b-member-screening.schema.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "0ceec5956e1662c1c75fa924561ece9643e2463fb80521dd0021b5e9a784709d",
+      "role": "contract_schema"
+    },
+    {
+      "artifactId": "P3B-A03",
+      "path": "analysis/build_phase3b_member_screening_contract_demo.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "a8e9fd141a6e8c41a029c644cf32f59daece753d1c6bf23cc55cdcd41e8f6df3",
+      "role": "fixture_builder"
+    },
+    {
+      "artifactId": "P3B-A04",
+      "path": "analysis/validate_phase3b_member_screening_contract.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "408f2fd9fd6dd6c98f5efb9b9088818ddecb6e5846f237278ec7e7dd84da8c0c",
+      "role": "validator"
+    },
+    {
+      "artifactId": "P3B-A05",
+      "path": "analysis/verify_phase3b_member_screening_contract.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "baeddd9e3eabe8a9223d9d366f048a5d34ba1176fe97921ee02ce007ffa7042e",
+      "role": "verification"
+    },
+    {
+      "artifactId": "P3B-A06",
+      "path": "examples/phase3b-member-screening-contract-demo.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "0d2ce4aa3f09ffa430fab35ce6ec3cf513c7a20d8b83e6f8621d232109e7f47d",
+      "role": "blocked_fixture"
+    },
+    {
+      "artifactId": "P3B-A07",
+      "path": "docs/phase-3b-compression-readiness.md",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "04a8651b1014fff6b3c21bd5ae5b40fa49ec79fb54d3ff89b183803fb92d1744",
+      "role": "governance"
+    },
+    {
+      "artifactId": "P3B-A08",
+      "path": "schemas/phase-3b-compression-readiness.schema.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "f6dfeb7ed0ab076487228f13035399e995b06b06a6c9a52f2a7b0be5a485506d",
+      "role": "contract_schema"
+    },
+    {
+      "artifactId": "P3B-A09",
+      "path": "analysis/phase3b_compression_readiness.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "71580a8dcaaf10039a453ef51c29520cd50d2b1d22ac111fc3d443610a7af937",
+      "role": "input_preflight"
+    },
+    {
+      "artifactId": "P3B-A10",
+      "path": "analysis/build_phase3b_compression_readiness_demo.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "0ddc9dc4322d3a65f64e873dba13014586965fd801dd8e10f592ed29e6e36bdd",
+      "role": "fixture_builder"
+    },
+    {
+      "artifactId": "P3B-A11",
+      "path": "analysis/validate_phase3b_compression_readiness.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "3b20d29ff986c22c7e5d8986ab6d2d14cade3ea0442ae9f4f98afe699a538a07",
+      "role": "validator"
+    },
+    {
+      "artifactId": "P3B-A12",
+      "path": "analysis/verify_phase3b_compression_readiness_c01_c02.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "c0b162ca0d220db77466f42afac09656d97043767e460d9f821f6aa8fea9036c",
+      "role": "verification"
+    },
+    {
+      "artifactId": "P3B-A13",
+      "path": "examples/phase3b-compression-readiness-demo.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "8a57f94dc34673815bd6b9fb675438e0cd28fd55316e376f15502a5e3930c845",
+      "role": "blocked_fixture"
+    },
+    {
+      "artifactId": "P3B-A14",
+      "path": "verification/phase3b-compression-readiness-c01-c02.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "2ab2f82287c4530f24b26fd3b7817c106d16379906700ab93c47ed6805c3774b",
+      "role": "input_verification_case"
+    },
+    {
+      "artifactId": "P3B-A15",
+      "path": "docs/phase-3b-member-evidence.md",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "99cf629a65c4aa5348c22fb60999f701242f60fcb06833942421a6b5a6d9bc47",
+      "role": "governance"
+    },
+    {
+      "artifactId": "P3B-A16",
+      "path": "schemas/phase-3b-member-evidence.schema.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "dae2cd07a335a0e00ffb8a5b05dfd13a313e4dd1348a488ed963b52f1de15c89",
+      "role": "contract_schema"
+    },
+    {
+      "artifactId": "P3B-A17",
+      "path": "analysis/phase3b_member_evidence.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "ce677117b292816bbf9dc1671426910111f6531a5197f486a0e23888d7d88ddd",
+      "role": "input_preflight"
+    },
+    {
+      "artifactId": "P3B-A18",
+      "path": "analysis/build_phase3b_member_evidence_demo.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "5fa40db029469e785303ee7c2cc58683b81e6bfaec41ca7600e45022d26e44de",
+      "role": "fixture_builder"
+    },
+    {
+      "artifactId": "P3B-A19",
+      "path": "analysis/validate_phase3b_member_evidence.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "168e80379b2a5619bd820ee1dcd08ac1385146c035c5742f6938ab10505f9a47",
+      "role": "validator"
+    },
+    {
+      "artifactId": "P3B-A20",
+      "path": "analysis/verify_phase3b_member_evidence.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "f476d9f2e2cac160a460d51364b6569e19cfa3e81300a7c70ead0b4bb910614b",
+      "role": "verification"
+    },
+    {
+      "artifactId": "P3B-A21",
+      "path": "examples/phase3b-member-evidence-demo.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "b9bd36f9a5dab290aa5fa6434a33f545ac0a143df022be853482d5e8b7bcd553",
+      "role": "blocked_fixture"
+    }
+  ],
+  "reviewItems": [
+    {
+      "itemId": "P3B-RR-01",
+      "title": "Publication, amendment and binary identity",
+      "releaseGateIds": [
+        "CM3-01"
+      ],
+      "scope": "Confirm the controlled publication, incorporated amendment and private source-control record before any extraction.",
+      "sourcePointers": [
+        "AS 4100:2020 publication identity and Amendment control sheet"
+      ],
+      "artifactIds": [
+        "P3B-A01",
+        "P3B-A02",
+        "P3B-A06"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-RR-02",
+      "title": "Scope, applicability and authority boundary",
+      "releaseGateIds": [
+        "CM3-01",
+        "CM3-10"
+      ],
+      "scope": "Confirm member and material applicability, excluded limit states, copyright boundary and the non-certification status of the screening contract.",
+      "sourcePointers": [
+        "AS 4100:2020 Section 1 and TowerFlow CM-3 exclusions"
+      ],
+      "artifactIds": [
+        "P3B-A01",
+        "P3B-A02",
+        "P3B-A06"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-RR-03",
+      "title": "Signed member demand and result identity",
+      "releaseGateIds": [
+        "CM3-02"
+      ],
+      "scope": "Check the mapping from released Phase 3A result set and combination to signed axial member demand, source/force direction and result hash.",
+      "sourcePointers": [
+        "TowerFlow CM-1/CM-2 signed axial-force and result identity contract"
+      ],
+      "artifactIds": [
+        "P3B-A01",
+        "P3B-A02",
+        "P3B-A04",
+        "P3B-A05",
+        "P3B-A08",
+        "P3B-A09",
+        "P3B-A11",
+        "P3B-A12",
+        "P3B-A15",
+        "P3B-A16",
+        "P3B-A17",
+        "P3B-A19",
+        "P3B-A20",
+        "P3B-A21"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-RR-04",
+      "title": "Member, section and material provenance",
+      "releaseGateIds": [
+        "CM3-03",
+        "CM3-04"
+      ],
+      "scope": "Confirm member-section identity and the reviewed source records for section geometry, area, radii of gyration, grade and material strength.",
+      "sourcePointers": [
+        "AS 4100:2020 applicability and material/property provisions"
+      ],
+      "artifactIds": [
+        "P3B-A01",
+        "P3B-A02",
+        "P3B-A04",
+        "P3B-A05",
+        "P3B-A08",
+        "P3B-A09",
+        "P3B-A11",
+        "P3B-A12"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-RR-05",
+      "title": "Effective length and slenderness basis",
+      "releaseGateIds": [
+        "CM3-05"
+      ],
+      "scope": "Confirm that every compression check has reviewed local-axis effective lengths, radii of gyration, slenderness arithmetic and a traceable restraint basis without an implicit factor.",
+      "sourcePointers": [
+        "AS 4100:2020 Section 6 member stability provisions"
+      ],
+      "artifactIds": [
+        "P3B-A01",
+        "P3B-A02",
+        "P3B-A04",
+        "P3B-A05",
+        "P3B-A07",
+        "P3B-A08",
+        "P3B-A09",
+        "P3B-A10",
+        "P3B-A11",
+        "P3B-A12",
+        "P3B-A13",
+        "P3B-A14",
+        "P3B-A15",
+        "P3B-A16",
+        "P3B-A17",
+        "P3B-A19",
+        "P3B-A20",
+        "P3B-A21"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-RR-06",
+      "title": "Tension resistance rule extraction",
+      "releaseGateIds": [
+        "CM3-06"
+      ],
+      "scope": "Review future tension-resistance rule data, implementation trace, applicability controls and deterministic cases directly against the controlled source.",
+      "sourcePointers": [
+        "AS 4100:2020 Section 7 Members subject to axial tension"
+      ],
+      "artifactIds": [
+        "P3B-A01",
+        "P3B-A02"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-RR-07",
+      "title": "Compression resistance rule extraction",
+      "releaseGateIds": [
+        "CM3-07"
+      ],
+      "scope": "Review future compression-resistance rule data, implementation trace, stability controls and deterministic cases directly against the controlled source.",
+      "sourcePointers": [
+        "AS 4100:2020 Section 6 Members subject to axial compression"
+      ],
+      "artifactIds": [
+        "P3B-A01",
+        "P3B-A02"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-RR-08",
+      "title": "Benchmark, presentation identity and disclosure",
+      "releaseGateIds": [
+        "CM3-08",
+        "CM3-09",
+        "CM3-10"
+      ],
+      "scope": "Require an independent calculation or trusted-software benchmark and confirm API, table, viewport, Drawing and limitation identity before any web utilisation mode.",
+      "sourcePointers": [
+        "TowerFlow CM-3 verification ladder and product disclosure contract"
+      ],
+      "artifactIds": [
+        "P3B-A01",
+        "P3B-A02",
+        "P3B-A03",
+        "P3B-A04",
+        "P3B-A05",
+        "P3B-A06",
+        "P3B-A07",
+        "P3B-A08",
+        "P3B-A10",
+        "P3B-A11",
+        "P3B-A12",
+        "P3B-A13",
+        "P3B-A15",
+        "P3B-A16",
+        "P3B-A18",
+        "P3B-A19",
+        "P3B-A20",
+        "P3B-A21"
+      ],
+      "decision": "pending",
+      "comments": null
+    }
+  ],
+  "reviewer": {
+    "role": "independent_structural_engineer",
+    "name": null,
+    "organisation": null,
+    "qualification": null,
+    "registrationReference": null,
+    "independenceConfirmed": false,
+    "independenceBasis": null,
+    "authorisedSourceAccessConfirmed": false,
+    "controlledSourceRecordReference": null,
+    "reviewDate": null,
+    "signedRecordReference": null
+  },
+  "completion": {
+    "requiredReviewItemIds": [
+      "P3B-RR-01",
+      "P3B-RR-02",
+      "P3B-RR-03",
+      "P3B-RR-04",
+      "P3B-RR-05",
+      "P3B-RR-06",
+      "P3B-RR-07",
+      "P3B-RR-08"
+    ],
+    "allItemsAccepted": false,
+    "independentEngineeringReview": "pending",
+    "releaseAuthority": false
+  },
+  "restrictions": [
+    "The licensed Standard, local path, binary fingerprint, page images and substantial Standard text are not bundled or published.",
+    "The current intake contains no AS 4100 rule data, resistance implementation or member capacity values.",
+    "Source identity and artifact integrity do not constitute independent engineering review.",
+    "A completed rule review does not approve project actions, member data, effective lengths, connections or foundations.",
+    "Phase 3B remains REVIEW_REQUIRED and carries no design or construction release authority."
+  ]
+}

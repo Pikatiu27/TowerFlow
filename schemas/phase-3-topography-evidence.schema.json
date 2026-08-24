@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-topography-evidence.schema.json",
+  "title": "TowerFlow Phase 3 Topography Evidence Pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "evidencePackId", "siteId", "windRegion", "siteElevationM", "structureHeightM", "assessment", "towerSectionReferenceHeightsM", "evidenceRegister", "directionAssessments"],
+  "properties": {
+    "schemaVersion": { "const": "0.3.0-draft" },
+    "evidencePackId": { "$ref": "#/$defs/id" },
+    "siteId": { "$ref": "#/$defs/id" },
+    "windRegion": { "enum": ["A0", "A1", "A2", "A3", "A4", "A5", "B1", "B2", "C", "D"] },
+    "siteElevationM": { "type": "number" },
+    "structureHeightM": { "type": "number", "exclusiveMinimum": 0 },
+    "assessment": { "$ref": "#/$defs/assessment" },
+    "towerSectionReferenceHeightsM": {
+      "type": "array",
+      "minItems": 10,
+      "uniqueItems": true,
+      "items": { "type": "number", "exclusiveMinimum": 0 }
+    },
+    "evidenceRegister": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/evidence" }
+    },
+    "directionAssessments": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/directionAssessment" }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
+    "direction": { "enum": [0, 45, 90, 135, 180, 225, 270, 315] },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessedBy", "assessmentDate", "reviewStatus", "reviewedBy", "reviewDate", "knownFutureChangesConsidered", "futureChangesDescription"],
+      "properties": {
+        "assessedBy": { "type": "string", "minLength": 1 },
+        "assessmentDate": { "type": "string", "format": "date" },
+        "reviewStatus": { "enum": ["draft", "reviewed"] },
+        "reviewedBy": { "type": "string", "minLength": 1 },
+        "reviewDate": { "type": "string", "format": "date" },
+        "knownFutureChangesConsidered": { "type": "boolean" },
+        "futureChangesDescription": { "type": "string", "minLength": 1 }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "captureDate", "fileReference", "scaleOrResolution", "description"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "enum": ["topographic_survey", "contour_map", "site_plan", "field_photography", "engineer_assessment"] },
+        "captureDate": { "type": "string", "format": "date" },
+        "fileReference": { "type": "string", "minLength": 1 },
+        "scaleOrResolution": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    },
+    "candidateCrossSection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "bearingDegTrueNorth", "featureType", "featureHeightM", "upwindSlopeLengthM", "siteDistanceFromCrestM", "inSteepPeakZone", "geometryBasis"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "bearingDegTrueNorth": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+        "featureType": { "enum": ["hill", "ridge", "escarpment"] },
+        "featureHeightM": { "type": "number", "exclusiveMinimum": 0 },
+        "upwindSlopeLengthM": { "type": "number", "exclusiveMinimum": 0 },
+        "siteDistanceFromCrestM": { "type": "number" },
+        "inSteepPeakZone": { "type": "boolean" },
+        "downwindAverageSlope": { "type": "number", "minimum": 0 },
+        "geometryBasis": { "type": "string", "minLength": 1 }
+      }
+    },
+    "directionAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceDirectionDegTrueNorth", "status", "classificationStatus", "confidence", "currentConditionsConfirmed", "evidenceIds", "mostAdverseSelectionReviewed", "candidateCrossSections"],
+      "properties": {
+        "sourceDirectionDegTrueNorth": { "$ref": "#/$defs/direction" },
+        "status": { "enum": ["not_applicable", "geometry_supplied", "review_required"] },
+        "classificationStatus": { "enum": ["draft", "reviewed"] },
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "currentConditionsConfirmed": { "type": "boolean" },
+        "evidenceIds": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+        "nonApplicabilityReason": { "type": "string" },
+        "mostAdverseSelectionReviewed": { "type": "boolean" },
+        "candidateCrossSections": { "type": "array", "items": { "$ref": "#/$defs/candidateCrossSection" } }
+      }
+    }
+  }
+}

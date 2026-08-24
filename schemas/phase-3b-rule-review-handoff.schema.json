@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3b-rule-review-handoff.schema.json",
+  "title": "TowerFlow Phase 3B Rule Review Handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "handoffId",
+    "status",
+    "prepared",
+    "controlledSource",
+    "ruleExtraction",
+    "artifacts",
+    "reviewItems",
+    "reviewer",
+    "completion",
+    "restrictions"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.1.0-source-control" },
+    "handoffId": { "const": "P3B-RULE-REVIEW-001" },
+    "status": {
+      "enum": ["blank_source_review", "rule_extraction_in_progress", "engineering_review_complete"]
+    },
+    "prepared": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preparedBy", "preparedDate", "purpose"],
+      "properties": {
+        "preparedBy": { "const": "TowerFlow Phase 3B implementation" },
+        "preparedDate": { "type": "string", "format": "date" },
+        "purpose": { "type": "string", "minLength": 1 }
+      }
+    },
+    "controlledSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publication",
+        "title",
+        "incorporatedAmendments",
+        "catalogueUrl",
+        "sourceFingerprintStatus",
+        "licensedSourceBundled",
+        "reviewerMustUseControlledCopy"
+      ],
+      "properties": {
+        "publication": { "const": "AS 4100:2020" },
+        "title": { "const": "Steel structures" },
+        "incorporatedAmendments": { "const": ["Amendment No. 1 (September 2021)"] },
+        "catalogueUrl": { "const": "https://store.standards.org.au/product/as-4100-2020" },
+        "sourceFingerprintStatus": { "const": "held_outside_public_repository" },
+        "licensedSourceBundled": { "const": false },
+        "reviewerMustUseControlledCopy": { "const": true }
+      }
+    },
+    "ruleExtraction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "ruleArtifactIds", "calculationImplementationStatus", "webUtilisationModeStatus"],
+      "properties": {
+        "status": { "enum": ["not_started", "in_progress", "review_ready", "reviewed"] },
+        "ruleArtifactIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^P3B-A[0-9]{2}$" }
+        },
+        "calculationImplementationStatus": { "enum": ["not_implemented", "verification_only", "reviewed"] },
+        "webUtilisationModeStatus": { "enum": ["not_implemented", "gated_review", "reviewed"] }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/artifact" }
+    },
+    "reviewItems": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/reviewItem" }
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "name",
+        "organisation",
+        "qualification",
+        "registrationReference",
+        "independenceConfirmed",
+        "independenceBasis",
+        "authorisedSourceAccessConfirmed",
+        "controlledSourceRecordReference",
+        "reviewDate",
+        "signedRecordReference"
+      ],
+      "properties": {
+        "role": { "const": "independent_structural_engineer" },
+        "name": { "$ref": "#/$defs/nullableText" },
+        "organisation": { "$ref": "#/$defs/nullableText" },
+        "qualification": { "$ref": "#/$defs/nullableText" },
+        "registrationReference": { "$ref": "#/$defs/nullableText" },
+        "independenceConfirmed": { "type": "boolean" },
+        "independenceBasis": { "$ref": "#/$defs/nullableText" },
+        "authorisedSourceAccessConfirmed": { "type": "boolean" },
+        "controlledSourceRecordReference": { "$ref": "#/$defs/nullableText" },
+        "reviewDate": {
+          "anyOf": [{ "type": "string", "format": "date" }, { "type": "null" }]
+        },
+        "signedRecordReference": { "$ref": "#/$defs/nullableText" }
+      }
+    },
+    "completion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requiredReviewItemIds",
+        "allItemsAccepted",
+        "independentEngineeringReview",
+        "releaseAuthority"
+      ],
+      "properties": {
+        "requiredReviewItemIds": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^P3B-RR-[0-9]{2}$" }
+        },
+        "allItemsAccepted": { "type": "boolean" },
+        "independentEngineeringReview": { "enum": ["pending", "accepted", "rejected"] },
+        "releaseAuthority": { "const": false }
+      }
+    },
+    "restrictions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullableText": {
+      "anyOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }]
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifactId", "path", "hashBasis", "sha256", "role"],
+      "properties": {
+        "artifactId": { "type": "string", "pattern": "^P3B-A[0-9]{2}$" },
+        "path": {
+          "type": "string",
+          "pattern": "^(analysis|docs|examples|rules|schemas|verification)/[A-Za-z0-9._/-]+$"
+        },
+        "hashBasis": { "const": "utf8_lf_normalized" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "role": {
+          "enum": [
+            "governance",
+            "contract_schema",
+            "fixture_builder",
+            "validator",
+            "verification",
+            "blocked_fixture",
+            "rule_data",
+            "implementation",
+            "golden_case",
+            "independent_benchmark",
+            "input_preflight",
+            "input_verification_case"
+          ]
+        }
+      }
+    },
+    "reviewItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "itemId",
+        "title",
+        "releaseGateIds",
+        "scope",
+        "sourcePointers",
+        "artifactIds",
+        "decision",
+        "comments"
+      ],
+      "properties": {
+        "itemId": { "type": "string", "pattern": "^P3B-RR-[0-9]{2}$" },
+        "title": { "type": "string", "minLength": 1 },
+        "releaseGateIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^CM3-(0[1-9]|10)$" }
+        },
+        "scope": { "type": "string", "minLength": 1 },
+        "sourcePointers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "artifactIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^P3B-A[0-9]{2}$" }
+        },
+        "decision": { "enum": ["pending", "accepted", "rejected"] },
+        "comments": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3b-member-evidence.schema.json",
+  "title": "TowerFlow Phase 3B Member Evidence Package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packageId",
+    "packageStatus",
+    "modelId",
+    "acceptance",
+    "units",
+    "memberAssignments",
+    "sectionDefinitions",
+    "materialDefinitions",
+    "stabilityDefinitions",
+    "exclusions",
+    "releaseAuthority"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.1.0-review" },
+    "packageId": { "$ref": "#/$defs/id" },
+    "packageStatus": { "enum": ["synthetic_verification_only", "project_review"] },
+    "modelId": { "$ref": "#/$defs/id" },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "scope", "reviewedBy", "reviewDate", "evidenceRecordIds", "releaseAuthority"],
+      "properties": {
+        "status": { "enum": ["fixture_verified", "reviewed_for_member_input"] },
+        "scope": { "enum": ["synthetic_fixture", "project_member_input"] },
+        "reviewedBy": { "type": "string", "minLength": 1 },
+        "reviewDate": { "type": "string", "format": "date" },
+        "evidenceRecordIds": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "releaseAuthority": { "const": false }
+      }
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["memberLength", "sectionLength", "area", "stress"],
+      "properties": {
+        "memberLength": { "const": "m" },
+        "sectionLength": { "const": "mm" },
+        "area": { "const": "mm2" },
+        "stress": { "const": "MPa" }
+      }
+    },
+    "memberAssignments": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/memberAssignment" }
+    },
+    "sectionDefinitions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/sectionDefinition" }
+    },
+    "materialDefinitions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/materialDefinition" }
+    },
+    "stabilityDefinitions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/stabilityDefinition" }
+    },
+    "exclusions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "releaseAuthority": { "const": false }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "positiveNumber": { "type": "number", "exclusiveMinimum": 0 },
+    "nullablePositiveNumber": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+    "sourceStatus": { "enum": ["synthetic_verification_only", "reviewed"] },
+    "axisNumber": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["localY", "localZ"],
+      "properties": {
+        "localY": { "$ref": "#/$defs/positiveNumber" },
+        "localZ": { "$ref": "#/$defs/positiveNumber" }
+      }
+    },
+    "axisId": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["localY", "localZ"],
+      "properties": {
+        "localY": { "$ref": "#/$defs/id" },
+        "localZ": { "$ref": "#/$defs/id" }
+      }
+    },
+    "axisMethod": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["localY", "localZ"],
+      "properties": {
+        "localY": { "const": "explicit_value" },
+        "localZ": { "const": "explicit_value" }
+      }
+    },
+    "memberAssignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "memberId",
+        "memberComposition",
+        "screeningModes",
+        "sectionDefinitionId",
+        "materialDefinitionId",
+        "stabilityDefinitionId"
+      ],
+      "properties": {
+        "memberId": { "$ref": "#/$defs/id" },
+        "memberComposition": { "const": "single_component" },
+        "screeningModes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["tension", "compression"] }
+        },
+        "sectionDefinitionId": { "$ref": "#/$defs/id" },
+        "materialDefinitionId": { "$ref": "#/$defs/id" },
+        "stabilityDefinitionId": {
+          "anyOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }]
+        }
+      }
+    },
+    "sectionDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "definitionId",
+        "sectionType",
+        "grossAreaMm2",
+        "netAreaMm2",
+        "netAreaStatus",
+        "netAreaSourceRecordId",
+        "radiusGyrationYmm",
+        "radiusGyrationZmm",
+        "sourceRecordId",
+        "sourceStatus"
+      ],
+      "properties": {
+        "definitionId": { "$ref": "#/$defs/id" },
+        "sectionType": { "type": "string", "minLength": 1 },
+        "grossAreaMm2": { "$ref": "#/$defs/positiveNumber" },
+        "netAreaMm2": { "$ref": "#/$defs/nullablePositiveNumber" },
+        "netAreaStatus": { "enum": ["not_supplied", "synthetic_verification_only", "reviewed"] },
+        "netAreaSourceRecordId": {
+          "anyOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }]
+        },
+        "radiusGyrationYmm": { "$ref": "#/$defs/positiveNumber" },
+        "radiusGyrationZmm": { "$ref": "#/$defs/positiveNumber" },
+        "sourceRecordId": { "$ref": "#/$defs/id" },
+        "sourceStatus": { "$ref": "#/$defs/sourceStatus" }
+      }
+    },
+    "materialDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "definitionId",
+        "grade",
+        "yieldStressMPa",
+        "tensileStrengthMPa",
+        "sourceRecordId",
+        "sourceStatus"
+      ],
+      "properties": {
+        "definitionId": { "$ref": "#/$defs/id" },
+        "grade": { "type": "string", "minLength": 1 },
+        "yieldStressMPa": { "$ref": "#/$defs/positiveNumber" },
+        "tensileStrengthMPa": { "$ref": "#/$defs/nullablePositiveNumber" },
+        "sourceRecordId": { "$ref": "#/$defs/id" },
+        "sourceStatus": { "$ref": "#/$defs/sourceStatus" }
+      }
+    },
+    "stabilityDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "definitionId",
+        "memberLengthM",
+        "effectiveLengthMByAxis",
+        "effectiveLengthMethodByAxis",
+        "effectiveLengthBasisRecordIdByAxis",
+        "sourceRecordId",
+        "sourceStatus"
+      ],
+      "properties": {
+        "definitionId": { "$ref": "#/$defs/id" },
+        "memberLengthM": { "$ref": "#/$defs/positiveNumber" },
+        "effectiveLengthMByAxis": { "$ref": "#/$defs/axisNumber" },
+        "effectiveLengthMethodByAxis": { "$ref": "#/$defs/axisMethod" },
+        "effectiveLengthBasisRecordIdByAxis": { "$ref": "#/$defs/axisId" },
+        "sourceRecordId": { "$ref": "#/$defs/id" },
+        "sourceStatus": { "$ref": "#/$defs/sourceStatus" }
+      }
+    }
+  }
+}

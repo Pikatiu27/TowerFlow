@@ -1,0 +1,229 @@
+{
+  "profileId": "towerflow-drawing-profile",
+  "version": "0.1.0",
+  "status": "PRE_INTEGRATION_PRIVATE_REVIEW",
+  "language": "en",
+  "standardAdoption": {
+    "adoptionId": "TF-UWEDS-001",
+    "packageDocumentId": "UWEDS-001",
+    "packageVersion": "1.7.1",
+    "recordPath": "engineering/drawing-standard-adoption.json",
+    "releaseBoundary": "PRIVATE_REVIEW_ONLY",
+    "preDrawingCaseReviews": {
+      "structure_general_arrangement": [
+        "TF-PDCR-GA-001"
+      ],
+      "axial_force_result_summary": [
+        "TF-PDCR-FEA-001"
+      ],
+      "load_diagram": [
+        "TF-PDCR-FEA-001"
+      ],
+      "analysis_verification": [
+        "TF-PDCR-FEA-001"
+      ]
+    }
+  },
+  "graphicConvention": {
+    "id": "towerflow-load-action-reaction-deformation-graphic-convention",
+    "version": "0.1.4",
+    "rulesPath": "rules/towerflow-graphic-convention-v0.1.json"
+  },
+  "annotationLayout": {
+    "profileId": "towerflow-annotation-layout",
+    "version": "0.1.0",
+    "recordPath": "profiles/towerflow-annotation-layout-v0.1.json",
+    "sourceProfile": "ANNOTATION_LAYOUT_DEFAULT_V1@1.1.0",
+    "resolvedRecordPolicy": "DIMENSION_REQUIREMENT_TO_RESOLVED_ANNOTATION"
+  },
+  "scope": {
+    "includedDrawingTypes": [
+      "structure_general_arrangement",
+      "load_diagram",
+      "axial_force_result_summary",
+      "analysis_verification"
+    ],
+    "excludedCapabilities": [
+      "connection_detailing",
+      "bolt_design",
+      "weld_design",
+      "base_plate_design",
+      "fabrication_issue",
+      "public_result_switching"
+    ]
+  },
+  "authority": {
+    "canonicalGeometrySource": "engineering_model",
+    "displayGeometryMayOverrideCanonicalGeometry": false,
+    "perspectiveViewsAreDimensional": false,
+    "publicResultSwitchAllowed": false
+  },
+  "units": {
+    "length": "m",
+    "force": "kN",
+    "moment": "kN.m",
+    "displacement": "mm"
+  },
+  "screenDisplay": {
+    "background": "#F4F5F7",
+    "defaultProjection": "orthographic",
+    "minimumUiTextPx": 12,
+    "minimumHitTargetPx": 32,
+    "maximumDefaultVisibleLabels": 20,
+    "maximumSimultaneousOverlayFamilies": 2,
+    "opacities": {
+      "focal": 1.0,
+      "participating": 0.85,
+      "context": 0.25,
+      "reference": 0.12,
+      "xray": 0.18
+    },
+    "reducedMotionSupported": true,
+    "monochromeModeSupported": true,
+    "statusMustNotUseColourAlone": true
+  },
+  "controlledViewRequirements": [
+    "engineeringQuestion",
+    "authority",
+    "projection",
+    "dimensionalAuthority",
+    "scaleState",
+    "displayPreset",
+    "geometryRevision",
+    "selectionLinks"
+  ],
+  "semanticSvgRequirements": [
+    "stableEntityId",
+    "viewId",
+    "layerRole",
+    "engineeringSourceId",
+    "uniqueDocumentIds"
+  ],
+  "resultLegendRequirements": [
+    "quantity",
+    "component",
+    "unit",
+    "coordinateBasis",
+    "resultLocation",
+    "averaging",
+    "rangeMode",
+    "minValue",
+    "maxValue",
+    "loadCase",
+    "deformationScale",
+    "geometryRevision",
+    "analysisRevision"
+  ],
+  "resultScheduleRequirements": [
+    "resultExtrema",
+    "criticalProbeTable",
+    "supportReactionTable",
+    "equilibriumAudit",
+    "assumptionAndExclusionTable"
+  ],
+  "releaseGates": [
+    {
+      "ruleId": "TF-DRW-TRUTH-001",
+      "severity": "blocking",
+      "requirement": "Canonical engineering geometry and revision metadata shall govern every controlled view."
+    },
+    {
+      "ruleId": "TF-FEA-RES-001",
+      "severity": "blocking",
+      "requirement": "Every primary result view shall provide the complete result legend."
+    },
+    {
+      "ruleId": "TF-FEA-RES-002",
+      "severity": "blocking",
+      "requirement": "Result geometry revision shall match the controlled view and analysis geometry revisions."
+    },
+    {
+      "ruleId": "TF-WEB-UI-003",
+      "severity": "blocking",
+      "requirement": "A view shall show no more than two overlay families and status shall include text."
+    },
+    {
+      "ruleId": "TF-ANN-001",
+      "severity": "blocking",
+      "requirement": "Mandatory dimensions shall resolve from semantic model features with pinned text metrics, valid arrow targets, no prohibited text collision and placement inside the controlled view."
+    },
+    {
+      "ruleId": "TF-REL-001",
+      "severity": "blocking",
+      "requirement": "Profile v0.1 artifacts remain private-review records and are not eligible for public issue."
+    }
+  ],
+  "sourceBasis": [
+    {
+      "document": "00_UNIFIED_WEB_ENGINEERING_DRAWING_STANDARD_V1.md",
+      "appliedTopics": [
+        "canonical engineering truth",
+        "controlled views",
+        "revision ownership",
+        "release gates"
+      ]
+    },
+    {
+      "document": "profiles/AU_STRUCTURAL_WEB_DEFAULT.yaml",
+      "appliedTopics": [
+        "Australian structural drawing defaults",
+        "orthographic engineering views"
+      ]
+    },
+    {
+      "document": "profiles/SCREEN_DISPLAY_DEFAULT.yaml",
+      "appliedTopics": [
+        "screen readability",
+        "opacity hierarchy",
+        "interaction limits"
+      ]
+    },
+    {
+      "document": "recipes/structure_general_arrangement.yaml",
+      "appliedTopics": [
+        "general arrangement view set",
+        "dimension and schedule coverage"
+      ]
+    },
+    {
+      "document": "recipes/fea_result_summary.yaml",
+      "appliedTopics": [
+        "analysis idealisation",
+        "result legend",
+        "deformed and undeformed comparison"
+      ]
+    },
+    {
+      "document": "rules/fea_visual_rules.yaml",
+      "appliedTopics": [
+        "result metadata",
+        "revision consistency",
+        "common comparison definitions"
+      ]
+    },
+    {
+      "document": "02_ANNOTATION_AND_DIMENSION_LAYOUT_ENGINE_SPEC_V1.md",
+      "appliedTopics": [
+        "dimension requirement pipeline",
+        "deterministic paper-space layout",
+        "resolved annotation validation"
+      ]
+    },
+    {
+      "document": "profiles/ANNOTATION_LAYOUT_DEFAULT.yaml",
+      "appliedTopics": [
+        "paper clearances",
+        "lane order",
+        "collision policy"
+      ]
+    },
+    {
+      "document": "rules/web_release_rules.yaml",
+      "appliedTopics": [
+        "selection synchronisation",
+        "overlay limits",
+        "non-colour status encoding"
+      ]
+    }
+  ]
+}

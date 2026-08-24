@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-mount-transfer.schema.json",
+  "title": "TowerFlow Phase 3 Mount Transfer Draft",
+  "description": "Isolated rigid-transfer contract. This schema does not define mount, fastener, weld or tower-member capacity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "mountId",
+    "calculationStatus",
+    "transferMethod",
+    "capacityCheckStatus",
+    "attachmentNodeIds",
+    "transferredResultants",
+    "interfaces",
+    "excludedBehaviour"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.3.0-draft" },
+    "mountId": { "type": "string", "pattern": "^[A-Za-z0-9_-]{2,40}$" },
+    "calculationStatus": { "enum": ["synthetic_verification_only", "reviewed"] },
+    "transferMethod": { "const": "rigid_affine_three_node" },
+    "capacityCheckStatus": { "const": "not_performed" },
+    "attachmentNodeIds": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "transferredResultants": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": { "enum": ["Fx", "Fy", "Fz", "Mx", "My", "Mz"] }
+    },
+    "interfaces": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "interfaceId",
+          "towerNodeId",
+          "mountFeatureId",
+          "status",
+          "transferMechanisms",
+          "evidenceId"
+        ],
+        "properties": {
+          "interfaceId": { "type": "string", "minLength": 1 },
+          "towerNodeId": { "type": "string", "minLength": 1 },
+          "mountFeatureId": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["synthetic_verification_only", "reviewed"] },
+          "transferMechanisms": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "uniqueItems": true,
+            "items": { "enum": ["tension", "compression", "shear"] }
+          },
+          "evidenceId": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "excludedBehaviour": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

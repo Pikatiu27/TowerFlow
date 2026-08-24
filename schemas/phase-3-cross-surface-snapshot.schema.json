@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-cross-surface-snapshot.schema.json",
+  "title": "TowerFlow Phase 3A Cross-Surface Snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "analysisMode",
+    "projectInputId",
+    "actionScenarioId",
+    "verificationCaseId",
+    "modelId",
+    "adapter",
+    "inputHashSha256",
+    "sourceHashSha256",
+    "resultHashSha256",
+    "activeResultSet",
+    "surfaces",
+    "drawingIdentity"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.1.0-cross-surface-snapshot" },
+    "analysisMode": { "const": "phase3-review" },
+    "projectInputId": { "type": "string", "minLength": 1 },
+    "actionScenarioId": { "type": "string", "minLength": 1 },
+    "verificationCaseId": { "enum": ["WIND-M01", "WIND-M02", "WIND-M03"] },
+    "modelId": { "type": "string", "minLength": 1 },
+    "adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "const": "phase3-mapped-action-review" },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "inputHashSha256": { "$ref": "#/$defs/sha256" },
+    "sourceHashSha256": { "$ref": "#/$defs/sha256" },
+    "resultHashSha256": { "$ref": "#/$defs/sha256" },
+    "activeResultSet": { "$ref": "#/$defs/resultSet" },
+    "surfaces": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api", "viewport3d", "resultsTable", "drawing"],
+      "properties": {
+        "api": { "$ref": "#/$defs/surface" },
+        "viewport3d": { "$ref": "#/$defs/surface" },
+        "resultsTable": { "$ref": "#/$defs/surface" },
+        "drawing": { "$ref": "#/$defs/surface" }
+      }
+    },
+    "drawingIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contractId", "contractVersion", "documentRevision", "bindingResultSetHashSha256"],
+      "properties": {
+        "contractId": { "const": "TF-P3A-DRW-ID-001" },
+        "contractVersion": { "type": "string", "minLength": 1 },
+        "documentRevision": { "type": "string", "minLength": 1 },
+        "bindingResultSetHashSha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullableString": { "type": ["string", "null"] },
+    "resultSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "hashSha256",
+        "sourceDirectionDegTrueNorth",
+        "forceDirectionDegTrueNorth",
+        "loadingId",
+        "windLoadCaseId",
+        "combinationId"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "hashSha256": { "$ref": "#/$defs/sha256" },
+        "sourceDirectionDegTrueNorth": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+        "forceDirectionDegTrueNorth": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+        "loadingId": { "type": "string", "minLength": 1 },
+        "windLoadCaseId": { "type": "string", "minLength": 1 },
+        "combinationId": { "$ref": "#/$defs/nullableString" }
+      }
+    },
+    "surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "resultHashSha256", "resultSetId", "resultSetHashSha256"],
+      "properties": {
+        "state": { "const": "BOUND" },
+        "resultHashSha256": { "$ref": "#/$defs/sha256" },
+        "resultSetId": { "type": "string", "minLength": 1 },
+        "resultSetHashSha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

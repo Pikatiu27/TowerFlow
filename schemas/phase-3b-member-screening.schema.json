@@ -1,0 +1,372 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3b-member-screening.schema.json",
+  "title": "TowerFlow Phase 3B Member Screening Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contractId",
+    "calculationStatus",
+    "screeningStatus",
+    "releaseAuthority",
+    "units",
+    "sourceAnalysis",
+    "standardBasis",
+    "memberChecks",
+    "releaseGates",
+    "blockers",
+    "exclusions"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.4.0-draft" },
+    "contractId": { "const": "CM3-MEMBER-SCREENING-001" },
+    "calculationStatus": {
+      "enum": ["contract_only", "synthetic_contract_verification", "project_screening_review"]
+    },
+    "screeningStatus": { "const": "REVIEW_REQUIRED" },
+    "releaseAuthority": { "const": false },
+    "units": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["force", "length", "sectionLength", "area", "stress", "utilisation"],
+      "properties": {
+        "force": { "const": "kN" },
+        "length": { "const": "m" },
+        "sectionLength": { "const": "mm" },
+        "area": { "const": "mm2" },
+        "stress": { "const": "MPa" },
+        "utilisation": { "const": "dimensionless" }
+      }
+    },
+    "sourceAnalysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modelId",
+        "adapterId",
+        "adapterVersion",
+        "phase3aReleaseStatus",
+        "resultHashSha256",
+        "resultSetIds",
+        "approvedProjectInputId"
+      ],
+      "properties": {
+        "modelId": { "type": ["string", "null"], "minLength": 1 },
+        "adapterId": { "type": ["string", "null"], "minLength": 1 },
+        "adapterVersion": { "type": ["string", "null"], "minLength": 1 },
+        "phase3aReleaseStatus": {
+          "enum": ["SYNTHETIC_REVIEW_ONLY", "PROJECT_REVIEW_ONLY", "READY_FOR_MEMBER_SCREENING"]
+        },
+        "resultHashSha256": { "$ref": "#/$defs/nullableHash" },
+        "resultSetIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "approvedProjectInputId": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "standardBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "designation",
+        "title",
+        "catalogueUrl",
+        "controlledCopyStatus",
+        "ruleDataStatus",
+        "controlledSourceHashSha256"
+      ],
+      "properties": {
+        "designation": { "const": "AS 4100:2020" },
+        "title": { "const": "Steel structures" },
+        "catalogueUrl": { "const": "https://store.standards.org.au/product/as-4100-2020" },
+        "controlledCopyStatus": { "enum": ["not_supplied", "review_pending", "reviewed"] },
+        "ruleDataStatus": { "enum": ["not_extracted", "review_pending", "reviewed"] },
+        "controlledSourceHashSha256": { "$ref": "#/$defs/nullableHash" }
+      }
+    },
+    "memberChecks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/memberCheck" }
+    },
+    "releaseGates": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/releaseGate" }
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "exclusions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullableHash": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+    "memberEvidenceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceMode", "packageId", "modelId", "packageHashSha256"],
+      "properties": {
+        "sourceMode": { "enum": ["inline_synthetic_case", "member_evidence_package"] },
+        "packageId": { "type": ["string", "null"], "minLength": 1 },
+        "modelId": { "type": "string", "minLength": 1 },
+        "packageHashSha256": { "$ref": "#/$defs/nullableHash" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "sourceMode": { "const": "inline_synthetic_case" } },
+            "required": ["sourceMode"]
+          },
+          "then": {
+            "properties": {
+              "packageId": { "type": "null" },
+              "packageHashSha256": { "type": "null" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "sourceMode": { "const": "member_evidence_package" } },
+            "required": ["sourceMode"]
+          },
+          "then": {
+            "properties": {
+              "packageId": { "type": "string", "minLength": 1 },
+              "packageHashSha256": { "$ref": "#/$defs/hash" }
+            }
+          }
+        }
+      ]
+    },
+    "direction": { "enum": [0, 45, 90, 135, 180, 225, 270, 315] },
+    "axisValues": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["localY", "localZ"],
+      "properties": {
+        "localY": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "localZ": { "type": ["number", "null"], "exclusiveMinimum": 0 }
+      }
+    },
+    "sectionProperties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "definitionId",
+        "sectionType",
+        "grossAreaMm2",
+        "netAreaMm2",
+        "netAreaStatus",
+        "netAreaSourceRecordId",
+        "radiusGyrationYmm",
+        "radiusGyrationZmm",
+        "sourceRecordId",
+        "sourceStatus"
+      ],
+      "properties": {
+        "definitionId": { "type": "string", "minLength": 1 },
+        "sectionType": { "type": "string", "minLength": 1 },
+        "grossAreaMm2": { "type": "number", "exclusiveMinimum": 0 },
+        "netAreaMm2": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "netAreaStatus": { "enum": ["not_required", "pending", "synthetic_verification_only", "reviewed"] },
+        "netAreaSourceRecordId": { "type": ["string", "null"], "minLength": 1 },
+        "radiusGyrationYmm": { "type": "number", "exclusiveMinimum": 0 },
+        "radiusGyrationZmm": { "type": "number", "exclusiveMinimum": 0 },
+        "sourceRecordId": { "type": "string", "minLength": 1 },
+        "sourceStatus": { "enum": ["pending", "reviewed"] }
+      }
+    },
+    "materialProperties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["definitionId", "grade", "yieldStressMPa", "tensileStrengthMPa", "sourceRecordId", "sourceStatus"],
+      "properties": {
+        "definitionId": { "type": "string", "minLength": 1 },
+        "grade": { "type": "string", "minLength": 1 },
+        "yieldStressMPa": { "type": "number", "exclusiveMinimum": 0 },
+        "tensileStrengthMPa": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "sourceRecordId": { "type": "string", "minLength": 1 },
+        "sourceStatus": { "enum": ["pending", "reviewed"] }
+      }
+    },
+    "demand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "axialDemandKN",
+        "forceState",
+        "resultSetId",
+        "loadCombinationId",
+        "windSourceDirectionDegTrueNorth",
+        "downwindForceDirectionDegTrueNorth",
+        "analysisResultHashSha256"
+      ],
+      "properties": {
+        "axialDemandKN": { "type": "number", "not": { "const": 0 } },
+        "forceState": { "enum": ["tension", "compression"] },
+        "resultSetId": { "type": "string", "minLength": 1 },
+        "loadCombinationId": { "type": "string", "minLength": 1 },
+        "windSourceDirectionDegTrueNorth": { "$ref": "#/$defs/direction" },
+        "downwindForceDirectionDegTrueNorth": { "$ref": "#/$defs/direction" },
+        "analysisResultHashSha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "connectionBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "forceDistribution",
+        "forceDistributionFactorKt",
+        "uniformDistributionCriteria",
+        "basisRecordId"
+      ],
+      "properties": {
+        "status": { "enum": ["not_applicable", "pending", "synthetic_verification_only", "reviewed"] },
+        "forceDistribution": { "enum": ["uniform", "non_uniform", "not_applicable"] },
+        "forceDistributionFactorKt": { "type": ["number", "null"], "exclusiveMinimum": 0, "maximum": 1 },
+        "uniformDistributionCriteria": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["eachPartConnected", "symmetricAboutCentroidalAxes", "connectedPartsProportionedForForce"],
+              "properties": {
+                "eachPartConnected": { "type": "boolean" },
+                "symmetricAboutCentroidalAxes": { "type": "boolean" },
+                "connectedPartsProportionedForForce": { "type": "boolean" }
+              }
+            },
+            { "type": "null" }
+          ]
+        },
+        "basisRecordId": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "stability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "memberLengthM",
+        "effectiveLengthMByAxis",
+        "slendernessRatioByAxis",
+        "effectiveLengthBasisRecordIdByAxis",
+        "basisRecordId"
+      ],
+      "properties": {
+        "status": { "enum": ["not_applicable", "pending", "synthetic_verification_only", "reviewed"] },
+        "memberLengthM": { "type": "number", "exclusiveMinimum": 0 },
+        "effectiveLengthMByAxis": { "$ref": "#/$defs/axisValues" },
+        "slendernessRatioByAxis": { "$ref": "#/$defs/axisValues" },
+        "effectiveLengthBasisRecordIdByAxis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["localY", "localZ"],
+          "properties": {
+            "localY": { "type": ["string", "null"], "minLength": 1 },
+            "localZ": { "type": ["string", "null"], "minLength": 1 }
+          }
+        },
+        "basisRecordId": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "resistance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "tensionDesignResistanceKN",
+        "compressionDesignResistanceKN",
+        "selectedDesignResistanceKN",
+        "governingMode",
+        "governingLimitState",
+        "clauseReferences",
+        "calculationRecordId"
+      ],
+      "properties": {
+        "status": { "enum": ["not_evaluated", "synthetic_test_value", "reviewed"] },
+        "tensionDesignResistanceKN": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "compressionDesignResistanceKN": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "selectedDesignResistanceKN": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "governingMode": { "enum": ["tension", "compression", "not_evaluated"] },
+        "governingLimitState": { "type": ["string", "null"], "minLength": 1 },
+        "clauseReferences": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "calculationRecordId": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "utilisation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "value", "demandMagnitudeKN", "designResistanceKN", "formula"],
+      "properties": {
+        "status": { "enum": ["not_evaluated", "calculated"] },
+        "value": { "type": ["number", "null"], "minimum": 0 },
+        "demandMagnitudeKN": { "type": ["number", "null"], "minimum": 0 },
+        "designResistanceKN": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "formula": { "const": "abs(signed axial demand) / positive design resistance" }
+      }
+    },
+    "memberCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "memberId",
+        "memberEvidenceIdentity",
+        "sectionProperties",
+        "materialProperties",
+        "demand",
+        "connectionBasis",
+        "stability",
+        "resistance",
+        "utilisation",
+        "checkStatus",
+        "blockers"
+      ],
+      "properties": {
+        "memberId": { "type": "string", "minLength": 1 },
+        "memberEvidenceIdentity": { "$ref": "#/$defs/memberEvidenceIdentity" },
+        "sectionProperties": { "$ref": "#/$defs/sectionProperties" },
+        "materialProperties": { "$ref": "#/$defs/materialProperties" },
+        "demand": { "$ref": "#/$defs/demand" },
+        "connectionBasis": { "$ref": "#/$defs/connectionBasis" },
+        "stability": { "$ref": "#/$defs/stability" },
+        "resistance": { "$ref": "#/$defs/resistance" },
+        "utilisation": { "$ref": "#/$defs/utilisation" },
+        "checkStatus": { "const": "REVIEW_REQUIRED" },
+        "blockers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "releaseGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gateId", "status", "description"],
+      "properties": {
+        "gateId": { "type": "string", "pattern": "^CM3-(0[1-9]|10)$" },
+        "status": { "enum": ["pending", "verification_only", "project_reviewed"] },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

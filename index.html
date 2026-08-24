@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SC TOWERFLOW | Tower Analysis</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="./src/styles.css?v=project-input-intake-v1" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./src/vendor/three/three.module.js",
+          "three/addons/": "./src/vendor/three/addons/"
+        }
+      }
+    </script>
+    <script src="./src/vendor/lucide/lucide.min.js?v=1.8.0" defer></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="viewer-section" aria-label="3D tower viewer">
+        <div id="viewer" class="viewer"></div>
+        <section id="drawing-workspace" class="drawing-workspace" aria-label="Engineering drawing workspace" hidden>
+          <header class="drawing-command-bar">
+            <strong class="drawing-app-label">DRAWINGS</strong>
+            <div class="drawing-type-tabs" role="tablist" aria-label="Drawing type">
+              <button class="is-active" type="button" role="tab" aria-selected="true" data-drawing-type="ga">GA</button>
+              <button type="button" role="tab" aria-selected="false" data-drawing-type="loads">Loads</button>
+              <button type="button" role="tab" aria-selected="false" data-drawing-type="axial">Results</button>
+              <button type="button" role="tab" aria-selected="false" data-drawing-type="checks">Verification</button>
+            </div>
+            <div class="drawing-command-status">
+              <div class="drawing-zoom-controls" aria-label="Drawing zoom controls">
+                <button type="button" data-drawing-zoom="out" title="Zoom out" aria-label="Zoom out">
+                  <i data-lucide="minus" aria-hidden="true"></i><span class="tool-fallback" aria-hidden="true">-</span>
+                </button>
+                <output id="drawing-zoom-value" class="drawing-zoom-value" aria-label="Drawing zoom">Fit</output>
+                <button type="button" data-drawing-zoom="in" title="Zoom in" aria-label="Zoom in">
+                  <i data-lucide="plus" aria-hidden="true"></i><span class="tool-fallback" aria-hidden="true">+</span>
+                </button>
+                <button id="drawing-zoom-fit" type="button" title="Fit drawing sheet" aria-label="Fit drawing sheet">
+                  <i data-lucide="maximize-2" aria-hidden="true"></i><span class="tool-fallback" aria-hidden="true">Fit</span>
+                </button>
+              </div>
+              <strong>Private Review</strong>
+            </div>
+          </header>
+          <div class="drawing-sheet-scroll">
+            <article class="drawing-sheet" aria-label="Controlled engineering drawing sheet">
+              <svg id="drawing-svg" viewBox="0 0 1188 840" role="img" aria-label="TowerFlow controlled drawing"></svg>
+            </article>
+          </div>
+        </section>
+        <div id="selection-callout" class="selection-callout" aria-live="polite" hidden></div>
+        <div class="viewport-header">
+          <div class="viewport-toolbar" role="toolbar" aria-label="Viewport controls">
+            <div class="viewport-context" aria-label="Active model context">
+              <span>Active model</span>
+              <strong id="viewer-model-badge">FEC Type AA / SI / Wind 0 deg</strong>
+            </div>
+            <span class="viewport-tool-divider" aria-hidden="true"></span>
+            <div class="view-toolbar" aria-label="Camera orientation">
+              <button class="viewport-tool-button" type="button" data-view="iso" title="Isometric view" aria-label="Isometric view" aria-pressed="false">
+                <i data-lucide="box" aria-hidden="true"></i><span class="tool-fallback" aria-hidden="true">3D</span>
+              </button>
+              <button class="viewport-tool-button" type="button" data-view="front" title="Front view" aria-label="Front view" aria-pressed="true">
+                <i data-lucide="square" aria-hidden="true"></i><span class="tool-fallback" aria-hidden="true">F</span>
+              </button>
+              <button class="viewport-tool-button" type="button" data-view="side" title="Side view" aria-label="Side view" aria-pressed="false">
+                <i data-lucide="panel-right" aria-hidden="true"></i><span class="tool-fallback" aria-hidden="true">S</span>
+              </button>
+              <button class="viewport-tool-button" type="button" data-view="plan" title="Plan view" aria-label="Plan view" aria-pressed="false">
+                <i data-lucide="panel-top" aria-hidden="true"></i><span class="tool-fallback" aria-hidden="true">P</span>
+              </button>
+              <button class="viewport-tool-button" type="button" data-view="fit" title="Fit model" aria-label="Fit model">
+                <i data-lucide="maximize-2" aria-hidden="true"></i><span class="tool-fallback" aria-hidden="true">Fit</span>
+              </button>
+              <span class="viewport-tool-divider" aria-hidden="true"></span>
+              <button id="reset-view" class="viewport-tool-button" type="button" title="Reset view" aria-label="Reset view">
+                <i data-lucide="rotate-ccw" aria-hidden="true"></i><span class="tool-fallback" aria-hidden="true">Reset</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="axis-gizmo" class="axis-gizmo" aria-label="Viewport global XYZ orientation"></div>
+        <div class="grid-label" aria-label="Grid reference">Grid 0.5 m</div>
+        <div class="view-context" aria-label="Active result context">
+          <div>
+            <span>Scenario</span>
+            <strong id="active-scenario">Demo Tower</strong>
+          </div>
+          <div>
+            <span id="active-loading-kind">Load Case</span>
+            <strong id="active-load-case">LC1</strong>
+          </div>
+          <div>
+            <span>Result</span>
+            <strong id="active-result-context">Axial Force</strong>
+          </div>
+          <div>
+            <span>Direction</span>
+            <strong id="active-load-direction">Global +X</strong>
+          </div>
+        </div>
+        <div id="viewport-legend" class="legend-panel" aria-label="Viewport legend">
+          <p id="legend-title" class="eyebrow">Axial Force</p>
+          <div class="legend-row" data-legend-group="results">
+            <span class="legend-swatch tension"></span>
+            <span>Tension</span>
+          </div>
+          <div class="legend-row" data-legend-group="results">
+            <span class="legend-swatch compression"></span>
+            <span>Compression</span>
+          </div>
+          <div class="legend-row" data-legend-group="results">
+            <span class="legend-swatch low-force"></span>
+            <span>Low |N|</span>
+          </div>
+          <div class="legend-row" data-legend-group="loads" data-load-legend-category="W">
+            <span class="legend-swatch wind-load"></span>
+            <span>W Wind</span>
+          </div>
+          <div class="legend-row" data-legend-group="loads" data-load-legend-category="G">
+            <span class="legend-swatch permanent-load"></span>
+            <span>G Permanent</span>
+          </div>
+          <div class="legend-row" data-legend-group="reactions" hidden>
+            <span class="legend-swatch support-reaction"></span>
+            <span>Support reaction</span>
+          </div>
+          <div class="legend-row" data-legend-group="deformation" hidden>
+            <span class="legend-swatch deformed-shape"></span>
+            <span>Deformed</span>
+          </div>
+          <div class="legend-row" data-legend-group="deformation" hidden>
+            <span class="legend-swatch undeformed-reference"></span>
+            <span>Undeformed reference</span>
+          </div>
+          <p id="legend-note" class="legend-note">Intensity = |N|.</p>
+        </div>
+      </section>
+
+      <section id="result-review-panel" class="result-review-panel" aria-label="Engineering results review">
+        <header class="result-review-header">
+          <div class="result-review-title">
+            <strong>Envelope</strong>
+            <span id="review-case-badge">--</span>
+          </div>
+          <div class="review-envelope-summary" aria-label="Global result envelope">
+            <div>
+              <span>Wind Source</span>
+              <strong id="review-envelope-direction">--</strong>
+            </div>
+            <div>
+              <span>Member</span>
+              <strong id="review-envelope-member">--</strong>
+            </div>
+            <div>
+              <span>Reaction comp.</span>
+              <strong id="review-envelope-reaction">--</strong>
+            </div>
+          </div>
+          <button
+            id="toggle-result-review"
+            class="icon-button"
+            type="button"
+            aria-expanded="true"
+            aria-controls="result-review-body"
+            title="Collapse results review"
+          ><span aria-hidden="true">-</span></button>
+        </header>
+        <div id="result-review-body" class="result-review-body">
+          <div class="result-review-tabs" role="tablist" aria-label="Result review data">
+            <button class="is-active" type="button" role="tab" aria-selected="true" data-review-tab="envelope">Combinations</button>
+            <button type="button" role="tab" aria-selected="false" data-review-tab="members">Members</button>
+          </div>
+          <article class="review-module case-review" data-review-view="envelope">
+            <header>
+              <h3>Directional Envelope</h3>
+              <strong id="review-case-count">--</strong>
+            </header>
+            <div class="case-table-wrap">
+              <table class="case-comparison-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Wind Source</th>
+                    <th scope="col">Max |N| kN</th>
+                    <th scope="col">Max |U| mm</th>
+                    <th scope="col">Max |R<sub>i</sub>| kN</th>
+                  </tr>
+                </thead>
+                <tbody id="case-comparison-body"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="review-module member-review" data-review-view="members" hidden>
+            <header>
+              <h3>Member Forces</h3>
+              <strong id="review-member-max">--</strong>
+            </header>
+            <div id="top-member-force-chart" class="member-force-chart"></div>
+          </article>
+        </div>
+      </section>
+
+      <div
+        id="split-resizer"
+        class="split-resizer"
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize viewer and inspector panels"
+        tabindex="0"
+      ></div>
+
+      <aside class="info-panel" aria-label="Engineering result inspector">
+        <div class="workspace-header">
+          <header class="panel-header">
+            <div>
+              <p class="panel-kicker">SC TowerFlow</p>
+              <h2>Tower Analysis</h2>
+            </div>
+            <div class="panel-header-actions">
+              <button id="project-basis-button" class="icon-button" type="button" title="Project Basis" aria-label="Open Project Basis">
+                <i data-lucide="book-open"></i>
+              </button>
+              <span id="analysis-state-badge" class="state-badge">P2 + P3A</span>
+            </div>
+          </header>
+
+          <nav class="workflow-section" aria-label="Analysis workspace" role="tablist">
+            <button class="workflow-step" type="button" role="tab" aria-selected="false" data-workspace-tab="model">
+              <i data-lucide="box"></i>
+              <strong>Model</strong>
+            </button>
+            <button class="workflow-step" type="button" role="tab" aria-selected="false" data-workspace-tab="loads">
+              <i data-lucide="wind"></i>
+              <strong>Loads</strong>
+            </button>
+            <button class="workflow-step" type="button" role="tab" aria-selected="false" data-workspace-tab="solve">
+              <i data-lucide="play"></i>
+              <strong>Solve</strong>
+            </button>
+            <button class="workflow-step is-active" type="button" role="tab" aria-selected="true" data-workspace-tab="results">
+              <i data-lucide="activity"></i>
+              <strong>Results</strong>
+            </button>
+            <button class="workflow-step" type="button" role="tab" aria-selected="false" data-workspace-tab="drawings">
+              <i data-lucide="file-text"></i>
+              <strong>Drawings</strong>
+            </button>
+          </nav>
+        </div>
+        <p id="solve-error" class="workspace-alert solve-error" hidden></p>
+        <p id="analysis-lifecycle-alert" class="workspace-alert analysis-lifecycle-alert" role="status" aria-live="polite" hidden>
+          Inputs changed after the last Phase 2 solve. Displayed results are stale.
+        </p>
+
+        <section class="kpi-strip" aria-label="Active case results" data-workspace-view="results">
+          <div>
+            <span>Max |N|</span>
+            <strong id="kpi-max-axial">--</strong>
+          </div>
+          <div>
+            <span>Max |U|</span>
+            <strong id="kpi-max-displacement">--</strong>
+          </div>
+          <div>
+            <span>Max |R<sub>i</sub>|</span>
+            <strong id="kpi-max-reaction">--</strong>
+          </div>
+          <div>
+            <span>Force Residual</span>
+            <strong id="kpi-force-balance">--</strong>
+          </div>
+        </section>
+
+        <section id="result-source-section" class="property-section" data-workspace-view="results" hidden>
+          <div class="section-bar">Dataset</div>
+          <div class="analysis-mode-switch" role="group" aria-label="Result source">
+            <button class="is-active" type="button" aria-pressed="true" data-analysis-mode="phase2">Phase 2 Analysis</button>
+            <button type="button" aria-pressed="false" data-analysis-mode="phase3-review" disabled>Phase 3A Review</button>
+          </div>
+        </section>
+
+        <section id="phase3-review-detail-section" class="property-section" data-workspace-view="results" hidden>
+          <div class="section-bar">Review Provenance</div>
+          <dl class="property-list phase3-review-register">
+            <div><dt>Review Status</dt><dd id="phase3-review-release-status">Not run</dd></div>
+            <div><dt>Project Input</dt><dd id="phase3-review-project-input">Not loaded</dd></div>
+            <div><dt>Input Acceptance</dt><dd id="phase3-review-input-acceptance">Not loaded</dd></div>
+            <div><dt>Review Case</dt><dd id="phase3-review-action-scenario">WIND-M01 / tower body</dd></div>
+            <div><dt>Combination</dt><dd id="phase3-review-combination">W only</dd></div>
+            <div><dt>Mount Transfer</dt><dd id="phase3-review-mount">Not applicable</dd></div>
+            <div><dt>Adapter</dt><dd id="phase3-review-adapter">phase3-mapped-action-review</dd></div>
+            <div><dt>Active Direction</dt><dd id="phase3-review-direction">--</dd></div>
+            <div><dt>Mapping Residual</dt><dd id="phase3-review-mapping-residual">--</dd></div>
+            <div><dt>Structural Residual</dt><dd id="phase3-review-structural-residual">--</dd></div>
+            <div><dt>Input Hash</dt><dd id="phase3-review-input-hash" class="hash-value">--</dd></div>
+            <div><dt>Source Hash</dt><dd id="phase3-review-source-hash" class="hash-value">--</dd></div>
+            <div><dt>Result Hash</dt><dd id="phase3-review-result-hash" class="hash-value">--</dd></div>
+          </dl>
+          <p id="phase3-review-boundary" class="panel-note">
+            No project-input package loaded. Release authority remains withheld.
+          </p>
+        </section>
+
+        <section class="property-section" data-workspace-view="results">
+          <div class="section-bar">Wind Calculation</div>
+          <dl id="wind-calculation-summary" class="property-list wind-calculation-summary" hidden>
+            <div><dt>Regional Speed V<sub>R</sub></dt><dd id="calculated-regional-speed">--</dd></div>
+            <div><dt>Design Speed V<sub>des</sub></dt><dd id="calculated-design-speed-range">--</dd></div>
+            <div><dt>Status</dt><dd id="calculated-wind-status">--</dd></div>
+          </dl>
+        </section>
+
+        <section class="property-section" data-workspace-view="results">
+          <div class="section-bar">Result Context</div>
+          <div class="control-row">
+            <label for="result-combination-select">Combination</label>
+            <select id="result-combination-select"></select>
+          </div>
+          <div class="control-row">
+            <label for="result-direction-select">Direction</label>
+            <select id="result-direction-select"></select>
+          </div>
+          <div class="control-row">
+            <label for="result-display-type">Quantity</label>
+            <select id="result-display-type">
+              <option value="member_axial" selected>Member axial force</option>
+              <option value="support_reaction">Support reactions</option>
+              <option value="nodal_displacement">Nodal displacement</option>
+            </select>
+          </div>
+          <div class="result-strip" aria-label="Active result summary">
+            <div>
+              <span>Case</span>
+              <strong id="panel-load-case">LC1</strong>
+            </div>
+            <div>
+              <span>Quantity</span>
+              <strong id="active-result-type">Member Axial</strong>
+            </div>
+          </div>
+        </section>
+
+        <section id="reaction-summary-section" class="property-section" data-workspace-view="results" hidden>
+          <div class="section-bar">Support Reactions</div>
+          <div class="reaction-table-wrap">
+            <table class="reaction-table">
+              <thead>
+                <tr>
+                  <th>Node</th>
+                  <th>R<sub>X</sub></th>
+                  <th>R<sub>Y</sub></th>
+                  <th>R<sub>Z</sub></th>
+                  <th>|R|</th>
+                </tr>
+              </thead>
+              <tbody id="reaction-table-body"></tbody>
+            </table>
+          </div>
+          <p class="panel-note">Support on model / Global XYZ / kN.</p>
+        </section>
+
+        <section id="displacement-summary-section" class="property-section" data-workspace-view="results" hidden>
+          <div class="section-bar">Nodal Displacement</div>
+          <div class="control-row">
+            <label for="deformation-scale">Display scale</label>
+            <span class="scale-input">
+              <input id="deformation-scale" type="number" min="1" max="100" step="1" value="20" />
+              <small>&times;</small>
+            </span>
+          </div>
+          <dl class="property-list">
+            <div>
+              <dt>Node</dt>
+              <dd id="displacement-node">--</dd>
+            </div>
+            <div>
+              <dt>U<sub>X</sub></dt>
+              <dd id="displacement-ux">--</dd>
+            </div>
+            <div>
+              <dt>U<sub>Y</sub></dt>
+              <dd id="displacement-uy">--</dd>
+            </div>
+            <div>
+              <dt>U<sub>Z</sub></dt>
+              <dd id="displacement-uz">--</dd>
+            </div>
+            <div>
+              <dt>|u|</dt>
+              <dd id="displacement-magnitude">--</dd>
+            </div>
+          </dl>
+          <p class="panel-note">Solved displacement / Global XYZ / true values in mm.</p>
+        </section>
+
+        <section id="selection-section" class="property-section" data-workspace-view="results">
+          <div class="section-bar">Selection</div>
+          <div class="selection-summary">
+            <strong id="member-title">No selection</strong>
+            <span id="member-state">Member or node</span>
+          </div>
+          <dl class="property-list">
+            <div>
+              <dt id="selection-row-a-label">Axial Force</dt>
+              <dd id="member-force">-</dd>
+            </div>
+            <div>
+              <dt id="selection-row-b-label">Length</dt>
+              <dd id="member-length">-</dd>
+            </div>
+            <div>
+              <dt id="selection-row-c-label">Group</dt>
+              <dd id="member-group">-</dd>
+            </div>
+            <div>
+              <dt id="selection-row-d-label">Section</dt>
+              <dd id="member-section">-</dd>
+            </div>
+          </dl>
+          <p id="member-interpretation" class="panel-note" hidden></p>
+        </section>
+
+        <section class="property-section" data-workspace-view="model" hidden>
+          <div class="section-bar">Model Identity</div>
+          <dl class="property-list">
+            <div>
+              <dt>Model</dt>
+              <dd id="case-title">Loading...</dd>
+            </div>
+            <div>
+              <dt>Model ID</dt>
+              <dd id="model-id">--</dd>
+            </div>
+            <div>
+              <dt>Schema</dt>
+              <dd id="model-schema">--</dd>
+            </div>
+            <div>
+              <dt>Revision</dt>
+              <dd id="model-revision">--</dd>
+            </div>
+            <div>
+              <dt>Units</dt>
+              <dd id="model-units">SI</dd>
+            </div>
+            <div>
+              <dt>Nodes</dt>
+              <dd id="node-count">--</dd>
+            </div>
+            <div>
+              <dt>Members</dt>
+              <dd id="member-count">--</dd>
+            </div>
+            <div>
+              <dt>Height</dt>
+              <dd id="model-height">--</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="property-section" data-workspace-view="model" hidden>
+          <div class="section-bar">Idealisation &amp; Properties</div>
+          <dl class="property-list">
+            <div>
+              <dt>Formulation</dt>
+              <dd>3D pin-jointed truss</dd>
+            </div>
+            <div>
+              <dt>DOF</dt>
+              <dd>Ux, Uy, Uz per node</dd>
+            </div>
+            <div>
+              <dt>Axes</dt>
+              <dd>Global XYZ, Z vertical</dd>
+            </div>
+            <div><dt>Member Groups</dt><dd id="model-group-count">--</dd></div>
+            <div><dt>Section Assignments</dt><dd id="model-section-count">--</dd></div>
+            <div><dt>Material Model</dt><dd id="model-material">--</dd></div>
+            <div><dt>Property Source</dt><dd id="model-property-source">--</dd></div>
+          </dl>
+        </section>
+
+        <section class="property-section loading-manager" data-workspace-view="loads" hidden>
+          <div class="section-bar">Load Cases</div>
+          <div class="loading-tabs" role="tablist" aria-label="Load case type">
+            <button class="is-active" type="button" role="tab" aria-selected="true" data-loading-tab="cases">Primary Load Cases</button>
+            <button type="button" role="tab" aria-selected="false" data-loading-tab="combinations">Combination Load Cases</button>
+          </div>
+          <div class="loading-register" data-loading-view="cases">
+            <div><strong id="loading-permanent-case-id">LC-G-01</strong><span>Permanent Loads</span><em>G</em><small id="loading-permanent-case-total">Primary / solve required for resultant</small></div>
+            <div><strong id="loading-wind-case-id">LC-W-000</strong><span id="loading-wind-case-name">Wind 0 deg</span><em>W</em><small id="loading-wind-case-total">Primary / one of 8 alternatives</small></div>
+          </div>
+          <div class="loading-register" data-loading-view="combinations" hidden>
+            <fieldset class="combination-set">
+              <legend>Calculate</legend>
+              <label class="combination-all">
+                <input id="combination-select-all" type="checkbox" />
+                <span>All combinations</span>
+              </label>
+              <label class="combination-option">
+                <input type="checkbox" value="ULS_WIND_STRENGTH" data-combination-situation checked />
+                <strong>ULS Wind Strength</strong>
+                <span>1.2G + W<sub>u</sub> (Q = 0)</span>
+                <small>AS/NZS 1170.0 Cl. 4.2.2(d)</small>
+              </label>
+              <label class="combination-option">
+                <input type="checkbox" value="ULS_WIND_REVERSAL" data-combination-situation />
+                <strong>ULS Wind Reversal</strong>
+                <span>0.9G + W<sub>u</sub></span>
+                <small>AS/NZS 1170.0 Cl. 4.2.2(e)</small>
+              </label>
+              <label class="combination-option">
+                <input type="checkbox" value="SLS_WIND" data-combination-situation />
+                <strong>SLS Wind</strong>
+                <span>G + W<sub>s</sub></span>
+                <small>AS/NZS 1170.0 Cl. 4.3 / project criteria required</small>
+              </label>
+            </fieldset>
+          </div>
+          <p id="loading-boundary" class="panel-note">Preliminary AS/NZS 1170.0 G/W set. Q and unentered G are excluded.</p>
+        </section>
+
+        <section id="phase2-input-section" class="property-section" data-workspace-view="loads" data-loading-owner="cases" hidden>
+          <div class="section-bar section-bar-with-status">
+            <span>Primary Load Data</span>
+            <div class="section-bar-actions">
+              <em id="phase2-input-status">Active / Phase 2</em>
+              <button id="discard-phase2-changes" class="section-icon-button" type="button" title="Revert to last solved inputs" aria-label="Revert Phase 2 inputs" hidden>
+                <i data-lucide="undo-2" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+          <p class="panel-note primary-load-note">LC-G-01 includes automatic tower self-weight. Enter equipment and additional permanent items below.</p>
+          <form id="solver-form" class="solver-form" novalidate>
+            <details class="solver-group">
+              <summary><span>Wind Definition</span><small>LC-W / 8 directions</small></summary>
+              <div class="solver-group-body">
+                <div class="wind-method-banner">
+                  <div>
+                    <span>Wind method</span>
+                    <strong>AS/NZS 1170.2:2021</strong>
+                  </div>
+                  <small>Preliminary / manual exposure classification</small>
+                </div>
+                <div class="solver-grid">
+              <label class="solver-field" for="solve-wind-region">
+                <span>Region</span>
+                <select id="solve-wind-region" required>
+                  <option>A0</option><option selected>A1</option><option>A2</option><option>A3</option><option>A4</option><option>A5</option>
+                  <option>B1</option><option>B2</option><option>C</option><option>D</option>
+                </select>
+              </label>
+              <label class="solver-field" for="solve-wind-ari">
+                <span>ARI</span>
+                <span class="input-with-unit">
+                  <input id="solve-wind-ari" type="number" min="1" max="10000" step="1" value="500" required />
+                  <small>years</small>
+                </span>
+              </label>
+              <label class="solver-field" for="solve-north-axis">
+                <span>Global +X Azimuth</span>
+                <span class="input-with-unit">
+                  <input id="solve-north-axis" type="number" min="0" max="359.9" step="0.1" value="0" required />
+                  <small>deg TN</small>
+                </span>
+              </label>
+              <label id="coastline-field" class="solver-field" for="solve-coastline-fraction" hidden>
+                <span>C/D Coast Fraction</span>
+                <input id="solve-coastline-fraction" type="number" min="0" max="1" step="0.05" value="1" />
+              </label>
+                </div>
+
+                <div class="directional-input-heading">
+                  <strong>Directional Exposure</strong>
+                  <small>Source direction / manual TC and M<sub>t</sub></small>
+                </div>
+                <div id="wind-direction-grid" class="wind-direction-grid">
+              <div class="wind-direction-header"><span>Dir.</span><span>TC</span><span>M<sub>t</sub></span></div>
+              <div class="wind-direction-row" data-wind-direction="0"><strong>0°</strong><select data-wind-tc aria-label="0 deg Terrain Category"><option>1</option><option>1.5</option><option>2</option><option selected>2.5</option><option>3</option><option>3.5</option><option>4</option></select><input data-wind-mt aria-label="0 deg topographic multiplier" type="number" min="1" max="2" step="0.01" value="1.00" /></div>
+              <div class="wind-direction-row" data-wind-direction="45"><strong>45°</strong><select data-wind-tc aria-label="45 deg Terrain Category"><option>1</option><option>1.5</option><option>2</option><option selected>2.5</option><option>3</option><option>3.5</option><option>4</option></select><input data-wind-mt aria-label="45 deg topographic multiplier" type="number" min="1" max="2" step="0.01" value="1.00" /></div>
+              <div class="wind-direction-row" data-wind-direction="90"><strong>90°</strong><select data-wind-tc aria-label="90 deg Terrain Category"><option>1</option><option>1.5</option><option>2</option><option selected>2.5</option><option>3</option><option>3.5</option><option>4</option></select><input data-wind-mt aria-label="90 deg topographic multiplier" type="number" min="1" max="2" step="0.01" value="1.00" /></div>
+              <div class="wind-direction-row" data-wind-direction="135"><strong>135°</strong><select data-wind-tc aria-label="135 deg Terrain Category"><option>1</option><option>1.5</option><option>2</option><option selected>2.5</option><option>3</option><option>3.5</option><option>4</option></select><input data-wind-mt aria-label="135 deg topographic multiplier" type="number" min="1" max="2" step="0.01" value="1.00" /></div>
+              <div class="wind-direction-row" data-wind-direction="180"><strong>180°</strong><select data-wind-tc aria-label="180 deg Terrain Category"><option>1</option><option>1.5</option><option>2</option><option selected>2.5</option><option>3</option><option>3.5</option><option>4</option></select><input data-wind-mt aria-label="180 deg topographic multiplier" type="number" min="1" max="2" step="0.01" value="1.00" /></div>
+              <div class="wind-direction-row" data-wind-direction="225"><strong>225°</strong><select data-wind-tc aria-label="225 deg Terrain Category"><option>1</option><option>1.5</option><option>2</option><option selected>2.5</option><option>3</option><option>3.5</option><option>4</option></select><input data-wind-mt aria-label="225 deg topographic multiplier" type="number" min="1" max="2" step="0.01" value="1.00" /></div>
+              <div class="wind-direction-row" data-wind-direction="270"><strong>270°</strong><select data-wind-tc aria-label="270 deg Terrain Category"><option>1</option><option>1.5</option><option>2</option><option selected>2.5</option><option>3</option><option>3.5</option><option>4</option></select><input data-wind-mt aria-label="270 deg topographic multiplier" type="number" min="1" max="2" step="0.01" value="1.00" /></div>
+              <div class="wind-direction-row" data-wind-direction="315"><strong>315°</strong><select data-wind-tc aria-label="315 deg Terrain Category"><option>1</option><option>1.5</option><option>2</option><option selected>2.5</option><option>3</option><option>3.5</option><option>4</option></select><input data-wind-mt aria-label="315 deg topographic multiplier" type="number" min="1" max="2" step="0.01" value="1.00" /></div>
+                </div>
+              </div>
+            </details>
+
+            <details class="solver-group">
+              <summary><span>Equipment</span><small>W area / G weight</small></summary>
+              <div class="solver-group-body">
+                <div class="solver-grid">
+              <label class="solver-field" for="solve-equipment-select">
+                <span>Equipment</span>
+                <select id="solve-equipment-select"></select>
+              </label>
+              <label class="solver-field" for="solve-equipment-height">
+                <span>Elevation</span>
+                <span class="input-with-unit">
+                  <input id="solve-equipment-height" type="number" min="0" max="80" step="0.5" required />
+                  <small>m</small>
+                </span>
+              </label>
+              <label class="solver-field" for="solve-equipment-area">
+                <span>Projected Area (W)</span>
+                <span class="input-with-unit">
+                  <input id="solve-equipment-area" type="number" min="0" max="20" step="0.01" required />
+                  <small>m2</small>
+                </span>
+              </label>
+              <label class="solver-field" for="solve-equipment-weight">
+                <span>Weight (G)</span>
+                <span class="input-with-unit">
+                  <input id="solve-equipment-weight" type="number" min="0" max="2000" step="1" required />
+                  <small>kg</small>
+                </span>
+              </label>
+                </div>
+              </div>
+            </details>
+
+            <details class="solver-group">
+              <summary><span>Additional Permanent Loads</span><small>LC-G-01 / user-defined</small></summary>
+              <div class="solver-group-body">
+                <div class="permanent-item-heading">
+                  <span class="solver-group-label">Item Register</span>
+                  <div class="object-editor-actions">
+                    <button id="add-permanent-item" type="button" title="Add permanent item"><i data-lucide="plus"></i><span>Add</span></button>
+                    <button id="remove-permanent-item" type="button" title="Remove permanent item"><i data-lucide="trash-2"></i><span>Remove</span></button>
+                  </div>
+                </div>
+                <div class="solver-grid permanent-item-grid">
+              <label class="solver-field solver-field-wide" for="solve-permanent-item-select">
+                <span>Item</span>
+                <select id="solve-permanent-item-select"></select>
+              </label>
+              <label class="solver-field" for="solve-permanent-item-type">
+                <span>Type</span>
+                <select id="solve-permanent-item-type">
+                  <option value="platform">Platform</option>
+                  <option value="ladder">Ladder</option>
+                  <option value="feeder_cable">Feeder cable</option>
+                  <option value="ancillary_steel">Ancillary steel</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label class="solver-field" for="solve-permanent-item-distribution">
+                <span>Distribution</span>
+                <select id="solve-permanent-item-distribution">
+                  <option value="point">Point</option>
+                  <option value="vertical_uniform">Vertical uniform</option>
+                </select>
+              </label>
+              <label class="solver-field" for="solve-permanent-item-weight">
+                <span>Total Weight (G)</span>
+                <span class="input-with-unit"><input id="solve-permanent-item-weight" type="number" min="0.1" max="10000" step="0.1" required /><small>kg</small></span>
+              </label>
+              <label class="solver-field" for="solve-permanent-item-azimuth">
+                <span>Azimuth</span>
+                <span class="input-with-unit"><input id="solve-permanent-item-azimuth" type="number" min="0" max="359.9" step="0.1" required /><small>deg</small></span>
+              </label>
+              <label id="permanent-point-elevation-field" class="solver-field solver-field-wide" for="solve-permanent-point-elevation">
+                <span>Elevation</span>
+                <span class="input-with-unit"><input id="solve-permanent-point-elevation" type="number" min="0" max="80" step="0.001" required /><small>m</small></span>
+              </label>
+              <label id="permanent-bottom-elevation-field" class="solver-field" for="solve-permanent-bottom-elevation" hidden>
+                <span>Bottom Elevation</span>
+                <span class="input-with-unit"><input id="solve-permanent-bottom-elevation" type="number" min="0" max="80" step="0.001" /><small>m</small></span>
+              </label>
+              <label id="permanent-top-elevation-field" class="solver-field" for="solve-permanent-top-elevation" hidden>
+                <span>Top Elevation</span>
+                <span class="input-with-unit"><input id="solve-permanent-top-elevation" type="number" min="0" max="80" step="0.001" /><small>m</small></span>
+              </label>
+                </div>
+              </div>
+            </details>
+          </form>
+        </section>
+
+        <section class="property-section" data-workspace-view="loads" data-loading-owner="cases" hidden>
+          <div class="section-bar">Display Loads</div>
+          <div class="control-row">
+            <label for="load-action-filter">Show</label>
+            <select id="load-action-filter">
+              <option value="ALL" selected>Selected load case</option>
+              <option value="W">Wind loads (W)</option>
+              <option value="G">Permanent loads (G)</option>
+            </select>
+          </div>
+          <div class="toggle-grid">
+            <label class="compact-toggle">
+              <input id="show-loads" type="checkbox" checked />
+              <span>Nodal loads + values</span>
+            </label>
+          </div>
+        </section>
+
+        <section id="solve-console" class="property-section solve-console" data-workspace-view="solve" hidden>
+          <div class="section-bar">Analysis Run</div>
+          <div class="solve-command-row">
+            <div>
+              <span>Status</span>
+              <strong id="solve-status" class="solve-status" role="status" aria-live="polite">Ready</strong>
+            </div>
+            <button id="run-solve" type="submit" form="solver-form">Solve Phase 2</button>
+          </div>
+          <dl class="property-list">
+            <div>
+              <dt>Engine</dt>
+              <dd>Phase 3A wind + Phase 2 truss</dd>
+            </div>
+            <div>
+              <dt>Method</dt>
+              <dd>Linear-elastic 3D truss</dd>
+            </div>
+            <div>
+              <dt>Combinations</dt>
+              <dd id="solve-combination-count">--</dd>
+            </div>
+            <div>
+              <dt>Directions</dt>
+              <dd id="solve-direction-count">8</dd>
+            </div>
+            <div>
+              <dt>Result Cases</dt>
+              <dd id="solve-case-count">--</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section id="solve-readiness" class="property-section" data-workspace-view="solve" hidden>
+          <div class="section-bar">Readiness</div>
+          <ul class="readiness-list" aria-label="Analysis readiness checks">
+            <li><span>Model</span><strong id="readiness-model" data-state="checking">CHECKING</strong></li>
+            <li><span>Primary Loads</span><strong id="readiness-loads" data-state="checking">CHECKING</strong></li>
+            <li><span>Combinations</span><strong id="readiness-combinations" data-state="checking">CHECKING</strong></li>
+            <li><span>Wind Definition</span><strong id="readiness-wind" data-state="checking">CHECKING</strong></li>
+          </ul>
+        </section>
+
+        <details id="solve-run-log" class="property-section solver-group solve-run-log" data-workspace-view="solve" hidden>
+          <summary><span>Run Log</span><small id="solve-run-log-summary">No run in this session</small></summary>
+          <div id="solve-run-log-entries" class="run-log-entries" aria-live="polite"></div>
+        </details>
+
+        <details id="phase3-review-section" class="property-section solver-group advanced-review" data-workspace-view="solve" data-phase3-review hidden>
+          <summary><span>Advanced Review</span><small>Phase 3A / gated</small></summary>
+          <div>
+            <div class="project-input-command">
+              <div>
+                <span>Project Input</span>
+                <strong id="phase3-project-input-state" data-state="loading">LOADING</strong>
+              </div>
+              <div class="project-input-actions">
+                <input id="phase3-project-input-file" type="file" accept="application/json,.json" hidden />
+                <button id="import-phase3-project-input" type="button" title="Import project input JSON">
+                  <i data-lucide="file-up" aria-hidden="true"></i><span>Import</span>
+                </button>
+                <button id="reset-phase3-project-input" type="button" title="Use controlled demo fixture">
+                  <i data-lucide="rotate-ccw" aria-hidden="true"></i><span>Demo</span>
+                </button>
+              </div>
+            </div>
+            <dl class="property-list phase3-input-register">
+              <div><dt>Package</dt><dd id="phase3-project-input-id">--</dd></div>
+              <div><dt>Acceptance</dt><dd id="phase3-project-input-acceptance">--</dd></div>
+              <div><dt>Coverage</dt><dd id="phase3-project-input-coverage">--</dd></div>
+            </dl>
+            <ul id="phase3-project-input-errors" class="project-input-errors" aria-label="Project input preflight errors" hidden></ul>
+            <label class="phase3-scenario-control" for="phase3-action-scenario">
+              <span>Review Case</span>
+              <select id="phase3-action-scenario">
+                <option value="P3A-TOWER-BODY">WIND-M01 | Tower body</option>
+                <option value="P3A-INSIDE-ANT-A1">WIND-M02 | Inside ancillary</option>
+                <option value="P3A-EXTERNAL-ANT-A1">WIND-M03 | External rigid transfer</option>
+              </select>
+            </label>
+            <div class="solve-command-row phase3-review-command">
+              <div>
+                <span>Controlled Case</span>
+                <strong id="phase3-review-command-status" class="solve-status" role="status" aria-live="polite">WIND-C01 / WIND-M01</strong>
+              </div>
+              <button id="run-phase3-review" type="button">Run Review</button>
+            </div>
+          </div>
+        </details>
+
+        <section class="property-section" data-workspace-view="model" hidden>
+          <div class="section-bar">Supports</div>
+          <dl class="property-list">
+            <div><dt>Analysis</dt><dd id="model-support-basis">--</dd></div>
+          </dl>
+          <div class="boundary-toolbar">
+            <label for="support-preset">Display</label>
+            <select id="support-preset">
+              <option value="pinned" selected>Analysis restraints</option>
+              <option value="fixed">Fixed 6DOF preview</option>
+              <option value="custom">Custom preview</option>
+            </select>
+          </div>
+          <div id="support-table" class="support-table" aria-label="Support restraints"></div>
+          <p id="support-note" class="panel-note">
+            Display matches the analysis restraints. Rotations are not solver DOF.
+          </p>
+        </section>
+
+        <section class="property-section" data-workspace-view="model" hidden>
+          <div class="section-bar">Model Validation</div>
+          <div id="model-validation-state" class="model-validation-state" role="status" data-state="checking">
+            <strong id="model-validation-title">CHECKING</strong>
+            <span id="model-validation-summary">Model checks pending</span>
+          </div>
+          <ul class="model-validation-list" aria-label="Model validation summary">
+            <li><span>Identity</span><strong id="model-validation-identity">--</strong></li>
+            <li><span>Topology</span><strong id="model-validation-topology">--</strong></li>
+            <li><span>Properties</span><strong id="model-validation-properties">--</strong></li>
+            <li><span>Restraints</span><strong id="model-validation-restraints">--</strong></li>
+          </ul>
+          <p id="model-validation-note" class="panel-note">Model validation has not run.</p>
+        </section>
+
+        <section class="property-section" data-workspace-view="drawings" hidden>
+          <div class="section-bar">Document Context</div>
+          <dl class="property-list">
+            <div>
+              <dt>Document</dt>
+              <dd id="drawing-document-id">TF-DRW-P2-GA-001</dd>
+            </div>
+            <div>
+              <dt>Sheet</dt>
+              <dd id="drawing-type-label">Tower General Arrangement</dd>
+            </div>
+            <div>
+              <dt>Issue State</dt>
+              <dd id="drawing-issue-state">PRIVATE REVIEW</dd>
+            </div>
+            <div>
+              <dt>Source Model</dt>
+              <dd id="drawing-model-id">--</dd>
+            </div>
+            <div>
+              <dt>Geometry Rev.</dt>
+              <dd id="drawing-geometry-revision">--</dd>
+            </div>
+            <div data-drawing-analysis-only hidden>
+              <dt>Analysis Rev.</dt>
+              <dd id="drawing-analysis-revision">N/A</dd>
+            </div>
+            <div data-drawing-analysis-only hidden>
+              <dt>Result Set</dt>
+              <dd id="drawing-result-set-id">--</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="property-section" data-workspace-view="drawings" hidden>
+          <div class="section-bar">Sheet Views</div>
+          <div id="drawing-controlled-views" class="drawing-controlled-views" aria-label="Controlled view register"></div>
+        </section>
+
+        <section class="property-section" data-workspace-view="drawings" data-drawing-analysis-only hidden>
+          <div id="drawing-analysis-section-title" class="section-bar">Sheet Context</div>
+          <div class="control-row">
+            <label for="drawing-result-set-select">Direction</label>
+            <select id="drawing-result-set-select"></select>
+          </div>
+          <dl class="property-list">
+            <div>
+              <dt>Quantity</dt>
+              <dd id="drawing-analysis-quantity">Member axial force, N</dd>
+            </div>
+            <div>
+              <dt>Basis</dt>
+              <dd id="drawing-analysis-basis">kN / member local x</dd>
+            </div>
+            <div>
+              <dt>Range</dt>
+              <dd id="drawing-result-range">--</dd>
+            </div>
+            <div>
+              <dt>Case</dt>
+              <dd id="drawing-load-case">--</dd>
+            </div>
+            <div>
+              <dt>Governing</dt>
+              <dd id="drawing-critical-member">--</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="property-section" data-workspace-view="drawings" hidden>
+          <div class="section-bar">Validation</div>
+          <div id="drawing-validation-state" class="drawing-release-state" role="status" data-state="checking">
+            <strong id="drawing-validation-title">Checking</strong>
+            <span id="drawing-validation-summary">Pending</span>
+          </div>
+          <ul class="drawing-validation-list" aria-label="Drawing validation summary">
+            <li><span>Model</span><strong id="drawing-validation-model">--</strong></li>
+            <li><span>Identity</span><strong id="drawing-validation-identity">--</strong></li>
+            <li><span>Annotations</span><strong id="drawing-validation-annotations">--</strong></li>
+            <li><span>Metadata</span><strong id="drawing-validation-metadata">--</strong></li>
+            <li><span>Directions</span><strong id="drawing-validation-directions">--</strong></li>
+            <li><span>Equilibrium</span><strong id="drawing-validation-equilibrium">--</strong></li>
+            <li><span>Freshness</span><strong id="drawing-validation-freshness">--</strong></li>
+            <li><span>Issue</span><strong id="drawing-validation-public">BLOCKED</strong></li>
+          </ul>
+          <p id="drawing-validation-note" class="drawing-validation-note">Phase 2 demo. Not for design or construction.</p>
+        </section>
+
+        <section class="property-section drawing-output" data-workspace-view="drawings" hidden>
+          <div class="section-bar">Output</div>
+          <div class="drawing-output-command">
+            <div>
+              <span>Review Artifact</span>
+              <strong id="drawing-output-status">Validation required</strong>
+            </div>
+            <button id="export-drawing-svg" type="button" disabled>
+              <i data-lucide="download" aria-hidden="true"></i>
+              <span>Review SVG</span>
+            </button>
+          </div>
+          <p class="panel-note">Private-review output only. Public, design and construction issue remain blocked.</p>
+        </section>
+
+        <details id="drawing-basis-section" class="property-section solver-group drawing-basis-section" data-workspace-view="drawings" hidden>
+          <summary><span>Drawing Basis</span><small>D1-D4 / controlled</small></summary>
+          <div class="drawing-basis-body">
+            <dl class="property-list">
+              <div><dt>Profile</dt><dd id="drawing-profile-version">towerflow-drawing-profile / 0.1.0</dd></div>
+              <div><dt>Standard</dt><dd id="drawing-standard-adoption">UWEDS 1.7.1 / TF-UWEDS-001</dd></div>
+            </dl>
+            <ul class="reference-register">
+              <li>
+              <strong>D1</strong>
+              <div><a href="./docs/towerflow-drawing-profile-v0.1.md" target="_blank" rel="noreferrer">TowerFlow Drawing Profile v0.1</a><small>Views, metadata, revisions, validation.</small></div>
+            </li>
+            <li>
+              <strong>D2</strong>
+              <div><a href="./docs/load-action-reaction-deformation-graphic-convention-v0.1.md" target="_blank" rel="noreferrer">Engineering Graphic Convention v0.1</a><small>Axes, actions, restraints, forces, deformation.</small></div>
+            </li>
+            <li>
+              <strong>D3</strong>
+              <div><a href="./engineering/drawing-standard-adoption.json" target="_blank" rel="noreferrer">UWEDS Adoption TF-UWEDS-001</a><small>Version pin, adopted modules, review boundary.</small></div>
+            </li>
+            <li>
+              <strong>D4</strong>
+              <div><a href="./docs/towerflow-drawing-workspace-outline.md" target="_blank" rel="noreferrer">Drawing Workspace Outline</a><small>Review scope, semantic SVG, failure coverage.</small></div>
+            </li>
+            <li>
+              <strong>M1</strong>
+              <div><a href="./docs/phase-2-calculation-reference.md" target="_blank" rel="noreferrer">Phase 2 Calculation Reference</a><small>Formulation and limitations.</small></div>
+            </li>
+            <li>
+              <strong>M2</strong>
+              <div><a href="./docs/phase-3-project-input-contract.md" target="_blank" rel="noreferrer">Phase 3A Project Input Contract</a><small>Inline evidence, acceptance, and fail-closed review boundary.</small></div>
+            </li>
+            <li>
+              <strong>G1</strong>
+              <div><a href="./docs/demo-tower-reference.md" target="_blank" rel="noreferrer">FEC Type AA geometry source</a><small>Idealised; not manufacturer-issued.</small></div>
+              </li>
+            </ul>
+          </div>
+        </details>
+      </aside>
+    </main>
+
+    <dialog id="project-basis-dialog" class="project-basis-dialog" aria-labelledby="project-basis-title">
+      <header>
+        <div>
+          <p class="panel-kicker">Analysis Governance</p>
+          <h2 id="project-basis-title">Project Basis</h2>
+        </div>
+        <button id="project-basis-close" class="icon-button" type="button" title="Close" aria-label="Close Project Basis">
+          <i data-lucide="x"></i>
+        </button>
+      </header>
+      <div class="project-basis-body">
+        <section>
+          <div class="section-bar">Basis</div>
+          <dl class="property-list">
+            <div><dt>Method</dt><dd>Linear-elastic 3D truss, direct stiffness [M1-M3]</dd></div>
+            <div><dt>DOF</dt><dd>Ux, Uy, Uz / node</dd></div>
+            <div><dt>Loads</dt><dd>AS/NZS 1170.0 combinations + 1170.2 speed chain [S0-S1, M1]</dd></div>
+            <div><dt>Standards</dt><dd>AS/NZS 1170.0 Section 4 + 1170.2 Sections 2-4 preliminary; AS 4100 excluded [S0-S2]</dd></div>
+            <div><dt>Equilibrium</dt><dd>Global force balance + envelope [M1]</dd></div>
+            <div><dt>Status</dt><dd>Parametric analysis / not certified design</dd></div>
+          </dl>
+        </section>
+        <section>
+          <div class="section-bar">References</div>
+          <ul class="reference-register">
+            <li><strong>G1</strong><div><a href="./docs/demo-tower-reference.md" target="_blank" rel="noreferrer">FEC Type AA geometry source</a><small>Idealised demo; not manufacturer-certified.</small></div></li>
+            <li><strong>M1</strong><div><a href="./docs/phase-2-calculation-reference.md" target="_blank" rel="noreferrer">Phase 2 Calculation Reference</a><small>Methods, assumptions, checks, bibliography.</small></div></li>
+            <li><strong>M2-M3</strong><div class="reference-links"><a href="https://frame3dd.sourceforge.net/" target="_blank" rel="noreferrer">Frame3DD</a><a href="https://opensees.github.io/OpenSeesDocumentation/user/manual/model/elements/Truss.html" target="_blank" rel="noreferrer">OpenSees Truss Element</a><small>Independent method references; no runtime dependency.</small></div></li>
+            <li><strong>P1</strong><div><a href="https://www.bipm.org/documents/d/guest/si-brochure-9-en-pdf" target="_blank" rel="noreferrer">BIPM SI Brochure, 9th edition</a><small>SI units and standard gravity.</small></div></li>
+            <li><strong>U1-U5</strong><div class="reference-links"><a href="https://www.dlubal.com/en/downloads-and-information/documents/online-manuals/rfem-6/000267" target="_blank" rel="noreferrer">Nodal Loads</a><a href="https://www.dlubal.com/en/downloads-and-information/documents/online-manuals/rfem-6/000006" target="_blank" rel="noreferrer">Nodal Supports</a><a href="https://www.dlubal.com/en/downloads-and-information/documents/online-manuals/rfem-6/000124" target="_blank" rel="noreferrer">Coordinate Systems</a><a href="https://www.dlubal.com/en/downloads-and-information/documents/online-manuals/rfem-6/000020" target="_blank" rel="noreferrer">Graphics Control</a><a href="https://www.dlubal.com/en/downloads-and-information/documents/online-manuals/rfem-6/000069" target="_blank" rel="noreferrer">Load Cases &amp; Combinations</a><small>RFEM 6 UI and loading-workflow conventions.</small></div></li>
+            <li><strong>S0</strong><div><a href="https://store.standards.org.au/product/as-nzs-1170-0-2002" target="_blank" rel="noreferrer">AS/NZS 1170.0:2002 General principles</a><small>Section 4 preliminary G/W combinations; project design basis required.</small></div></li>
+            <li><strong>S1</strong><div><a href="https://store.standards.org.au/product/as-nzs-1170-2-2021" target="_blank" rel="noreferrer">AS/NZS 1170.2:2021 Wind actions</a><small>Sections 2-4 wind-speed chain; preliminary manual exposure inputs.</small></div></li>
+            <li><strong>R1</strong><div><a href="./docs/phase-3-independent-review-handoff.md" target="_blank" rel="noreferrer">Phase 3A Rule Review Handoff</a><small>Hash-pinned blank intake; independent decisions pending.</small></div></li>
+            <li><strong>S2</strong><div><a href="https://store.standards.org.au/product/as-4100-2020" target="_blank" rel="noreferrer">AS 4100:2020 Steel structures</a><small>Not implemented in Phase 2.</small></div></li>
+          </ul>
+        </section>
+        <section>
+          <div class="section-bar">Exclusions</div>
+          <ul class="scope-list">
+            <li>Project release approval and physical ancillary/mount capacity [S1]</li>
+            <li>AS 4100:2020 member capacity and utilisation [S2]</li>
+            <li>Foundation, base plate, and anchor bolt checks</li>
+            <li>Reliability or probability assessment</li>
+          </ul>
+        </section>
+      </div>
+    </dialog>
+
+    <script id="phase3-acceptance-snapshot" type="application/json" data-state="NOT_AVAILABLE" hidden>{}</script>
+    <script type="module" src="./src/main.js?v=cross-surface-acceptance-v5"></script>
+  </body>
+</html>

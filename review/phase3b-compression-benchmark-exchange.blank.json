@@ -1,0 +1,248 @@
+{
+  "schemaVersion": "0.1.0-benchmark-exchange",
+  "exchangeId": "P3B-COMP-BENCH-EXCHANGE-001",
+  "status": "blank_external_response",
+  "request": {
+    "handoffId": "P3B-COMP-REVIEW-001",
+    "ruleSetId": "as-4100-2020-amd1-section-6-compression-chs-v0.1",
+    "sourceFixture": "verification/phase3b-compression-chs-b01-b04.json",
+    "sourceFixtureSha256": "46a1b5e1382d958669d0e41502b167da249b5f4b1eee2b039b9db3eca4f43f19",
+    "requestPayloadSha256": "524efaf91081ccca3698c5d2b9c4f0a17257ed09d3ba1c43128cc95376e877ff",
+    "capacityComparisonTolerance": {
+      "rule": "difference_lte_max_absolute_or_relative_allowance",
+      "absoluteKN": 0.5,
+      "relative": 0.005
+    },
+    "cases": [
+      {
+        "caseId": "COMPRESSION-CHS-B01",
+        "purpose": "Reproduce the visually checked Austube tabulated capacity at Le = 5.0 m",
+        "input": {
+          "section": {
+            "designation": "139.7 x 5.4 CHS",
+            "sectionFamily": "circular_hollow_section",
+            "manufacturingRoute": "cold_formed_non_stress_relieved",
+            "crossSectionVariation": "constant",
+            "localBucklingAssessment": "fully_effective",
+            "penetrationsOrUnfilledHoles": false,
+            "formFactorKf": 1.0,
+            "grossAreaMm2": 2280.0,
+            "netAreaMm2": 2280.0,
+            "effectiveAreaMm2": 2280.0,
+            "outsideDiameterMm": 139.7,
+            "wallThicknessMm": 5.4,
+            "radiusGyrationMmByAxis": {
+              "localY": 47.5,
+              "localZ": 47.5
+            }
+          },
+          "material": {
+            "grade": "AS/NZS 1163 C250L0",
+            "yieldStressMPa": 250.0
+          },
+          "effectiveLengthMByAxis": {
+            "localY": 5.0,
+            "localZ": 5.0
+          }
+        },
+        "inputPayloadSha256": "1728a7dd62e73b3c238fbcdcdaa6a33de4253c38d58ab4ac3df57494b11da1cc",
+        "towerFlowResult": {
+          "governingAxis": "localY",
+          "plateElementSlenderness": 25.870370370370367,
+          "nominalSectionCapacityKN": 570.0,
+          "modifiedMemberSlendernessByAxis": {
+            "localY": 105.263157894737,
+            "localZ": 105.263157894737
+          },
+          "memberSlendernessReductionFactorAlphaCByAxis": {
+            "localY": 0.5618765335055944,
+            "localZ": 0.5618765335055944
+          },
+          "designMemberCapacityKNByAxis": {
+            "localY": 288.24266168837,
+            "localZ": 288.24266168837
+          },
+          "designCompressionCapacityKN": 288.24266168837
+        },
+        "towerFlowResultPayloadSha256": "6a5ee0aa4d1dd87979d02efb6745b95d7a896cbe4fa5f8b02bc8b272be926306"
+      },
+      {
+        "caseId": "COMPRESSION-CHS-B02",
+        "purpose": "Short effective length cross-check",
+        "input": {
+          "section": {
+            "designation": "139.7 x 5.4 CHS",
+            "sectionFamily": "circular_hollow_section",
+            "manufacturingRoute": "cold_formed_non_stress_relieved",
+            "crossSectionVariation": "constant",
+            "localBucklingAssessment": "fully_effective",
+            "penetrationsOrUnfilledHoles": false,
+            "formFactorKf": 1.0,
+            "grossAreaMm2": 2280.0,
+            "netAreaMm2": 2280.0,
+            "effectiveAreaMm2": 2280.0,
+            "outsideDiameterMm": 139.7,
+            "wallThicknessMm": 5.4,
+            "radiusGyrationMmByAxis": {
+              "localY": 47.5,
+              "localZ": 47.5
+            }
+          },
+          "material": {
+            "grade": "AS/NZS 1163 C250L0",
+            "yieldStressMPa": 250.0
+          },
+          "effectiveLengthMByAxis": {
+            "localY": 0.75,
+            "localZ": 0.75
+          }
+        },
+        "inputPayloadSha256": "adc951d6ec14a2ff4d8a08be09e48dd983d643437dc5e3b364060e3f7ee2a5f0",
+        "towerFlowResult": {
+          "governingAxis": "localY",
+          "plateElementSlenderness": 25.870370370370367,
+          "nominalSectionCapacityKN": 570.0,
+          "modifiedMemberSlendernessByAxis": {
+            "localY": 15.789473684211,
+            "localZ": 15.789473684211
+          },
+          "memberSlendernessReductionFactorAlphaCByAxis": {
+            "localY": 0.9962601550068364,
+            "localZ": 0.9962601550068364
+          },
+          "designMemberCapacityKNByAxis": {
+            "localY": 511.08145951850713,
+            "localZ": 511.08145951850713
+          },
+          "designCompressionCapacityKN": 511.08145951850713
+        },
+        "towerFlowResultPayloadSha256": "f874dedbe6a46f612163d986e9884b114da1bcabb483051aa7537edbd2deeb84"
+      },
+      {
+        "caseId": "COMPRESSION-CHS-B03",
+        "purpose": "Slender-member cross-check beyond the secondary table endpoint",
+        "input": {
+          "section": {
+            "designation": "139.7 x 5.4 CHS",
+            "sectionFamily": "circular_hollow_section",
+            "manufacturingRoute": "cold_formed_non_stress_relieved",
+            "crossSectionVariation": "constant",
+            "localBucklingAssessment": "fully_effective",
+            "penetrationsOrUnfilledHoles": false,
+            "formFactorKf": 1.0,
+            "grossAreaMm2": 2280.0,
+            "netAreaMm2": 2280.0,
+            "effectiveAreaMm2": 2280.0,
+            "outsideDiameterMm": 139.7,
+            "wallThicknessMm": 5.4,
+            "radiusGyrationMmByAxis": {
+              "localY": 47.5,
+              "localZ": 47.5
+            }
+          },
+          "material": {
+            "grade": "AS/NZS 1163 C250L0",
+            "yieldStressMPa": 250.0
+          },
+          "effectiveLengthMByAxis": {
+            "localY": 8.0,
+            "localZ": 8.0
+          }
+        },
+        "inputPayloadSha256": "f740506398e2a83115487d39622965dc3ca8b4193d755ed7d263df9cd872c20a",
+        "towerFlowResult": {
+          "governingAxis": "localY",
+          "plateElementSlenderness": 25.870370370370367,
+          "nominalSectionCapacityKN": 570.0,
+          "modifiedMemberSlendernessByAxis": {
+            "localY": 168.421052631579,
+            "localZ": 168.421052631579
+          },
+          "memberSlendernessReductionFactorAlphaCByAxis": {
+            "localY": 0.2553740476863569,
+            "localZ": 0.2553740476863569
+          },
+          "designMemberCapacityKNByAxis": {
+            "localY": 131.0068864631011,
+            "localZ": 131.0068864631011
+          },
+          "designCompressionCapacityKN": 131.0068864631011
+        },
+        "towerFlowResultPayloadSha256": "6a3268968196d22ece5f96e35a42f34027536899f444fbdd18994edf2096c7dc"
+      },
+      {
+        "caseId": "COMPRESSION-CHS-B04",
+        "purpose": "Unequal local-axis effective lengths select local Z",
+        "input": {
+          "section": {
+            "designation": "139.7 x 5.4 CHS",
+            "sectionFamily": "circular_hollow_section",
+            "manufacturingRoute": "cold_formed_non_stress_relieved",
+            "crossSectionVariation": "constant",
+            "localBucklingAssessment": "fully_effective",
+            "penetrationsOrUnfilledHoles": false,
+            "formFactorKf": 1.0,
+            "grossAreaMm2": 2280.0,
+            "netAreaMm2": 2280.0,
+            "effectiveAreaMm2": 2280.0,
+            "outsideDiameterMm": 139.7,
+            "wallThicknessMm": 5.4,
+            "radiusGyrationMmByAxis": {
+              "localY": 47.5,
+              "localZ": 47.5
+            }
+          },
+          "material": {
+            "grade": "AS/NZS 1163 C250L0",
+            "yieldStressMPa": 250.0
+          },
+          "effectiveLengthMByAxis": {
+            "localY": 3.0,
+            "localZ": 5.0
+          }
+        },
+        "inputPayloadSha256": "cb6585f51a95236ef0da1642a229afa04fd6d98adbf70c8be28f2552091af5c8",
+        "towerFlowResult": {
+          "governingAxis": "localZ",
+          "plateElementSlenderness": 25.870370370370367,
+          "nominalSectionCapacityKN": 570.0,
+          "modifiedMemberSlendernessByAxis": {
+            "localY": 63.157894736842,
+            "localZ": 105.263157894737
+          },
+          "memberSlendernessReductionFactorAlphaCByAxis": {
+            "localY": 0.8464713410437449,
+            "localZ": 0.5618765335055944
+          },
+          "designMemberCapacityKNByAxis": {
+            "localY": 434.23979795544113,
+            "localZ": 288.24266168837
+          },
+          "designCompressionCapacityKN": 288.24266168837
+        },
+        "towerFlowResultPayloadSha256": "4e4bc4e88f5e9274df15f8f2f8e6b278b022302fc8f3664bf1caaaabc226e6b3"
+      }
+    ],
+    "limitations": [
+      "The exchange covers the bounded verification-only CHS compression slice, not general steel-member capacity.",
+      "The external party must independently reproduce the calculations and must not use TowerFlow or its Decimal oracle as the benchmark engine.",
+      "A numerically accepted response does not itself close CM3-07 or CM3-08 and grants no project or release authority."
+    ]
+  },
+  "response": {
+    "status": "pending",
+    "method": null,
+    "methodDescription": null,
+    "toolName": null,
+    "toolVersion": null,
+    "toolBuild": null,
+    "preparedBy": null,
+    "preparedByIndependentParty": false,
+    "evidenceRecordReference": null,
+    "signedRecordReference": null,
+    "requestPayloadSha256Observed": null,
+    "comparisonResults": [],
+    "responsePayloadSha256": null
+  },
+  "releaseAuthority": false
+}

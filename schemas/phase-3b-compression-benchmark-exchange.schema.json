@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3b-compression-benchmark-exchange.schema.json",
+  "title": "TowerFlow Phase 3B CHS Compression Benchmark Exchange",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "exchangeId", "status", "request", "response", "releaseAuthority"],
+  "properties": {
+    "schemaVersion": { "const": "0.1.0-benchmark-exchange" },
+    "exchangeId": { "const": "P3B-COMP-BENCH-EXCHANGE-001" },
+    "status": { "enum": ["blank_external_response", "external_response_supplied"] },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "handoffId",
+        "ruleSetId",
+        "sourceFixture",
+        "sourceFixtureSha256",
+        "requestPayloadSha256",
+        "capacityComparisonTolerance",
+        "cases",
+        "limitations"
+      ],
+      "properties": {
+        "handoffId": { "const": "P3B-COMP-REVIEW-001" },
+        "ruleSetId": { "const": "as-4100-2020-amd1-section-6-compression-chs-v0.1" },
+        "sourceFixture": { "const": "verification/phase3b-compression-chs-b01-b04.json" },
+        "sourceFixtureSha256": { "$ref": "#/$defs/sha256" },
+        "requestPayloadSha256": { "$ref": "#/$defs/sha256" },
+        "capacityComparisonTolerance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["rule", "absoluteKN", "relative"],
+          "properties": {
+            "rule": { "const": "difference_lte_max_absolute_or_relative_allowance" },
+            "absoluteKN": { "const": 0.5 },
+            "relative": { "const": 0.005 }
+          }
+        },
+        "cases": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": { "$ref": "#/$defs/requestCase" }
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "method",
+        "methodDescription",
+        "toolName",
+        "toolVersion",
+        "toolBuild",
+        "preparedBy",
+        "preparedByIndependentParty",
+        "evidenceRecordReference",
+        "signedRecordReference",
+        "requestPayloadSha256Observed",
+        "comparisonResults",
+        "responsePayloadSha256"
+      ],
+      "properties": {
+        "status": { "enum": ["pending", "evidence_supplied"] },
+        "method": {
+          "anyOf": [
+            { "enum": ["independent_hand_calculation", "trusted_software"] },
+            { "type": "null" }
+          ]
+        },
+        "methodDescription": { "$ref": "#/$defs/nullableText" },
+        "toolName": { "$ref": "#/$defs/nullableText" },
+        "toolVersion": { "$ref": "#/$defs/nullableText" },
+        "toolBuild": { "$ref": "#/$defs/nullableText" },
+        "preparedBy": { "$ref": "#/$defs/nullableText" },
+        "preparedByIndependentParty": { "type": "boolean" },
+        "evidenceRecordReference": { "$ref": "#/$defs/nullableText" },
+        "signedRecordReference": { "$ref": "#/$defs/nullableText" },
+        "requestPayloadSha256Observed": { "$ref": "#/$defs/nullableSha256" },
+        "comparisonResults": {
+          "type": "array",
+          "maxItems": 4,
+          "items": { "$ref": "#/$defs/responseCase" }
+        },
+        "responsePayloadSha256": { "$ref": "#/$defs/nullableSha256" }
+      }
+    },
+    "releaseAuthority": { "const": false }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullableSha256": {
+      "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+    },
+    "nullableText": {
+      "anyOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }]
+    },
+    "axisValues": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["localY", "localZ"],
+      "properties": {
+        "localY": { "type": "number", "exclusiveMinimum": 0 },
+        "localZ": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "requestCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caseId",
+        "purpose",
+        "input",
+        "inputPayloadSha256",
+        "towerFlowResult",
+        "towerFlowResultPayloadSha256"
+      ],
+      "properties": {
+        "caseId": { "type": "string", "pattern": "^COMPRESSION-CHS-B0[1-4]$" },
+        "purpose": { "type": "string", "minLength": 1 },
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["section", "material", "effectiveLengthMByAxis"],
+          "properties": {
+            "section": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "designation",
+                "sectionFamily",
+                "manufacturingRoute",
+                "crossSectionVariation",
+                "localBucklingAssessment",
+                "penetrationsOrUnfilledHoles",
+                "formFactorKf",
+                "grossAreaMm2",
+                "netAreaMm2",
+                "effectiveAreaMm2",
+                "outsideDiameterMm",
+                "wallThicknessMm",
+                "radiusGyrationMmByAxis"
+              ],
+              "properties": {
+                "designation": { "const": "139.7 x 5.4 CHS" },
+                "sectionFamily": { "const": "circular_hollow_section" },
+                "manufacturingRoute": { "const": "cold_formed_non_stress_relieved" },
+                "crossSectionVariation": { "const": "constant" },
+                "localBucklingAssessment": { "const": "fully_effective" },
+                "penetrationsOrUnfilledHoles": { "const": false },
+                "formFactorKf": { "const": 1.0 },
+                "grossAreaMm2": { "const": 2280.0 },
+                "netAreaMm2": { "const": 2280.0 },
+                "effectiveAreaMm2": { "const": 2280.0 },
+                "outsideDiameterMm": { "const": 139.7 },
+                "wallThicknessMm": { "const": 5.4 },
+                "radiusGyrationMmByAxis": { "$ref": "#/$defs/axisValues" }
+              }
+            },
+            "material": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["grade", "yieldStressMPa"],
+              "properties": {
+                "grade": { "const": "AS/NZS 1163 C250L0" },
+                "yieldStressMPa": { "const": 250.0 }
+              }
+            },
+            "effectiveLengthMByAxis": { "$ref": "#/$defs/axisValues" }
+          }
+        },
+        "inputPayloadSha256": { "$ref": "#/$defs/sha256" },
+        "towerFlowResult": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "governingAxis",
+            "plateElementSlenderness",
+            "nominalSectionCapacityKN",
+            "modifiedMemberSlendernessByAxis",
+            "memberSlendernessReductionFactorAlphaCByAxis",
+            "designMemberCapacityKNByAxis",
+            "designCompressionCapacityKN"
+          ],
+          "properties": {
+            "governingAxis": { "enum": ["localY", "localZ"] },
+            "plateElementSlenderness": { "type": "number", "exclusiveMinimum": 0 },
+            "nominalSectionCapacityKN": { "type": "number", "exclusiveMinimum": 0 },
+            "modifiedMemberSlendernessByAxis": { "$ref": "#/$defs/axisValues" },
+            "memberSlendernessReductionFactorAlphaCByAxis": { "$ref": "#/$defs/axisValues" },
+            "designMemberCapacityKNByAxis": { "$ref": "#/$defs/axisValues" },
+            "designCompressionCapacityKN": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "towerFlowResultPayloadSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "responseCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caseId",
+        "inputPayloadSha256Observed",
+        "inputIdentityConfirmed",
+        "intermediateResultsReference",
+        "independentCapacityKN",
+        "absoluteDifferenceKN",
+        "relativeDifference",
+        "withinTolerance"
+      ],
+      "properties": {
+        "caseId": { "type": "string", "pattern": "^COMPRESSION-CHS-B0[1-4]$" },
+        "inputPayloadSha256Observed": { "$ref": "#/$defs/sha256" },
+        "inputIdentityConfirmed": { "type": "boolean" },
+        "intermediateResultsReference": { "type": "string", "minLength": 1 },
+        "independentCapacityKN": { "type": "number", "exclusiveMinimum": 0 },
+        "absoluteDifferenceKN": { "type": "number", "minimum": 0 },
+        "relativeDifference": { "type": "number", "minimum": 0 },
+        "withinTolerance": { "type": "boolean" }
+      }
+    }
+  }
+}

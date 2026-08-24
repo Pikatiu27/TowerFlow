@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3b-compression-readiness.schema.json",
+  "title": "TowerFlow Phase 3B Compression-Input Readiness Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "checkId",
+    "calculationStatus",
+    "readinessStatus",
+    "screeningStatus",
+    "releaseAuthority",
+    "memberId",
+    "memberEvidenceIdentity",
+    "units",
+    "demand",
+    "evidence",
+    "section",
+    "material",
+    "stabilityGeometry",
+    "resistance",
+    "blockers"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.2.0-review" },
+    "checkId": { "type": "string", "minLength": 1 },
+    "calculationStatus": {
+      "enum": ["synthetic_verification_only", "project_review_only"]
+    },
+    "readinessStatus": { "const": "INPUTS_COMPLETE_RULE_EVALUATION_BLOCKED" },
+    "screeningStatus": { "const": "REVIEW_REQUIRED" },
+    "releaseAuthority": { "const": false },
+    "memberId": { "type": "string", "minLength": 1 },
+    "memberEvidenceIdentity": { "$ref": "#/$defs/memberEvidenceIdentity" },
+    "units": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["force", "memberLength", "sectionLength", "area", "stress", "ratio"],
+      "properties": {
+        "force": { "const": "kN" },
+        "memberLength": { "const": "m" },
+        "sectionLength": { "const": "mm" },
+        "area": { "const": "mm2" },
+        "stress": { "const": "MPa" },
+        "ratio": { "const": "dimensionless" }
+      }
+    },
+    "demand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signedAxialDemandKN",
+        "demandMagnitudeKN",
+        "resultSetId",
+        "loadCombinationId",
+        "analysisResultHashSha256"
+      ],
+      "properties": {
+        "signedAxialDemandKN": { "type": "number", "exclusiveMaximum": 0 },
+        "demandMagnitudeKN": { "type": "number", "exclusiveMinimum": 0 },
+        "resultSetId": { "type": "string", "minLength": 1 },
+        "loadCombinationId": { "type": "string", "minLength": 1 },
+        "analysisResultHashSha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sectionSourceRecordId",
+        "materialSourceRecordId",
+        "stabilitySourceRecordId",
+        "effectiveLengthBasisRecordIdByAxis"
+      ],
+      "properties": {
+        "sectionSourceRecordId": { "$ref": "#/$defs/nonemptyText" },
+        "materialSourceRecordId": { "$ref": "#/$defs/nonemptyText" },
+        "stabilitySourceRecordId": { "$ref": "#/$defs/nonemptyText" },
+        "effectiveLengthBasisRecordIdByAxis": { "$ref": "#/$defs/axisText" }
+      }
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["grossAreaMm2", "radiusGyrationMmByAxis"],
+      "properties": {
+        "grossAreaMm2": { "$ref": "#/$defs/positiveNumber" },
+        "radiusGyrationMmByAxis": { "$ref": "#/$defs/axisNumber" }
+      }
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["yieldStressMPa"],
+      "properties": {
+        "yieldStressMPa": { "$ref": "#/$defs/positiveNumber" }
+      }
+    },
+    "stabilityGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "memberLengthM",
+        "effectiveLengthMByAxis",
+        "derivedEffectiveLengthToMemberLengthRatioByAxis",
+        "geometricSlendernessByAxis",
+        "largerGeometricSlendernessAxis"
+      ],
+      "properties": {
+        "memberLengthM": { "$ref": "#/$defs/positiveNumber" },
+        "effectiveLengthMByAxis": { "$ref": "#/$defs/axisNumber" },
+        "derivedEffectiveLengthToMemberLengthRatioByAxis": { "$ref": "#/$defs/axisNumber" },
+        "geometricSlendernessByAxis": { "$ref": "#/$defs/axisNumber" },
+        "largerGeometricSlendernessAxis": { "enum": ["localY", "localZ"] }
+      }
+    },
+    "resistance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "compressionDesignResistanceKN", "utilisation", "clauseReferences"],
+      "properties": {
+        "status": { "const": "not_evaluated" },
+        "compressionDesignResistanceKN": { "type": "null" },
+        "utilisation": { "type": "null" },
+        "clauseReferences": { "const": [] }
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 },
+      "allOf": [
+        { "contains": { "const": "AS4100_COMPRESSION_RESISTANCE_NOT_IMPLEMENTED" } },
+        { "contains": { "const": "CM3_07_RELEASE_GATE_OPEN" } }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "calculationStatus": { "const": "synthetic_verification_only" } },
+        "required": ["calculationStatus"]
+      },
+      "then": {
+        "properties": {
+          "blockers": { "contains": { "const": "SYNTHETIC_VERIFICATION_ONLY" } }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "calculationStatus": { "const": "project_review_only" } },
+        "required": ["calculationStatus"]
+      },
+      "then": {
+        "properties": {
+          "memberEvidenceIdentity": {
+            "properties": { "sourceMode": { "const": "member_evidence_package" } }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullableHash": { "anyOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+    "nonemptyText": { "type": "string", "minLength": 1 },
+    "positiveNumber": { "type": "number", "exclusiveMinimum": 0 },
+    "memberEvidenceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceMode", "packageId", "modelId", "packageHashSha256"],
+      "properties": {
+        "sourceMode": { "enum": ["inline_synthetic_case", "member_evidence_package"] },
+        "packageId": { "type": ["string", "null"], "minLength": 1 },
+        "modelId": { "type": "string", "minLength": 1 },
+        "packageHashSha256": { "$ref": "#/$defs/nullableHash" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "sourceMode": { "const": "inline_synthetic_case" } },
+            "required": ["sourceMode"]
+          },
+          "then": {
+            "properties": {
+              "packageId": { "type": "null" },
+              "packageHashSha256": { "type": "null" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "sourceMode": { "const": "member_evidence_package" } },
+            "required": ["sourceMode"]
+          },
+          "then": {
+            "properties": {
+              "packageId": { "type": "string", "minLength": 1 },
+              "packageHashSha256": { "$ref": "#/$defs/hash" }
+            }
+          }
+        }
+      ]
+    },
+    "axisNumber": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["localY", "localZ"],
+      "properties": {
+        "localY": { "$ref": "#/$defs/positiveNumber" },
+        "localZ": { "$ref": "#/$defs/positiveNumber" }
+      }
+    },
+    "axisText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["localY", "localZ"],
+      "properties": {
+        "localY": { "$ref": "#/$defs/nonemptyText" },
+        "localZ": { "$ref": "#/$defs/nonemptyText" }
+      }
+    }
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-wind-case.schema.json",
+  "title": "TowerFlow Phase 3 Complete Wind Case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "scenarioId", "calculationStatus", "designBasis", "site", "evidencePacks", "tower", "dynamicAssessment", "coefficientRecords"],
+  "properties": {
+    "schemaVersion": { "const": "0.3.0-draft" },
+    "scenarioId": { "$ref": "#/$defs/id" },
+    "calculationStatus": {
+      "enum": ["synthetic_verification_only", "project_review"]
+    },
+    "designBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["limitState", "averageRecurrenceIntervalYears", "standardEdition", "approvalStatus", "approvalEvidenceId"],
+      "properties": {
+        "limitState": { "enum": ["ULS", "SLS"] },
+        "averageRecurrenceIntervalYears": { "type": "number", "exclusiveMinimum": 0 },
+        "standardEdition": { "const": "AS/NZS 1170.2:2021 Amd 1:2023 Amd 2:2024" },
+        "approvalStatus": { "enum": ["draft", "reviewed"] },
+        "approvalEvidenceId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["siteId", "elevationM", "windRegion", "trueNorthToGlobalXDeg"],
+      "properties": {
+        "siteId": { "$ref": "#/$defs/id" },
+        "elevationM": { "type": "number" },
+        "windRegion": { "enum": ["A0", "A1", "A2", "A3", "A4", "A5", "B1", "B2", "C", "D"] },
+        "trueNorthToGlobalXDeg": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+        "coastlineFraction": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "evidencePacks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["terrainEvidencePackId", "terrainFile", "topographyEvidencePackId", "topographyFile"],
+      "properties": {
+        "terrainEvidencePackId": { "$ref": "#/$defs/id" },
+        "terrainFile": { "type": "string", "minLength": 1 },
+        "topographyEvidencePackId": { "$ref": "#/$defs/id" },
+        "topographyFile": { "type": "string", "minLength": 1 }
+      }
+    },
+    "shieldingParameter": { "type": "number", "exclusiveMinimum": 0 },
+    "tower": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seedId", "heightM", "sections"],
+      "properties": {
+        "seedId": { "const": "fec-type-aa-full-elevation-demo" },
+        "heightM": { "const": 50.35 },
+        "sections": {
+          "type": "array",
+          "minItems": 10,
+          "items": { "$ref": "#/$defs/section" }
+        }
+      }
+    },
+    "dynamicAssessment": { "$ref": "#/$defs/dynamicAssessment" },
+    "coefficientRecords": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/coefficientRecord" }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{2,80}$" },
+    "directionAreas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["0", "45", "90", "135", "180", "225", "270", "315"],
+      "properties": {
+        "0": { "type": "number", "exclusiveMinimum": 0 },
+        "45": { "type": "number", "exclusiveMinimum": 0 },
+        "90": { "type": "number", "exclusiveMinimum": 0 },
+        "135": { "type": "number", "exclusiveMinimum": 0 },
+        "180": { "type": "number", "exclusiveMinimum": 0 },
+        "225": { "type": "number", "exclusiveMinimum": 0 },
+        "270": { "type": "number", "exclusiveMinimum": 0 },
+        "315": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "bottomElevationM", "topElevationM", "referenceHeightM", "solidityRatio", "averageMemberDiameterM", "projectedMemberAreaM2ByDirection"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "bottomElevationM": { "type": "number", "minimum": 0 },
+        "topElevationM": { "type": "number", "exclusiveMinimum": 0 },
+        "referenceHeightM": { "type": "number", "exclusiveMinimum": 0 },
+        "solidityRatio": { "type": "number", "minimum": 0, "maximum": 1 },
+        "averageMemberDiameterM": { "type": "number", "exclusiveMinimum": 0 },
+        "projectedMemberAreaM2ByDirection": { "$ref": "#/$defs/directionAreas" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceId", "description", "reviewedBy", "reviewDate"],
+      "properties": {
+        "sourceId": { "$ref": "#/$defs/id" },
+        "description": { "type": "string", "minLength": 1 },
+        "reviewedBy": { "type": "string", "minLength": 1 },
+        "reviewDate": { "type": "string", "format": "date" }
+      }
+    },
+    "dynamicAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "structureType", "fundamentalFrequencyHz", "heightM", "significantModalCoupling", "aerodynamicInterference", "porousLatticeTower", "hasUhfAntennaSection", "supportingTowerProjectedAreaM2", "headframeProjectedAreaM2", "evidence"],
+      "properties": {
+        "status": { "enum": ["pending", "reviewed"] },
+        "structureType": { "const": "free_standing_tower" },
+        "fundamentalFrequencyHz": { "type": "number", "exclusiveMinimum": 0 },
+        "heightM": { "type": "number", "exclusiveMinimum": 0 },
+        "significantModalCoupling": { "type": "boolean" },
+        "aerodynamicInterference": { "type": "boolean" },
+        "porousLatticeTower": { "type": "boolean" },
+        "hasUhfAntennaSection": { "type": "boolean" },
+        "supportingTowerProjectedAreaM2": { "type": "number", "minimum": 0 },
+        "headframeProjectedAreaM2": { "type": "number", "minimum": 0 },
+        "evidence": { "$ref": "#/$defs/evidence" }
+      }
+    },
+    "coefficientRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "evidenceId"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "status": { "enum": ["pending", "reviewed"] },
+        "evidenceId": { "$ref": "#/$defs/id" }
+      }
+    }
+  }
+}

@@ -1,0 +1,283 @@
+{
+  "schemaVersion": "0.1.0-review-control",
+  "handoffId": "P3B-COMP-REVIEW-001",
+  "status": "blank_engineering_review",
+  "prepared": {
+    "preparedBy": "TowerFlow Phase 3B implementation",
+    "preparedDate": "2026-08-14",
+    "purpose": "Independently review the bounded CHS compression rule, implementation and benchmark evidence for CM3-07 and CM3-08."
+  },
+  "scope": {
+    "ruleSetId": "as-4100-2020-amd1-section-6-compression-chs-v0.1",
+    "calculationStatus": "verification_only",
+    "forceState": "compression",
+    "actionMode": "concentric_axial_only",
+    "sectionFamily": "circular_hollow_section",
+    "manufacturingRoute": "cold_formed_non_stress_relieved",
+    "releaseGateIds": [
+      "CM3-07",
+      "CM3-08"
+    ]
+  },
+  "controlledSource": {
+    "publication": "AS 4100:2020",
+    "incorporatedAmendments": [
+      "Amendment No. 1 (September 2021)"
+    ],
+    "sourceFingerprintStatus": "held_outside_public_repository",
+    "licensedSourceBundled": false,
+    "reviewerMustUseControlledCopy": true
+  },
+  "artifacts": [
+    {
+      "artifactId": "P3B-CR-A01",
+      "path": "rules/as-4100-2020-amd1-section-6-compression-chs.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "0edebaab1283e7f845777e1366b63dba0b23152f82491138c8beee9352363653",
+      "role": "rule_data"
+    },
+    {
+      "artifactId": "P3B-CR-A02",
+      "path": "analysis/phase3b_compression.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "751244e7f68b8036490c84473da0d9611e6ac0ed7a08e2ab454121462492c120",
+      "role": "implementation"
+    },
+    {
+      "artifactId": "P3B-CR-A03",
+      "path": "verification/phase3b-compression-chs-c01-c03.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "e3c8e632d84d6e11d9dd6b081e4e2656296ef1ff82d44b8db3cbe2e2300e233a",
+      "role": "golden_case"
+    },
+    {
+      "artifactId": "P3B-CR-A04",
+      "path": "analysis/verify_phase3b_compression_chs_c01_c03.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "8cc2ff4a085196c2ae78ce485bc284f187467b70a7ec86183d285a393a2677e4",
+      "role": "verification"
+    },
+    {
+      "artifactId": "P3B-CR-A05",
+      "path": "analysis/phase3b_compression_oracle.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "3ed57be220ccae42094bb561acaebcaf344e3cd9cade1577e26c87299f2ce967",
+      "role": "independent_oracle"
+    },
+    {
+      "artifactId": "P3B-CR-A06",
+      "path": "verification/phase3b-compression-chs-b01-b04.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "46a1b5e1382d958669d0e41502b167da249b5f4b1eee2b039b9db3eca4f43f19",
+      "role": "golden_case"
+    },
+    {
+      "artifactId": "P3B-CR-A07",
+      "path": "analysis/verify_phase3b_compression_chs_b01_b04.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "cf089b5f016f7fca92c00de22aedabb006ce7af6448fb1ed0c4409c8f04dfd51",
+      "role": "verification"
+    },
+    {
+      "artifactId": "P3B-CR-A08",
+      "path": "docs/phase-3b-compression-verification.md",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "94b9302d98081fd2e3d0892cd23c73b36093223809b3b6627a8867f4ffe4a8b1",
+      "role": "governance"
+    }
+  ],
+  "benchmarkRequirement": {
+    "status": "pending",
+    "allowedMethods": [
+      "independent_hand_calculation",
+      "trusted_software"
+    ],
+    "requiredCaseIds": [
+      "COMPRESSION-CHS-B01",
+      "COMPRESSION-CHS-B02",
+      "COMPRESSION-CHS-B03",
+      "COMPRESSION-CHS-B04"
+    ],
+    "capacityComparisonTolerance": {
+      "rule": "difference_lte_max_absolute_or_relative_allowance",
+      "absoluteKN": 0.5,
+      "relative": 0.005
+    },
+    "requiredEvidence": {
+      "inputIdentityConfirmed": true,
+      "intermediateResultsRecorded": true,
+      "finalCapacityRecorded": true,
+      "methodIdentityRecorded": true,
+      "signedRecordRequired": true
+    },
+    "exchangePackage": {
+      "exchangeId": "P3B-COMP-BENCH-EXCHANGE-001",
+      "path": "review/phase3b-compression-benchmark-exchange.blank.json",
+      "requestPayloadSha256": "524efaf91081ccca3698c5d2b9c4f0a17257ed09d3ba1c43128cc95376e877ff"
+    },
+    "evidence": {
+      "method": null,
+      "methodDescription": null,
+      "toolName": null,
+      "toolVersion": null,
+      "toolBuild": null,
+      "preparedBy": null,
+      "preparedByIndependentParty": false,
+      "evidenceRecordReference": null,
+      "benchmarkExchangeResponsePayloadSha256": null,
+      "evidencePayloadSha256": null,
+      "comparisonResults": []
+    }
+  },
+  "reviewItems": [
+    {
+      "itemId": "P3B-CR-01",
+      "title": "Controlled source and bounded applicability",
+      "releaseGateIds": [
+        "CM3-07"
+      ],
+      "artifactIds": [
+        "P3B-CR-A01",
+        "P3B-CR-A08"
+      ],
+      "acceptanceCriteria": [
+        "The reviewer used an authorised AS 4100:2020 copy incorporating Amendment No. 1.",
+        "The accepted scope remains limited to fully effective constant-section cold-formed non-stress-relieved CHS under concentric axial compression."
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-CR-02",
+      "title": "Rule extraction and clause trace",
+      "releaseGateIds": [
+        "CM3-07"
+      ],
+      "artifactIds": [
+        "P3B-CR-A01",
+        "P3B-CR-A08"
+      ],
+      "acceptanceCriteria": [
+        "Every constant, expression, capacity factor and applicability limit is checked against the controlled source.",
+        "No excluded section family, local-buckling state or member composition is implied to be covered."
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-CR-03",
+      "title": "Implementation and deterministic failure controls",
+      "releaseGateIds": [
+        "CM3-07"
+      ],
+      "artifactIds": [
+        "P3B-CR-A02",
+        "P3B-CR-A03",
+        "P3B-CR-A04"
+      ],
+      "acceptanceCriteria": [
+        "Production calculations reproduce the reviewed rule chain for both local axes.",
+        "C01-C03 and all scope-rejection tests pass without widening review or release status."
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-CR-04",
+      "title": "Independent benchmark method and identity",
+      "releaseGateIds": [
+        "CM3-08"
+      ],
+      "artifactIds": [
+        "P3B-CR-A05",
+        "P3B-CR-A06",
+        "P3B-CR-A07"
+      ],
+      "acceptanceCriteria": [
+        "The benchmark was prepared independently using a documented hand calculation or identified trusted software.",
+        "The signed evidence record and canonical evidence payload hash are recorded outside the public repository."
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-CR-05",
+      "title": "Benchmark input parity and numerical agreement",
+      "releaseGateIds": [
+        "CM3-08"
+      ],
+      "artifactIds": [
+        "P3B-CR-A05",
+        "P3B-CR-A06",
+        "P3B-CR-A07"
+      ],
+      "acceptanceCriteria": [
+        "B01-B04 all confirm identical section, material, manufacturing and effective-length inputs.",
+        "Each capacity difference is no greater than max(0.5 kN, 0.5 percent of the larger compared capacity)."
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3B-CR-06",
+      "title": "Decision, limitations and authority boundary",
+      "releaseGateIds": [
+        "CM3-07",
+        "CM3-08"
+      ],
+      "artifactIds": [
+        "P3B-CR-A01",
+        "P3B-CR-A02",
+        "P3B-CR-A03",
+        "P3B-CR-A04",
+        "P3B-CR-A05",
+        "P3B-CR-A06",
+        "P3B-CR-A07",
+        "P3B-CR-A08"
+      ],
+      "acceptanceCriteria": [
+        "The reviewer signs both gate decisions and records qualifications, registration, independence and source access.",
+        "The completed review does not claim project approval, web utilisation approval or design/construction release authority."
+      ],
+      "decision": "pending",
+      "comments": null
+    }
+  ],
+  "reviewer": {
+    "role": "independent_structural_engineer",
+    "name": null,
+    "organisation": null,
+    "qualification": null,
+    "registrationReference": null,
+    "independenceConfirmed": false,
+    "independenceBasis": null,
+    "authorisedSourceAccessConfirmed": false,
+    "controlledSourceRecordReference": null,
+    "reviewDate": null,
+    "signedRecordReference": null
+  },
+  "completion": {
+    "requiredReviewItemIds": [
+      "P3B-CR-01",
+      "P3B-CR-02",
+      "P3B-CR-03",
+      "P3B-CR-04",
+      "P3B-CR-05",
+      "P3B-CR-06"
+    ],
+    "allItemsAccepted": false,
+    "cm3GateStatus": {
+      "CM3-07": "pending",
+      "CM3-08": "pending"
+    },
+    "independentEngineeringReview": "pending",
+    "releaseAuthority": false
+  },
+  "restrictions": [
+    "The licensed Standard, local source path and controlled binary fingerprint are not bundled or published.",
+    "The blank package is reviewer intake only and is not evidence of an independent engineering review.",
+    "The Decimal oracle and manufacturer table regression do not independently close CM3-08.",
+    "Completion does not approve project member data, effective lengths, actions, connections, foundations or web utilisation.",
+    "The package never grants design or construction release authority."
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "adoption_id": "TF-UWEDS-001",
+  "project_id": "TOWERFLOW",
+  "project_name": "SC TowerFlow",
+  "adoption_status": "DRAFT",
+  "package": {
+    "document_id": "UWEDS-001",
+    "version": "1.7.1",
+    "adoption_mode": "GOVERNED_SUBSET",
+    "resolved_location": "external-controlled-package",
+    "manifest_ref": "PACKAGE_MANIFEST.md",
+    "pin_type": "CONTROLLED_DOCUMENT_REVISION",
+    "pin_value": "UWEDS-001/1.7.1/PACKAGE_MANIFEST-2026-08-01"
+  },
+  "governing_project_source_refs": [
+    "docs/standards-register.md",
+    "docs/load-action-reaction-deformation-graphic-convention-v0.1.md",
+    "public/data/tower-001.results.json"
+  ],
+  "project_profile_ref": "profiles/towerflow-drawing-profile-v0.1.json",
+  "adopted_modules": [
+    "00_UNIFIED_WEB_ENGINEERING_DRAWING_STANDARD_V1.md",
+    "DRAWING_STANDARD_MASTER_OUTLINE.md",
+    "02_ANNOTATION_AND_DIMENSION_LAYOUT_ENGINE_SPEC_V1.md",
+    "03_DIMENSION_AND_ANNOTATION_RULES_EXTENSION_V1.md",
+    "05_INTERACTIVE_ENGINEERING_DRAWING_NOTATION_STANDARD_V1.md",
+    "07_GRAPHICAL_ANNOTATION_AND_CALLOUT_STANDARD_V1.md",
+    "PROJECT_ADOPTION_GUIDE.md",
+    "IMPLEMENTATION_HANDOFF.md",
+    "PACKAGE_MANIFEST.md",
+    "profiles/AU_STRUCTURAL_WEB_DEFAULT.yaml",
+    "profiles/ANNOTATION_LAYOUT_DEFAULT.yaml",
+    "profiles/SCREEN_DISPLAY_DEFAULT.yaml",
+    "recipes/structure_general_arrangement.yaml",
+    "recipes/fea_result_summary.yaml",
+    "schemas/project_adoption_record.schema.json",
+    "schemas/pre_drawing_case_review.schema.json",
+    "schemas/dimension_requirement.schema.json",
+    "schemas/resolved_annotation.schema.json",
+    "rules/annotation_layout_rules.yaml",
+    "rules/drawing_rules.yaml",
+    "rules/fea_visual_rules.yaml",
+    "rules/project_adoption_rules.yaml",
+    "rules/reference_case_rules.yaml",
+    "rules/web_release_rules.yaml"
+  ],
+  "object_classes": [
+    "STRUCTURE",
+    "ANALYSIS_MODEL"
+  ],
+  "output_types": [
+    "WEB_SVG",
+    "SCREEN_REVIEW"
+  ],
+  "overrides": [],
+  "pre_drawing_case_review": {
+    "required": true,
+    "record_location": "engineering/pre-drawing-case-reviews/"
+  },
+  "validation": {
+    "package_command": "py -3 tools/validate_drawing_package.py",
+    "project_command": "py -3 analysis/verify_towerflow_drawing_adoption.py"
+  },
+  "release_boundary": "PRIVATE_REVIEW_ONLY",
+  "known_exclusions": [
+    "No construction, fabrication, certification, approval or as-built issue.",
+    "No connection, bolt, weld, base-plate, anchor or foundation detailing.",
+    "No vector PDF, CAD or DXF issue workflow.",
+    "No nonlinear, buckling, modal, contact or time-history result drawing.",
+    "Annotation collision resolution remains limited to deterministic TowerFlow sheet layouts."
+  ],
+  "adoption_owner": "TowerFlow project owner",
+  "approved_by": null,
+  "approved_at": null
+}

@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "0.2.0-review",
+  "checkId": "CM3-COMP-READY-C01",
+  "calculationStatus": "synthetic_verification_only",
+  "readinessStatus": "INPUTS_COMPLETE_RULE_EVALUATION_BLOCKED",
+  "screeningStatus": "REVIEW_REQUIRED",
+  "releaseAuthority": false,
+  "memberId": "M-C01",
+  "memberEvidenceIdentity": {
+    "sourceMode": "inline_synthetic_case",
+    "packageId": null,
+    "modelId": "synthetic-compression-readiness-model",
+    "packageHashSha256": null
+  },
+  "units": {
+    "force": "kN",
+    "memberLength": "m",
+    "sectionLength": "mm",
+    "area": "mm2",
+    "stress": "MPa",
+    "ratio": "dimensionless"
+  },
+  "demand": {
+    "signedAxialDemandKN": -150.0,
+    "demandMagnitudeKN": 150.0,
+    "resultSetId": "RS-C01",
+    "loadCombinationId": "COMB-C01",
+    "analysisResultHashSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "evidence": {
+    "sectionSourceRecordId": "SECTION-C01",
+    "materialSourceRecordId": "MATERIAL-C01",
+    "stabilitySourceRecordId": "STABILITY-C01",
+    "effectiveLengthBasisRecordIdByAxis": {
+      "localY": "EL-C01-Y",
+      "localZ": "EL-C01-Z"
+    }
+  },
+  "section": {
+    "grossAreaMm2": 1200.0,
+    "radiusGyrationMmByAxis": {
+      "localY": 25.0,
+      "localZ": 15.0
+    }
+  },
+  "material": {
+    "yieldStressMPa": 300.0
+  },
+  "stabilityGeometry": {
+    "memberLengthM": 3.0,
+    "effectiveLengthMByAxis": {
+      "localY": 3.3,
+      "localZ": 3.6
+    },
+    "derivedEffectiveLengthToMemberLengthRatioByAxis": {
+      "localY": 1.1,
+      "localZ": 1.2
+    },
+    "geometricSlendernessByAxis": {
+      "localY": 132.0,
+      "localZ": 240.0
+    },
+    "largerGeometricSlendernessAxis": "localZ"
+  },
+  "resistance": {
+    "status": "not_evaluated",
+    "compressionDesignResistanceKN": null,
+    "utilisation": null,
+    "clauseReferences": []
+  },
+  "blockers": [
+    "SYNTHETIC_VERIFICATION_ONLY",
+    "AS4100_COMPRESSION_RESISTANCE_NOT_IMPLEMENTED",
+    "CM3_07_RELEASE_GATE_OPEN"
+  ]
+}

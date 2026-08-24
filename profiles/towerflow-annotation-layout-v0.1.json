@@ -1,0 +1,46 @@
+{
+  "profileId": "towerflow-annotation-layout",
+  "version": "0.1.0",
+  "status": "PRIVATE_REVIEW",
+  "sourceProfile": "ANNOTATION_LAYOUT_DEFAULT_V1@1.1.0",
+  "coordinateSystem": {
+    "id": "TF-A4-LANDSCAPE-PAPER",
+    "viewBox": [0, 0, 1188, 840],
+    "paperSizeMm": [297, 210],
+    "svgUnitsPerMillimetre": 4,
+    "responsivePolicy": "FIXED_VIEWBOX_UNIFORM_SCALE"
+  },
+  "textMetrics": {
+    "revision": "TF-DIMENSION-METRICS-V1@1.0.0",
+    "fontFamily": "SFMono-Regular, Consolas, Liberation Mono, ui-monospace, monospace",
+    "fontWeight": 760,
+    "paperHeightMm": 2,
+    "characterAdvanceMm": 1.15,
+    "horizontalPaddingMm": 1.5,
+    "verticalPaddingMm": 0.5,
+    "renderWidthPolicy": "SVG_TEXT_LENGTH_PINNED"
+  },
+  "geometry": {
+    "featureGapMm": 1,
+    "extensionOvershootMm": 0.75,
+    "arrowLengthMm": 1.5,
+    "arrowHalfWidthMm": 0.6,
+    "textGapMm": 1.5
+  },
+  "clearanceMm": {
+    "textToText": 1.5,
+    "textToGeometry": 1.5,
+    "textToLine": 1,
+    "annotationToBorder": 3
+  },
+  "laneOrder": [
+    "FEATURE_SIZE",
+    "FEATURE_LOCATION",
+    "OVERALL",
+    "INTERFACE_INSTALLATION",
+    "SYSTEM_GRID"
+  ],
+  "candidateOrder": "ZONE_THEN_LANE_THEN_ANNOTATION_ID",
+  "tieBreaker": "ANNOTATION_ID_ASCENDING",
+  "manualAdjustmentAllowed": false
+}

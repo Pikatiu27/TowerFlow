@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-action-scenario.schema.json",
+  "title": "TowerFlow Phase 3A Action Scenario",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scenarioId",
+    "verificationCaseId",
+    "mappingMode",
+    "title",
+    "combination",
+    "ancillary",
+    "mount"
+  ],
+  "properties": {
+    "scenarioId": { "$ref": "#/$defs/id" },
+    "verificationCaseId": { "enum": ["WIND-M01", "WIND-M02", "WIND-M03"] },
+    "mappingMode": {
+      "enum": ["tower_body", "inside_tower_ancillary", "external_rigid_mount"]
+    },
+    "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "combination": {
+      "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/combination" }]
+    },
+    "ancillary": {
+      "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/ancillary" }]
+    },
+    "mount": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-mount-transfer.schema.json" }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "verificationCaseId": { "const": "WIND-M01" } } },
+      "then": {
+        "properties": {
+          "mappingMode": { "const": "tower_body" },
+          "combination": { "type": "null" },
+          "ancillary": { "type": "null" },
+          "mount": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "verificationCaseId": { "const": "WIND-M02" } } },
+      "then": {
+        "properties": {
+          "mappingMode": { "const": "inside_tower_ancillary" },
+          "combination": { "$ref": "#/$defs/combination" },
+          "ancillary": { "$ref": "#/$defs/ancillary" },
+          "mount": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "verificationCaseId": { "const": "WIND-M03" } } },
+      "then": {
+        "properties": {
+          "mappingMode": { "const": "external_rigid_mount" },
+          "combination": { "$ref": "#/$defs/combination" },
+          "ancillary": { "$ref": "#/$defs/ancillary" },
+          "mount": {
+            "$ref": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-mount-transfer.schema.json"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "combination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "designSituation", "expression", "standardReference", "factors"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9.+_-]{0,127}$"
+        },
+        "designSituation": { "const": "ULS_WIND_STRENGTH" },
+        "expression": { "const": "1.2G + W" },
+        "standardReference": { "type": "string", "minLength": 1 },
+        "factors": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["G", "W"],
+          "properties": {
+            "G": { "const": 1.2 },
+            "W": { "const": 1.0 }
+          }
+        }
+      }
+    },
+    "ancillary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "status",
+        "evidenceId",
+        "mountingHeightM",
+        "radialAzimuthDegTrueNorth",
+        "radialOffsetM",
+        "shape",
+        "aspectRatio",
+        "referenceAreaM2",
+        "weightKg"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["synthetic_verification_only", "reviewed"] },
+        "evidenceId": { "$ref": "#/$defs/id" },
+        "mountingHeightM": { "type": "number", "minimum": 0 },
+        "radialAzimuthDegTrueNorth": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+        "radialOffsetM": { "type": "number", "minimum": 0 },
+        "shape": {
+          "enum": [
+            "cylindrical_subcritical",
+            "equilateral_triangle_apex_to_wind",
+            "equilateral_triangle_face_to_wind",
+            "right_angled_triangle",
+            "square_face_to_wind",
+            "square_corner_to_wind",
+            "pentagon_face_to_wind",
+            "pentagon_corner_to_wind",
+            "hexagon_face_to_wind",
+            "hexagon_corner_to_wind",
+            "octagon",
+            "polygon_12_sided",
+            "polygon_16_sided"
+          ]
+        },
+        "aspectRatio": { "type": "number", "exclusiveMinimum": 0 },
+        "referenceAreaM2": { "type": "number", "minimum": 0 },
+        "weightKg": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}

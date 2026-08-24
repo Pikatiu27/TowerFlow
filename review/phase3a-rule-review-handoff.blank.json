@@ -1,0 +1,331 @@
+{
+  "schemaVersion": "0.1.0-review-handoff",
+  "handoffId": "P3A-RULE-REVIEW-001",
+  "status": "blank_independent_review",
+  "prepared": {
+    "preparedBy": "TowerFlow Phase 3A implementation",
+    "preparedDate": "2026-08-11",
+    "purpose": "Independent engineering review of extracted AS/NZS 1170.2 rule data, evidence controls and golden cases."
+  },
+  "controlledSource": {
+    "publication": "AS/NZS 1170.2:2021",
+    "incorporatedAmendments": [
+      "Amd 1:2023",
+      "Amd 2:2024"
+    ],
+    "expectedSha256": "e7710df661f8b0f90172874547f4eeb735307ee540c286bfb04be6c712a14f10",
+    "licensedSourceBundled": false,
+    "reviewerMustUseControlledCopy": true
+  },
+  "artifacts": [
+    {
+      "artifactId": "P3A-A01",
+      "path": "rules/as-nzs-1170-2-2021-amd2-section-3-4.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "4966fd157d245bb1a48f723da9d12bb2c681dcbae52430d95100808f6f3781e9",
+      "role": "rule_data"
+    },
+    {
+      "artifactId": "P3A-A02",
+      "path": "rules/as-nzs-1170-2-2021-amd2-appendix-c.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "4737c032aa1cb6c7c583772d17b6dba90978f3cbf8c629212fed8827f296dae4",
+      "role": "rule_data"
+    },
+    {
+      "artifactId": "P3A-A03",
+      "path": "rules/as-nzs-1170-2-2021-amd2-section-6-screening.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "1b2216efdc418edb2c7b7547ac8f6abec5782b8f70f7ecb57bb43ff94344228c",
+      "role": "rule_data"
+    },
+    {
+      "artifactId": "P3A-A04",
+      "path": "analysis/phase3_wind.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "d93d12e75e6dd9cb48e6fe8000990e9fe0721e256693bd9389474ced8b29c50d",
+      "role": "implementation"
+    },
+    {
+      "artifactId": "P3A-A05",
+      "path": "analysis/solve_phase3_wind_case.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "e8e06d70a0fbb045d1eba39bb020cc3ec2b3ed1778337ddcf2fdf3747186dc03",
+      "role": "implementation"
+    },
+    {
+      "artifactId": "P3A-A06",
+      "path": "verification/phase3-wind-g01-g04.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "d6761d689652963396c6dfbb250c2ff3205d0b606d03d9cc143a97e925610ab0",
+      "role": "golden_case"
+    },
+    {
+      "artifactId": "P3A-A07",
+      "path": "verification/phase3-wind-g05-g06.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "a117c0b6b91b5447e9b6a59deeb0765bcd807beabc9f48ce7e61f3742c598de0",
+      "role": "golden_case"
+    },
+    {
+      "artifactId": "P3A-A08",
+      "path": "verification/phase3-wind-g07-g08.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "363918c927c7ae95c7a2c966849cb1563da83ea2978c8059c1cc2fb4a770207a",
+      "role": "golden_case"
+    },
+    {
+      "artifactId": "P3A-A09",
+      "path": "analysis/verify_phase3_wind_g01_g04.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "76c69f4e47abf5017194199e526491a981f5cba6e60c17661a5312c059f6bd4f",
+      "role": "verification"
+    },
+    {
+      "artifactId": "P3A-A10",
+      "path": "analysis/verify_phase3_wind_g05_g06.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "534250c2f1b165bac09eff77d2623cd6d7ce926f38e08c09044bb2e4646bf9cd",
+      "role": "verification"
+    },
+    {
+      "artifactId": "P3A-A11",
+      "path": "analysis/verify_phase3_wind_g07_g08.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "9242c418a33de955bfeb19d2cc7759663721acd960945bf9ae9a863c0c108d0c",
+      "role": "verification"
+    },
+    {
+      "artifactId": "P3A-A12",
+      "path": "schemas/phase-3-terrain-evidence.schema.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "1ffb255d817cd1a7cd885d216f5d167ca4a4f1b43c9a9fbc95299acc7953f1f4",
+      "role": "evidence_contract"
+    },
+    {
+      "artifactId": "P3A-A13",
+      "path": "schemas/phase-3-topography-evidence.schema.json",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "da0bca66080bad5cdcaa1af5f553fc40a66eb932a9ef11614db06c0eadf89e78",
+      "role": "evidence_contract"
+    },
+    {
+      "artifactId": "P3A-A14",
+      "path": "analysis/validate_phase3_terrain_evidence.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "44201d5b6ea48c8500611e1c6a2d2ae24c93ad6e34fedf06bc3e1586110b181b",
+      "role": "evidence_contract"
+    },
+    {
+      "artifactId": "P3A-A15",
+      "path": "analysis/validate_phase3_topography_evidence.py",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "b881cfec417779c89af01bf1fc905ba5cef08488dfb9b26c64307a284cb9db21",
+      "role": "evidence_contract"
+    },
+    {
+      "artifactId": "P3A-A16",
+      "path": "docs/phase-3-wind-action-specification.md",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "8a9713f7d4589f9d37962d0255bcc6eafa993cebbb460fd66a2b4de78f201e95",
+      "role": "governance"
+    },
+    {
+      "artifactId": "P3A-A17",
+      "path": "docs/phase-3-wind-rule-data.md",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "dd2e3b8b74e244583040061e1f66aa10b3fd6705ec18323ed0afbbedeaa9d7f5",
+      "role": "governance"
+    },
+    {
+      "artifactId": "P3A-A18",
+      "path": "docs/phase-3-terrain-evidence.md",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "10a1908d35c5089095c1fc3f3b4ae63561ef1be95587cac0172dae065fb11713",
+      "role": "governance"
+    },
+    {
+      "artifactId": "P3A-A19",
+      "path": "docs/phase-3-topography-evidence.md",
+      "hashBasis": "utf8_lf_normalized",
+      "sha256": "efb71e58267f703e5fe51a0cf63bfbbf5cf800588004c548b4ad65f673567ad1",
+      "role": "governance"
+    }
+  ],
+  "reviewItems": [
+    {
+      "itemId": "P3A-RR-01",
+      "title": "Publication and amendment identity",
+      "releaseGateIds": [
+        "WIND-01"
+      ],
+      "scope": "Confirm the publication, incorporated amendments and controlled-source hash used by every extracted rule set.",
+      "sourcePointers": [
+        "AS/NZS 1170.2:2021 publication identity and amendment history"
+      ],
+      "artifactIds": [
+        "P3A-A01",
+        "P3A-A02",
+        "P3A-A03",
+        "P3A-A16",
+        "P3A-A17"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3A-RR-02",
+      "title": "Section 3 regional, directional and climate rules",
+      "releaseGateIds": [
+        "WIND-01"
+      ],
+      "scope": "Check extracted values, formulas, grouping and interpolation controls against the licensed controlled copy.",
+      "sourcePointers": [
+        "Clause 3.2 and Table 3.1(A)",
+        "Clause 3.3 and Table 3.2(A)",
+        "Clause 3.4 and Table 3.3"
+      ],
+      "artifactIds": [
+        "P3A-A01",
+        "P3A-A04",
+        "P3A-A06",
+        "P3A-A09"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3A-RR-03",
+      "title": "Section 4 terrain, shielding and topography rules",
+      "releaseGateIds": [
+        "WIND-04",
+        "WIND-05"
+      ],
+      "scope": "Check tabulated multipliers, interpolation, directional evidence controls and topographic equations.",
+      "sourcePointers": [
+        "Clauses 4.2.1 to 4.2.3 and Table 4.1",
+        "Clauses 4.3.1 to 4.3.3 and Table 4.2",
+        "Clauses 4.4.1 and 4.4.2"
+      ],
+      "artifactIds": [
+        "P3A-A01",
+        "P3A-A04",
+        "P3A-A06",
+        "P3A-A09",
+        "P3A-A12",
+        "P3A-A13",
+        "P3A-A14",
+        "P3A-A15",
+        "P3A-A18",
+        "P3A-A19"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3A-RR-04",
+      "title": "Appendix C tower and ancillary coefficients",
+      "releaseGateIds": [
+        "WIND-06",
+        "WIND-07"
+      ],
+      "scope": "Check aspect-ratio, circular-member triangular-tower and one-face ancillary coefficient rules, including stated interpolation limits.",
+      "sourcePointers": [
+        "Table C.1",
+        "Clauses C.4.1 to C.4.2.3",
+        "Tables C.3, C.4, C.6(A) and C.6(C)"
+      ],
+      "artifactIds": [
+        "P3A-A02",
+        "P3A-A04",
+        "P3A-A07",
+        "P3A-A10",
+        "P3A-A16",
+        "P3A-A17"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3A-RR-05",
+      "title": "Section 6 dynamic-sensitivity screening",
+      "releaseGateIds": [
+        "WIND-08"
+      ],
+      "scope": "Check the screening boundary, frequency decision path and conditions that prohibit assuming C_dyn equals 1.0.",
+      "sourcePointers": [
+        "Clauses 6.1 to 6.3 and 6.5.1"
+      ],
+      "artifactIds": [
+        "P3A-A03",
+        "P3A-A04",
+        "P3A-A05",
+        "P3A-A08",
+        "P3A-A11",
+        "P3A-A16",
+        "P3A-A17"
+      ],
+      "decision": "pending",
+      "comments": null
+    },
+    {
+      "itemId": "P3A-RR-06",
+      "title": "Golden-case arithmetic and rejection coverage",
+      "releaseGateIds": [
+        "WIND-01",
+        "WIND-04",
+        "WIND-05",
+        "WIND-06",
+        "WIND-07",
+        "WIND-08"
+      ],
+      "scope": "Independently reproduce representative intermediate values and confirm that missing evidence or coefficients fail closed.",
+      "sourcePointers": [
+        "WIND-G01 to WIND-G08 verification register"
+      ],
+      "artifactIds": [
+        "P3A-A04",
+        "P3A-A05",
+        "P3A-A06",
+        "P3A-A07",
+        "P3A-A08",
+        "P3A-A09",
+        "P3A-A10",
+        "P3A-A11"
+      ],
+      "decision": "pending",
+      "comments": null
+    }
+  ],
+  "reviewer": {
+    "role": "independent_structural_engineer",
+    "name": null,
+    "organisation": null,
+    "qualification": null,
+    "registrationReference": null,
+    "independenceConfirmed": false,
+    "independenceBasis": null,
+    "controlledSourceHashObservedSha256": null,
+    "reviewDate": null,
+    "signedRecordReference": null
+  },
+  "completion": {
+    "requiredReviewItemIds": [
+      "P3A-RR-01",
+      "P3A-RR-02",
+      "P3A-RR-03",
+      "P3A-RR-04",
+      "P3A-RR-05",
+      "P3A-RR-06"
+    ],
+    "allItemsAccepted": false,
+    "independentEngineeringReview": "pending",
+    "releaseAuthority": false
+  },
+  "restrictions": [
+    "The licensed Standard is not bundled with this public handoff.",
+    "Artifact integrity and test execution do not constitute independent engineering review.",
+    "A completed rule review does not approve project Region, terrain, topography, dynamics, geometry or ancillary inputs.",
+    "Phase 3A results remain REVIEW_REQUIRED and carry no design or construction release authority."
+  ]
+}

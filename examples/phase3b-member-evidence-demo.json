@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "0.1.0-review",
+  "packageId": "CM3-MEMBER-EVIDENCE-DEMO-001",
+  "packageStatus": "synthetic_verification_only",
+  "modelId": "synthetic-member-evidence-model",
+  "acceptance": {
+    "status": "fixture_verified",
+    "scope": "synthetic_fixture",
+    "reviewedBy": "TowerFlow deterministic verification",
+    "reviewDate": "2026-08-12",
+    "evidenceRecordIds": [
+      "SECTION-SOURCE-001",
+      "NET-AREA-SOURCE-001",
+      "MATERIAL-SOURCE-001",
+      "STABILITY-SOURCE-001",
+      "EFFECTIVE-LENGTH-Y-001",
+      "EFFECTIVE-LENGTH-Z-001"
+    ],
+    "releaseAuthority": false
+  },
+  "units": {
+    "memberLength": "m",
+    "sectionLength": "mm",
+    "area": "mm2",
+    "stress": "MPa"
+  },
+  "memberAssignments": [
+    {
+      "memberId": "M-EVIDENCE-001",
+      "memberComposition": "single_component",
+      "screeningModes": [
+        "tension",
+        "compression"
+      ],
+      "sectionDefinitionId": "SECTION-DEF-001",
+      "materialDefinitionId": "MATERIAL-DEF-001",
+      "stabilityDefinitionId": "STABILITY-DEF-001"
+    },
+    {
+      "memberId": "M-EVIDENCE-002",
+      "memberComposition": "single_component",
+      "screeningModes": [
+        "tension"
+      ],
+      "sectionDefinitionId": "SECTION-DEF-001",
+      "materialDefinitionId": "MATERIAL-DEF-001",
+      "stabilityDefinitionId": null
+    }
+  ],
+  "sectionDefinitions": [
+    {
+      "definitionId": "SECTION-DEF-001",
+      "sectionType": "synthetic axial section",
+      "grossAreaMm2": 1000.0,
+      "netAreaMm2": 900.0,
+      "netAreaStatus": "synthetic_verification_only",
+      "netAreaSourceRecordId": "NET-AREA-SOURCE-001",
+      "radiusGyrationYmm": 20.0,
+      "radiusGyrationZmm": 15.0,
+      "sourceRecordId": "SECTION-SOURCE-001",
+      "sourceStatus": "synthetic_verification_only"
+    }
+  ],
+  "materialDefinitions": [
+    {
+      "definitionId": "MATERIAL-DEF-001",
+      "grade": "synthetic test material",
+      "yieldStressMPa": 300.0,
+      "tensileStrengthMPa": 450.0,
+      "sourceRecordId": "MATERIAL-SOURCE-001",
+      "sourceStatus": "synthetic_verification_only"
+    }
+  ],
+  "stabilityDefinitions": [
+    {
+      "definitionId": "STABILITY-DEF-001",
+      "memberLengthM": 2.0,
+      "effectiveLengthMByAxis": {
+        "localY": 2.2,
+        "localZ": 2.4
+      },
+      "effectiveLengthMethodByAxis": {
+        "localY": "explicit_value",
+        "localZ": "explicit_value"
+      },
+      "effectiveLengthBasisRecordIdByAxis": {
+        "localY": "EFFECTIVE-LENGTH-Y-001",
+        "localZ": "EFFECTIVE-LENGTH-Z-001"
+      },
+      "sourceRecordId": "STABILITY-SOURCE-001",
+      "sourceStatus": "synthetic_verification_only"
+    }
+  ],
+  "exclusions": [
+    "AS4100_RESISTANCE_RULES",
+    "LOAD_DEMAND_AND_RESULT_SELECTION",
+    "CONNECTION_AND_LOCAL_CAPACITY",
+    "FINAL_DESIGN_CERTIFICATION"
+  ],
+  "releaseAuthority": false
+}

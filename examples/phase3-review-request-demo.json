@@ -1,0 +1,814 @@
+{
+  "schemaVersion": "0.5.0-review",
+  "requestId": "P3-REVIEW-DEMO-001",
+  "mode": "mapped_action_review",
+  "modelId": "fec-type-aa-full-elevation-demo",
+  "actionScenarioId": "P3A-TOWER-BODY",
+  "projectInput": {
+    "schemaVersion": "0.4.0-project-input",
+    "projectInputId": "P3-PROJECT-INPUT-DEMO-001",
+    "inputStatus": "synthetic_verification_only",
+    "modelId": "fec-type-aa-full-elevation-demo",
+    "acceptance": {
+      "status": "fixture_verified",
+      "scope": "synthetic_fixture",
+      "reviewedBy": "TowerFlow verification",
+      "reviewDate": "2026-07-12",
+      "evidenceIds": [
+        "AS1170.2-APP-C-TABLE-C6C",
+        "DESIGN-BASIS-DEMO",
+        "DYNAMIC-DEMO",
+        "SYNTHETIC-ANCILLARY-GEOMETRY-001",
+        "SYNTHETIC-EXTERNAL-ANCILLARY-GEOMETRY-001",
+        "SYNTHETIC-MOUNT-GEOMETRY-001",
+        "tower-001-terrain-demo",
+        "topography-demo-001"
+      ],
+      "releaseAuthority": false
+    },
+    "actionScenarios": [
+      {
+        "scenarioId": "P3A-TOWER-BODY",
+        "verificationCaseId": "WIND-M01",
+        "mappingMode": "tower_body",
+        "title": "Tower body wind",
+        "combination": null,
+        "ancillary": null,
+        "mount": null
+      },
+      {
+        "scenarioId": "P3A-INSIDE-ANT-A1",
+        "verificationCaseId": "WIND-M02",
+        "mappingMode": "inside_tower_ancillary",
+        "title": "Tower body + inside-tower antenna",
+        "combination": {
+          "id": "ULS-1.2G+W",
+          "designSituation": "ULS_WIND_STRENGTH",
+          "expression": "1.2G + W",
+          "standardReference": "AS/NZS 1170.0:2002 Section 4",
+          "factors": {
+            "G": 1.2,
+            "W": 1.0
+          }
+        },
+        "ancillary": {
+          "id": "ANT-A1",
+          "type": "panel antenna",
+          "mountingHeightM": 37.5,
+          "radialAzimuthDegTrueNorth": 30.0,
+          "radialOffsetM": 0.6,
+          "shape": "square_face_to_wind",
+          "aspectRatio": 14.0,
+          "referenceAreaM2": 0.8,
+          "weightKg": 28.0,
+          "status": "synthetic_verification_only",
+          "evidenceId": "SYNTHETIC-ANCILLARY-GEOMETRY-001"
+        },
+        "mount": null
+      },
+      {
+        "scenarioId": "P3A-EXTERNAL-ANT-A1",
+        "verificationCaseId": "WIND-M03",
+        "mappingMode": "external_rigid_mount",
+        "title": "Tower body + external antenna transfer",
+        "combination": {
+          "id": "ULS-1.2G+W",
+          "designSituation": "ULS_WIND_STRENGTH",
+          "expression": "1.2G + W",
+          "standardReference": "AS/NZS 1170.0:2002 Section 4",
+          "factors": {
+            "G": 1.2,
+            "W": 1.0
+          }
+        },
+        "ancillary": {
+          "id": "ANT-EXT-A1",
+          "type": "panel antenna",
+          "mountingHeightM": 37.5,
+          "radialAzimuthDegTrueNorth": 30.0,
+          "radialOffsetM": 1.8,
+          "shape": "square_face_to_wind",
+          "aspectRatio": 14.0,
+          "referenceAreaM2": 0.8,
+          "weightKg": 28.0,
+          "status": "synthetic_verification_only",
+          "evidenceId": "SYNTHETIC-EXTERNAL-ANCILLARY-GEOMETRY-001"
+        },
+        "mount": {
+          "schemaVersion": "0.3.0-draft",
+          "mountId": "MOUNT-EXT-A1",
+          "calculationStatus": "synthetic_verification_only",
+          "transferMethod": "rigid_affine_three_node",
+          "capacityCheckStatus": "not_performed",
+          "attachmentNodeIds": [
+            "N251",
+            "N252",
+            "N253"
+          ],
+          "transferredResultants": [
+            "Fx",
+            "Fy",
+            "Fz",
+            "Mx",
+            "My",
+            "Mz"
+          ],
+          "interfaces": [
+            {
+              "interfaceId": "IF-MOUNT-N251",
+              "towerNodeId": "N251",
+              "mountFeatureId": "MOUNT-EXT-A1-ATTACH-1",
+              "status": "synthetic_verification_only",
+              "transferMechanisms": [
+                "tension",
+                "compression",
+                "shear"
+              ],
+              "evidenceId": "SYNTHETIC-MOUNT-GEOMETRY-001"
+            },
+            {
+              "interfaceId": "IF-MOUNT-N252",
+              "towerNodeId": "N252",
+              "mountFeatureId": "MOUNT-EXT-A1-ATTACH-2",
+              "status": "synthetic_verification_only",
+              "transferMechanisms": [
+                "tension",
+                "compression",
+                "shear"
+              ],
+              "evidenceId": "SYNTHETIC-MOUNT-GEOMETRY-001"
+            },
+            {
+              "interfaceId": "IF-MOUNT-N253",
+              "towerNodeId": "N253",
+              "mountFeatureId": "MOUNT-EXT-A1-ATTACH-3",
+              "status": "synthetic_verification_only",
+              "transferMechanisms": [
+                "tension",
+                "compression",
+                "shear"
+              ],
+              "evidenceId": "SYNTHETIC-MOUNT-GEOMETRY-001"
+            }
+          ],
+          "excludedBehaviour": [
+            "mount member stiffness and stress",
+            "bolt, clamp and weld force distribution",
+            "local tower member and node capacity",
+            "slip, separation, prying and installation state"
+          ]
+        }
+      }
+    ],
+    "windCase": {
+      "schemaVersion": "0.3.0-draft",
+      "scenarioId": "phase3-wind-complete-demo",
+      "calculationStatus": "synthetic_verification_only",
+      "designBasis": {
+        "limitState": "ULS",
+        "averageRecurrenceIntervalYears": 500,
+        "standardEdition": "AS/NZS 1170.2:2021 Amd 1:2023 Amd 2:2024",
+        "approvalStatus": "reviewed",
+        "approvalEvidenceId": "DESIGN-BASIS-DEMO"
+      },
+      "site": {
+        "siteId": "tower-001",
+        "elevationM": 100,
+        "windRegion": "A1",
+        "trueNorthToGlobalXDeg": 30
+      },
+      "evidencePacks": {
+        "terrainEvidencePackId": "tower-001-terrain-demo",
+        "terrainFile": "examples/phase3-terrain-evidence-demo.json",
+        "topographyEvidencePackId": "topography-demo-001",
+        "topographyFile": "examples/phase3-topography-evidence-demo.json"
+      },
+      "tower": {
+        "seedId": "fec-type-aa-full-elevation-demo",
+        "heightM": 50.35,
+        "sections": [
+          {
+            "id": "S01",
+            "bottomElevationM": 0,
+            "topElevationM": 5,
+            "referenceHeightM": 2.5,
+            "solidityRatio": 0.22,
+            "averageMemberDiameterM": 0.09,
+            "projectedMemberAreaM2ByDirection": {
+              "0": 1.3,
+              "45": 1.38,
+              "90": 1.32,
+              "135": 1.38,
+              "180": 1.3,
+              "225": 1.38,
+              "270": 1.32,
+              "315": 1.38
+            }
+          },
+          {
+            "id": "S02",
+            "bottomElevationM": 5,
+            "topElevationM": 10,
+            "referenceHeightM": 7.5,
+            "solidityRatio": 0.21,
+            "averageMemberDiameterM": 0.087,
+            "projectedMemberAreaM2ByDirection": {
+              "0": 1.24,
+              "45": 1.32,
+              "90": 1.26,
+              "135": 1.32,
+              "180": 1.24,
+              "225": 1.32,
+              "270": 1.26,
+              "315": 1.32
+            }
+          },
+          {
+            "id": "S03",
+            "bottomElevationM": 10,
+            "topElevationM": 15,
+            "referenceHeightM": 12.5,
+            "solidityRatio": 0.2,
+            "averageMemberDiameterM": 0.084,
+            "projectedMemberAreaM2ByDirection": {
+              "0": 1.18,
+              "45": 1.26,
+              "90": 1.2,
+              "135": 1.26,
+              "180": 1.18,
+              "225": 1.26,
+              "270": 1.2,
+              "315": 1.26
+            }
+          },
+          {
+            "id": "S04",
+            "bottomElevationM": 15,
+            "topElevationM": 20,
+            "referenceHeightM": 17.5,
+            "solidityRatio": 0.19,
+            "averageMemberDiameterM": 0.081,
+            "projectedMemberAreaM2ByDirection": {
+              "0": 1.12,
+              "45": 1.2,
+              "90": 1.14,
+              "135": 1.2,
+              "180": 1.12,
+              "225": 1.2,
+              "270": 1.14,
+              "315": 1.2
+            }
+          },
+          {
+            "id": "S05",
+            "bottomElevationM": 20,
+            "topElevationM": 25,
+            "referenceHeightM": 22.5,
+            "solidityRatio": 0.18,
+            "averageMemberDiameterM": 0.078,
+            "projectedMemberAreaM2ByDirection": {
+              "0": 1.06,
+              "45": 1.14,
+              "90": 1.08,
+              "135": 1.14,
+              "180": 1.06,
+              "225": 1.14,
+              "270": 1.08,
+              "315": 1.14
+            }
+          },
+          {
+            "id": "S06",
+            "bottomElevationM": 25,
+            "topElevationM": 30,
+            "referenceHeightM": 27.5,
+            "solidityRatio": 0.17,
+            "averageMemberDiameterM": 0.075,
+            "projectedMemberAreaM2ByDirection": {
+              "0": 1.0,
+              "45": 1.08,
+              "90": 1.02,
+              "135": 1.08,
+              "180": 1.0,
+              "225": 1.08,
+              "270": 1.02,
+              "315": 1.08
+            }
+          },
+          {
+            "id": "S07",
+            "bottomElevationM": 30,
+            "topElevationM": 35,
+            "referenceHeightM": 32.5,
+            "solidityRatio": 0.16,
+            "averageMemberDiameterM": 0.072,
+            "projectedMemberAreaM2ByDirection": {
+              "0": 0.94,
+              "45": 1.02,
+              "90": 0.96,
+              "135": 1.02,
+              "180": 0.94,
+              "225": 1.02,
+              "270": 0.96,
+              "315": 1.02
+            }
+          },
+          {
+            "id": "S08",
+            "bottomElevationM": 35,
+            "topElevationM": 40,
+            "referenceHeightM": 37.5,
+            "solidityRatio": 0.15,
+            "averageMemberDiameterM": 0.069,
+            "projectedMemberAreaM2ByDirection": {
+              "0": 0.88,
+              "45": 0.96,
+              "90": 0.9,
+              "135": 0.96,
+              "180": 0.88,
+              "225": 0.96,
+              "270": 0.9,
+              "315": 0.96
+            }
+          },
+          {
+            "id": "S09",
+            "bottomElevationM": 40,
+            "topElevationM": 45,
+            "referenceHeightM": 42.5,
+            "solidityRatio": 0.14,
+            "averageMemberDiameterM": 0.066,
+            "projectedMemberAreaM2ByDirection": {
+              "0": 0.82,
+              "45": 0.9,
+              "90": 0.84,
+              "135": 0.9,
+              "180": 0.82,
+              "225": 0.9,
+              "270": 0.84,
+              "315": 0.9
+            }
+          },
+          {
+            "id": "S10",
+            "bottomElevationM": 45,
+            "topElevationM": 50.35,
+            "referenceHeightM": 47.675,
+            "solidityRatio": 0.13,
+            "averageMemberDiameterM": 0.063,
+            "projectedMemberAreaM2ByDirection": {
+              "0": 0.8,
+              "45": 0.88,
+              "90": 0.82,
+              "135": 0.88,
+              "180": 0.8,
+              "225": 0.88,
+              "270": 0.82,
+              "315": 0.88
+            }
+          }
+        ]
+      },
+      "dynamicAssessment": {
+        "status": "reviewed",
+        "structureType": "free_standing_tower",
+        "fundamentalFrequencyHz": 1.2,
+        "heightM": 50.35,
+        "significantModalCoupling": false,
+        "aerodynamicInterference": false,
+        "porousLatticeTower": true,
+        "hasUhfAntennaSection": false,
+        "supportingTowerProjectedAreaM2": 10.5,
+        "headframeProjectedAreaM2": 2.0,
+        "evidence": {
+          "sourceId": "DYNAMIC-DEMO",
+          "description": "Synthetic modal screening record for complete-case verification.",
+          "reviewedBy": "TowerFlow verification",
+          "reviewDate": "2026-07-12"
+        }
+      },
+      "coefficientRecords": [
+        {
+          "id": "tower-body-circular-triangle",
+          "status": "reviewed",
+          "evidenceId": "AS1170.2-APP-C-TABLE-C6C"
+        }
+      ]
+    },
+    "terrainEvidence": {
+      "schemaVersion": "0.3.0-draft",
+      "evidencePackId": "tower-001-terrain-demo",
+      "siteId": "tower-001",
+      "windRegion": "A1",
+      "assessment": {
+        "assessmentDate": "2026-07-11",
+        "assessedBy": "TowerFlow demonstration assessor",
+        "reviewStatus": "reviewed",
+        "reviewedBy": "TowerFlow demonstration reviewer",
+        "reviewDate": "2026-07-11",
+        "knownFutureChangesConsidered": true,
+        "futureChangesDescription": "Demonstration assumes no approved terrain-changing development within the assessed fetch."
+      },
+      "towerSectionReferenceHeightsM": [
+        2.5,
+        7.5,
+        12.5,
+        17.5,
+        22.5,
+        27.5,
+        32.5,
+        37.5,
+        42.5,
+        47.675
+      ],
+      "evidenceRegister": [
+        {
+          "id": "AERIAL_2026",
+          "type": "aerial_imagery",
+          "captureDate": "2026-06-15",
+          "fileReference": "demo/aerial-2026.tif",
+          "scaleOrResolution": "0.20 m/pixel",
+          "description": "Dated demonstration aerial imagery covering at least 3 km from the tower."
+        },
+        {
+          "id": "SITE_PLAN_001",
+          "type": "site_plan",
+          "captureDate": "2026-07-01",
+          "fileReference": "demo/site-plan-001.pdf",
+          "scaleOrResolution": "1:5000",
+          "description": "Demonstration site plan with tower location and true North."
+        },
+        {
+          "id": "TC_REVIEW_001",
+          "type": "engineer_assessment",
+          "captureDate": "2026-07-11",
+          "fileReference": "demo/tc-review-001.md",
+          "scaleOrResolution": "Eight 45 degree sectors",
+          "description": "Demonstration engineering classification note covering all directions."
+        }
+      ],
+      "directionAssessments": [
+        {
+          "sourceDirectionDegTrueNorth": 0,
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "AERIAL_2026",
+            "SITE_PLAN_001",
+            "TC_REVIEW_001"
+          ],
+          "terrainSegments": [
+            {
+              "startDistanceFromTowerM": 0,
+              "endDistanceFromTowerM": 400,
+              "terrainCategory": 4,
+              "classificationBasis": "Immediate urban fabric; ignored where within the height-dependent lag distance."
+            },
+            {
+              "startDistanceFromTowerM": 400,
+              "endDistanceFromTowerM": 700,
+              "terrainCategory": 2,
+              "classificationBasis": "Open cleared land."
+            },
+            {
+              "startDistanceFromTowerM": 700,
+              "endDistanceFromTowerM": 1200,
+              "terrainCategory": 3,
+              "classificationBasis": "Closely spaced suburban obstruction field."
+            },
+            {
+              "startDistanceFromTowerM": 1200,
+              "endDistanceFromTowerM": 3000,
+              "terrainCategory": 2,
+              "classificationBasis": "Open terrain continuing beyond the maximum required fetch."
+            }
+          ]
+        },
+        {
+          "sourceDirectionDegTrueNorth": 45,
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "AERIAL_2026",
+            "SITE_PLAN_001",
+            "TC_REVIEW_001"
+          ],
+          "terrainSegments": [
+            {
+              "startDistanceFromTowerM": 0,
+              "endDistanceFromTowerM": 3000,
+              "terrainCategory": 2.5,
+              "classificationBasis": "Scattered houses and trees across the assessed fetch."
+            }
+          ]
+        },
+        {
+          "sourceDirectionDegTrueNorth": 90,
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "AERIAL_2026",
+            "SITE_PLAN_001",
+            "TC_REVIEW_001"
+          ],
+          "terrainSegments": [
+            {
+              "startDistanceFromTowerM": 0,
+              "endDistanceFromTowerM": 3000,
+              "terrainCategory": 2,
+              "classificationBasis": "Open cleared land across the assessed fetch."
+            }
+          ]
+        },
+        {
+          "sourceDirectionDegTrueNorth": 135,
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "AERIAL_2026",
+            "SITE_PLAN_001",
+            "TC_REVIEW_001"
+          ],
+          "terrainSegments": [
+            {
+              "startDistanceFromTowerM": 0,
+              "endDistanceFromTowerM": 3000,
+              "terrainCategory": 3,
+              "classificationBasis": "Established suburban obstruction field."
+            }
+          ]
+        },
+        {
+          "sourceDirectionDegTrueNorth": 180,
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "AERIAL_2026",
+            "SITE_PLAN_001",
+            "TC_REVIEW_001"
+          ],
+          "terrainSegments": [
+            {
+              "startDistanceFromTowerM": 0,
+              "endDistanceFromTowerM": 3000,
+              "terrainCategory": 3,
+              "classificationBasis": "Established light industrial and suburban terrain."
+            }
+          ]
+        },
+        {
+          "sourceDirectionDegTrueNorth": 225,
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "AERIAL_2026",
+            "SITE_PLAN_001",
+            "TC_REVIEW_001"
+          ],
+          "terrainSegments": [
+            {
+              "startDistanceFromTowerM": 0,
+              "endDistanceFromTowerM": 3000,
+              "terrainCategory": 2.5,
+              "classificationBasis": "Mixed open land with scattered obstructions."
+            }
+          ]
+        },
+        {
+          "sourceDirectionDegTrueNorth": 270,
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "AERIAL_2026",
+            "SITE_PLAN_001",
+            "TC_REVIEW_001"
+          ],
+          "terrainSegments": [
+            {
+              "startDistanceFromTowerM": 0,
+              "endDistanceFromTowerM": 3000,
+              "terrainCategory": 2,
+              "classificationBasis": "Open terrain across the assessed fetch."
+            }
+          ]
+        },
+        {
+          "sourceDirectionDegTrueNorth": 315,
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "AERIAL_2026",
+            "SITE_PLAN_001",
+            "TC_REVIEW_001"
+          ],
+          "terrainSegments": [
+            {
+              "startDistanceFromTowerM": 0,
+              "endDistanceFromTowerM": 3000,
+              "terrainCategory": 2.5,
+              "classificationBasis": "Scattered low-density development."
+            }
+          ]
+        }
+      ]
+    },
+    "topographyEvidence": {
+      "schemaVersion": "0.3.0-draft",
+      "evidencePackId": "topography-demo-001",
+      "siteId": "tower-001",
+      "windRegion": "A1",
+      "siteElevationM": 100,
+      "structureHeightM": 50.35,
+      "assessment": {
+        "assessedBy": "Synthetic Demo Assessor",
+        "assessmentDate": "2026-07-10",
+        "reviewStatus": "reviewed",
+        "reviewedBy": "Synthetic Demo Reviewer",
+        "reviewDate": "2026-07-11",
+        "knownFutureChangesConsidered": true,
+        "futureChangesDescription": "Synthetic test case only; no future earthworks are represented."
+      },
+      "towerSectionReferenceHeightsM": [
+        2.5,
+        7.5,
+        12.5,
+        17.5,
+        22.5,
+        27.5,
+        32.5,
+        37.5,
+        42.5,
+        47.675
+      ],
+      "evidenceRegister": [
+        {
+          "id": "SURVEY_001",
+          "type": "topographic_survey",
+          "captureDate": "2026-07-01",
+          "fileReference": "synthetic/topographic-survey.dwg",
+          "scaleOrResolution": "Synthetic 1 m contours",
+          "description": "Synthetic survey evidence for numerical verification only."
+        },
+        {
+          "id": "CONTOUR_001",
+          "type": "contour_map",
+          "captureDate": "2026-07-01",
+          "fileReference": "synthetic/contour-map.pdf",
+          "scaleOrResolution": "Synthetic 1:5000",
+          "description": "Synthetic contour evidence covering all eight sectors."
+        },
+        {
+          "id": "ENGINEER_001",
+          "type": "engineer_assessment",
+          "captureDate": "2026-07-11",
+          "fileReference": "synthetic/topography-assessment.pdf",
+          "scaleOrResolution": "N/A",
+          "description": "Synthetic engineering review of candidate cross-sections and non-applicability records."
+        }
+      ],
+      "directionAssessments": [
+        {
+          "sourceDirectionDegTrueNorth": 0,
+          "status": "geometry_supplied",
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "SURVEY_001",
+            "CONTOUR_001",
+            "ENGINEER_001"
+          ],
+          "mostAdverseSelectionReviewed": true,
+          "candidateCrossSections": [
+            {
+              "id": "N-HILL-A",
+              "bearingDegTrueNorth": 10,
+              "featureType": "hill",
+              "featureHeightM": 20,
+              "upwindSlopeLengthM": 50,
+              "siteDistanceFromCrestM": 0,
+              "inSteepPeakZone": false,
+              "geometryBasis": "Synthetic crest-centred section with H = 20 m and Lu = 50 m."
+            },
+            {
+              "id": "N-HILL-B",
+              "bearingDegTrueNorth": 350,
+              "featureType": "hill",
+              "featureHeightM": 12,
+              "upwindSlopeLengthM": 80,
+              "siteDistanceFromCrestM": 5,
+              "inSteepPeakZone": false,
+              "geometryBasis": "Synthetic secondary section included to test most-adverse selection."
+            }
+          ]
+        },
+        {
+          "sourceDirectionDegTrueNorth": 45,
+          "status": "not_applicable",
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "CONTOUR_001",
+            "ENGINEER_001"
+          ],
+          "nonApplicabilityReason": "Synthetic contour review found no qualifying hill, ridge, or escarpment in this sector.",
+          "mostAdverseSelectionReviewed": true,
+          "candidateCrossSections": []
+        },
+        {
+          "sourceDirectionDegTrueNorth": 90,
+          "status": "not_applicable",
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "CONTOUR_001",
+            "ENGINEER_001"
+          ],
+          "nonApplicabilityReason": "Synthetic contour review found no qualifying hill, ridge, or escarpment in this sector.",
+          "mostAdverseSelectionReviewed": true,
+          "candidateCrossSections": []
+        },
+        {
+          "sourceDirectionDegTrueNorth": 135,
+          "status": "not_applicable",
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "CONTOUR_001",
+            "ENGINEER_001"
+          ],
+          "nonApplicabilityReason": "Synthetic contour review found no qualifying hill, ridge, or escarpment in this sector.",
+          "mostAdverseSelectionReviewed": true,
+          "candidateCrossSections": []
+        },
+        {
+          "sourceDirectionDegTrueNorth": 180,
+          "status": "not_applicable",
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "CONTOUR_001",
+            "ENGINEER_001"
+          ],
+          "nonApplicabilityReason": "Synthetic contour review found no qualifying hill, ridge, or escarpment in this sector.",
+          "mostAdverseSelectionReviewed": true,
+          "candidateCrossSections": []
+        },
+        {
+          "sourceDirectionDegTrueNorth": 225,
+          "status": "not_applicable",
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "CONTOUR_001",
+            "ENGINEER_001"
+          ],
+          "nonApplicabilityReason": "Synthetic contour review found no qualifying hill, ridge, or escarpment in this sector.",
+          "mostAdverseSelectionReviewed": true,
+          "candidateCrossSections": []
+        },
+        {
+          "sourceDirectionDegTrueNorth": 270,
+          "status": "not_applicable",
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "CONTOUR_001",
+            "ENGINEER_001"
+          ],
+          "nonApplicabilityReason": "Synthetic contour review found no qualifying hill, ridge, or escarpment in this sector.",
+          "mostAdverseSelectionReviewed": true,
+          "candidateCrossSections": []
+        },
+        {
+          "sourceDirectionDegTrueNorth": 315,
+          "status": "not_applicable",
+          "classificationStatus": "reviewed",
+          "confidence": "high",
+          "currentConditionsConfirmed": true,
+          "evidenceIds": [
+            "CONTOUR_001",
+            "ENGINEER_001"
+          ],
+          "nonApplicabilityReason": "Synthetic contour review found no qualifying hill, ridge, or escarpment in this sector.",
+          "mostAdverseSelectionReviewed": true,
+          "candidateCrossSections": []
+        }
+      ]
+    }
+  }
+}

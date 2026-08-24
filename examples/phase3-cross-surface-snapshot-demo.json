@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "0.1.0-cross-surface-snapshot",
+  "analysisMode": "phase3-review",
+  "projectInputId": "P3-PROJECT-INPUT-DEMO-001",
+  "actionScenarioId": "P3A-TOWER-BODY",
+  "verificationCaseId": "WIND-M01",
+  "modelId": "fec-type-aa-full-elevation-demo",
+  "adapter": {
+    "id": "phase3-mapped-action-review",
+    "version": "0.3.0"
+  },
+  "inputHashSha256": "b9c41edd548231a711e253ccadd6fded6f6a1a8b922ebfdff7f4a7190ebe8498",
+  "sourceHashSha256": "450757a82c1a937f2a6ace094e32d451b3dcadcf989c9613e26c08b0c5a9cbcd",
+  "resultHashSha256": "09e92e54c5fc53b8da181fb683d9b777e16bc72da82ccf578940c75572898259",
+  "activeResultSet": {
+    "id": "phase3-p3a-tower-body-000",
+    "hashSha256": "c0d506eae50a6611946c469bf8e35cf673aafdf1ca79e8c056a80e1346730099",
+    "sourceDirectionDegTrueNorth": 0,
+    "forceDirectionDegTrueNorth": 180.0,
+    "loadingId": "LC-P3-W-000",
+    "windLoadCaseId": "LC-P3-W-000",
+    "combinationId": null
+  },
+  "surfaces": {
+    "api": {
+      "state": "BOUND",
+      "resultHashSha256": "09e92e54c5fc53b8da181fb683d9b777e16bc72da82ccf578940c75572898259",
+      "resultSetId": "phase3-p3a-tower-body-000",
+      "resultSetHashSha256": "c0d506eae50a6611946c469bf8e35cf673aafdf1ca79e8c056a80e1346730099"
+    },
+    "viewport3d": {
+      "state": "BOUND",
+      "resultHashSha256": "09e92e54c5fc53b8da181fb683d9b777e16bc72da82ccf578940c75572898259",
+      "resultSetId": "phase3-p3a-tower-body-000",
+      "resultSetHashSha256": "c0d506eae50a6611946c469bf8e35cf673aafdf1ca79e8c056a80e1346730099"
+    },
+    "resultsTable": {
+      "state": "BOUND",
+      "resultHashSha256": "09e92e54c5fc53b8da181fb683d9b777e16bc72da82ccf578940c75572898259",
+      "resultSetId": "phase3-p3a-tower-body-000",
+      "resultSetHashSha256": "c0d506eae50a6611946c469bf8e35cf673aafdf1ca79e8c056a80e1346730099"
+    },
+    "drawing": {
+      "state": "BOUND",
+      "resultHashSha256": "09e92e54c5fc53b8da181fb683d9b777e16bc72da82ccf578940c75572898259",
+      "resultSetId": "phase3-p3a-tower-body-000",
+      "resultSetHashSha256": "c0d506eae50a6611946c469bf8e35cf673aafdf1ca79e8c056a80e1346730099"
+    }
+  },
+  "drawingIdentity": {
+    "contractId": "TF-P3A-DRW-ID-001",
+    "contractVersion": "0.3.0",
+    "documentRevision": "R03",
+    "bindingResultSetHashSha256": "c0d506eae50a6611946c469bf8e35cf673aafdf1ca79e8c056a80e1346730099"
+  }
+}

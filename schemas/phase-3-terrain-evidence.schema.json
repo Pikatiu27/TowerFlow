@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-terrain-evidence.schema.json",
+  "title": "TowerFlow Phase 3A Terrain Category Evidence Pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "evidencePackId", "siteId", "windRegion", "assessment", "towerSectionReferenceHeightsM", "evidenceRegister", "directionAssessments"],
+  "properties": {
+    "schemaVersion": { "const": "0.3.0-draft" },
+    "evidencePackId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,63}$" },
+    "siteId": { "type": "string", "minLength": 1 },
+    "windRegion": { "enum": ["A0", "A1", "A2", "A3", "A4", "A5", "B1", "B2", "C", "D"] },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessmentDate", "assessedBy", "reviewStatus", "reviewedBy", "reviewDate", "knownFutureChangesConsidered", "futureChangesDescription"],
+      "properties": {
+        "assessmentDate": { "type": "string", "format": "date" },
+        "assessedBy": { "type": "string", "minLength": 1 },
+        "reviewStatus": { "enum": ["draft", "reviewed"] },
+        "reviewedBy": { "type": "string", "minLength": 1 },
+        "reviewDate": { "type": "string", "format": "date" },
+        "knownFutureChangesConsidered": { "type": "boolean" },
+        "futureChangesDescription": { "type": "string", "minLength": 1 }
+      }
+    },
+    "towerSectionReferenceHeightsM": {
+      "type": "array",
+      "minItems": 10,
+      "uniqueItems": true,
+      "items": { "type": "number", "exclusiveMinimum": 0, "maximum": 50.35 }
+    },
+    "evidenceRegister": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/evidenceItem" }
+    },
+    "directionAssessments": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/directionAssessment" }
+    }
+  },
+  "$defs": {
+    "direction": { "enum": [0, 45, 90, 135, 180, 225, 270, 315] },
+    "evidenceItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "captureDate", "fileReference", "scaleOrResolution", "description"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Z0-9][A-Z0-9_-]{2,63}$" },
+        "type": { "enum": ["aerial_imagery", "site_plan", "survey", "field_photography", "engineer_assessment"] },
+        "captureDate": { "type": "string", "format": "date" },
+        "fileReference": { "type": "string", "minLength": 1 },
+        "scaleOrResolution": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    },
+    "directionAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceDirectionDegTrueNorth", "classificationStatus", "confidence", "currentConditionsConfirmed", "evidenceIds", "terrainSegments"],
+      "properties": {
+        "sourceDirectionDegTrueNorth": { "$ref": "#/$defs/direction" },
+        "classificationStatus": { "enum": ["draft", "reviewed"] },
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "currentConditionsConfirmed": { "type": "boolean" },
+        "evidenceIds": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "terrainSegments": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/terrainSegment" }
+        }
+      }
+    },
+    "terrainSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startDistanceFromTowerM", "endDistanceFromTowerM", "terrainCategory", "classificationBasis"],
+      "properties": {
+        "startDistanceFromTowerM": { "type": "number", "minimum": 0 },
+        "endDistanceFromTowerM": { "type": "number", "exclusiveMinimum": 0 },
+        "terrainCategory": { "enum": [1, 2, 2.5, 3, 4] },
+        "classificationBasis": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

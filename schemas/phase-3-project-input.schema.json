@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-project-input.schema.json",
+  "title": "TowerFlow Phase 3A Project Input Package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "projectInputId",
+    "inputStatus",
+    "modelId",
+    "acceptance",
+    "actionScenarios",
+    "windCase",
+    "terrainEvidence",
+    "topographyEvidence"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.4.0-project-input" },
+    "projectInputId": { "$ref": "#/$defs/id" },
+    "inputStatus": {
+      "enum": ["synthetic_verification_only", "project_review"]
+    },
+    "modelId": { "$ref": "#/$defs/id" },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "scope",
+        "reviewedBy",
+        "reviewDate",
+        "evidenceIds",
+        "releaseAuthority"
+      ],
+      "properties": {
+        "status": {
+          "enum": ["fixture_verified", "reviewed_for_analysis"]
+        },
+        "scope": {
+          "enum": ["synthetic_fixture", "project_input"]
+        },
+        "reviewedBy": { "type": "string", "minLength": 1 },
+        "reviewDate": { "type": "string", "format": "date" },
+        "evidenceIds": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "releaseAuthority": { "const": false }
+      }
+    },
+    "actionScenarios": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 25,
+      "items": {
+        "$ref": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-action-scenario.schema.json"
+      }
+    },
+    "windCase": {
+      "$ref": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-wind-case.schema.json"
+    },
+    "terrainEvidence": {
+      "$ref": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-terrain-evidence.schema.json"
+    },
+    "topographyEvidence": {
+      "$ref": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-topography-evidence.schema.json"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    }
+  }
+}

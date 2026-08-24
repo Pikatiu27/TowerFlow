@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3-project-input-preflight-report.schema.json",
+  "title": "TowerFlow Phase 3A Project Input Preflight Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "hashBasis",
+    "status",
+    "file",
+    "strictProjectReview",
+    "summary",
+    "errors",
+    "reportSha256"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.1.0-project-input-preflight-report" },
+    "hashBasis": { "const": "canonical-json-sort-keys-compact-ascii" },
+    "status": { "enum": ["PREFLIGHT_READY", "BLOCKED"] },
+    "file": { "type": "string", "minLength": 1 },
+    "strictProjectReview": { "type": "boolean" },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "documentType",
+        "documentSha256",
+        "projectInputSha256",
+        "requestId",
+        "selectedActionScenarioId",
+        "schemaVersion",
+        "projectInputId",
+        "inputStatus",
+        "modelId",
+        "acceptanceStatus",
+        "acceptanceScope",
+        "reviewedBy",
+        "reviewDate",
+        "releaseAuthority",
+        "scenarioCount",
+        "scenarioIds",
+        "acceptanceEvidenceIdCount",
+        "acceptanceEvidenceIds",
+        "terrainDirectionCount",
+        "terrainSourceDirectionsDeg",
+        "topographyDirectionCount",
+        "topographySourceDirectionsDeg"
+      ],
+      "properties": {
+        "documentType": { "enum": ["project_input", "review_request", "unreadable"] },
+        "documentSha256": { "$ref": "#/$defs/sha256" },
+        "projectInputSha256": { "$ref": "#/$defs/sha256" },
+        "requestId": { "$ref": "#/$defs/nullableString" },
+        "selectedActionScenarioId": { "$ref": "#/$defs/nullableString" },
+        "schemaVersion": { "$ref": "#/$defs/nullableString" },
+        "projectInputId": { "$ref": "#/$defs/nullableString" },
+        "inputStatus": { "$ref": "#/$defs/nullableString" },
+        "modelId": { "$ref": "#/$defs/nullableString" },
+        "acceptanceStatus": { "$ref": "#/$defs/nullableString" },
+        "acceptanceScope": { "$ref": "#/$defs/nullableString" },
+        "reviewedBy": { "$ref": "#/$defs/nullableString" },
+        "reviewDate": { "$ref": "#/$defs/nullableString" },
+        "releaseAuthority": { "type": ["boolean", "null"] },
+        "scenarioCount": { "type": "integer", "minimum": 0 },
+        "scenarioIds": { "$ref": "#/$defs/stringArray" },
+        "acceptanceEvidenceIdCount": { "type": "integer", "minimum": 0 },
+        "acceptanceEvidenceIds": { "$ref": "#/$defs/stringArray" },
+        "terrainDirectionCount": { "type": "integer", "minimum": 0 },
+        "terrainSourceDirectionsDeg": { "$ref": "#/$defs/directionArray" },
+        "topographyDirectionCount": { "type": "integer", "minimum": 0 },
+        "topographySourceDirectionsDeg": { "$ref": "#/$defs/directionArray" }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "reportSha256": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableString": {
+      "type": ["string", "null"]
+    },
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "directionArray": {
+      "type": "array",
+      "items": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 }
+    }
+  }
+}

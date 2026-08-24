@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "0.4.0-draft",
+  "contractId": "CM3-MEMBER-SCREENING-001",
+  "calculationStatus": "contract_only",
+  "screeningStatus": "REVIEW_REQUIRED",
+  "releaseAuthority": false,
+  "units": {
+    "force": "kN",
+    "length": "m",
+    "sectionLength": "mm",
+    "area": "mm2",
+    "stress": "MPa",
+    "utilisation": "dimensionless"
+  },
+  "sourceAnalysis": {
+    "modelId": null,
+    "adapterId": null,
+    "adapterVersion": null,
+    "phase3aReleaseStatus": "SYNTHETIC_REVIEW_ONLY",
+    "resultHashSha256": null,
+    "resultSetIds": [],
+    "approvedProjectInputId": null
+  },
+  "standardBasis": {
+    "designation": "AS 4100:2020",
+    "title": "Steel structures",
+    "catalogueUrl": "https://store.standards.org.au/product/as-4100-2020",
+    "controlledCopyStatus": "not_supplied",
+    "ruleDataStatus": "not_extracted",
+    "controlledSourceHashSha256": null
+  },
+  "memberChecks": [],
+  "releaseGates": [
+    {
+      "gateId": "CM3-01",
+      "status": "pending",
+      "description": "Controlled AS 4100 source and independently reviewed rule extraction"
+    },
+    {
+      "gateId": "CM3-02",
+      "status": "pending",
+      "description": "Released Phase 3A demand package, result-set identity and result hash"
+    },
+    {
+      "gateId": "CM3-03",
+      "status": "pending",
+      "description": "Member-section identity and section-property provenance"
+    },
+    {
+      "gateId": "CM3-04",
+      "status": "pending",
+      "description": "Material-property evidence and review"
+    },
+    {
+      "gateId": "CM3-05",
+      "status": "pending",
+      "description": "Effective-length and slenderness basis by checked local axis"
+    },
+    {
+      "gateId": "CM3-06",
+      "status": "pending",
+      "description": "Tension-resistance implementation, trace and deterministic tests"
+    },
+    {
+      "gateId": "CM3-07",
+      "status": "pending",
+      "description": "Compression-resistance implementation, trace and deterministic tests"
+    },
+    {
+      "gateId": "CM3-08",
+      "status": "pending",
+      "description": "Independent hand calculation or trusted-software benchmark"
+    },
+    {
+      "gateId": "CM3-09",
+      "status": "pending",
+      "description": "API, table, viewport and Drawing result identity"
+    },
+    {
+      "gateId": "CM3-10",
+      "status": "pending",
+      "description": "Scope disclosure, exclusions and reviewer authority"
+    }
+  ],
+  "blockers": [
+    "PHASE3A_INDEPENDENT_REVIEW_PENDING",
+    "APPROVED_PROJECT_INPUT_MISSING",
+    "AS4100_CONTROLLED_SOURCE_REVIEW_PENDING",
+    "AS4100_RULE_DATA_NOT_EXTRACTED",
+    "MEMBER_SECTION_AND_MATERIAL_EVIDENCE_MISSING"
+  ],
+  "exclusions": [
+    "FINAL_DESIGN_CERTIFICATION",
+    "CONNECTION_MOUNT_FASTENER_WELD_AND_LOCAL_TOWER_CAPACITY",
+    "FOUNDATION_ANCHOR_BASE_PLATE_AND_SOIL_CAPACITY",
+    "FATIGUE_FRACTURE_FIRE_AND_DURABILITY",
+    "SECOND_ORDER_NONLINEAR_AND_MEMBER_STATE_ANALYSIS",
+    "FRAME_BENDING_AND_COMBINED_ACTION_OUTSIDE_CM1",
+    "COLD_FORMED_MEMBER_CHECKS_GOVERNED_BY_OTHER_STANDARDS",
+    "DYNAMIC_CROSSWIND_AND_AEROELASTIC_RESPONSE"
+  ]
+}

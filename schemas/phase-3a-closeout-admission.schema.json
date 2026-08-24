@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pikatiu27.github.io/TowerFlow/schemas/phase-3a-closeout-admission.schema.json",
+  "title": "TowerFlow Phase 3A Closeout Submission Admission Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "hashBasis", "status", "requestFile", "resultFile",
+    "snapshotFile", "ruleReviewFile", "requestSha256", "resultSha256",
+    "snapshotSha256", "ruleReviewSha256", "preflightReportSha256",
+    "crossSurfaceReportSha256", "checks", "issues", "releaseAuthority",
+    "reportSha256"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "0.1.0-phase3a-closeout-admission"},
+    "hashBasis": {"const": "canonical-json-sort-keys-compact"},
+    "status": {"enum": ["BLOCKED", "READY_FOR_RELEASE_DECISION"]},
+    "requestFile": {"type": "string", "minLength": 1},
+    "resultFile": {"type": "string", "minLength": 1},
+    "snapshotFile": {"type": "string", "minLength": 1},
+    "ruleReviewFile": {"type": "string", "minLength": 1},
+    "requestSha256": {"$ref": "#/$defs/sha256"},
+    "resultSha256": {"$ref": "#/$defs/sha256"},
+    "snapshotSha256": {"$ref": "#/$defs/sha256"},
+    "ruleReviewSha256": {"$ref": "#/$defs/sha256"},
+    "preflightReportSha256": {"$ref": "#/$defs/sha256"},
+    "crossSurfaceReportSha256": {"$ref": "#/$defs/sha256"},
+    "checks": {
+      "type": "array", "minItems": 8, "maxItems": 8,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "sourceCheckId", "status", "message"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^P3A-CO-0[1-8]$"},
+          "sourceCheckId": {"type": ["string", "null"]},
+          "status": {"enum": ["PASS", "BLOCKED"]},
+          "message": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "issues": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "releaseAuthority": {"const": false},
+    "reportSha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

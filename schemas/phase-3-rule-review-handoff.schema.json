@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://towerflow.local/schemas/phase-3-rule-review-handoff.schema.json",
+  "title": "TowerFlow Phase 3A independent rule review handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "handoffId",
+    "status",
+    "prepared",
+    "controlledSource",
+    "artifacts",
+    "reviewItems",
+    "reviewer",
+    "completion",
+    "restrictions"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.1.0-review-handoff" },
+    "handoffId": { "const": "P3A-RULE-REVIEW-001" },
+    "status": {
+      "enum": ["blank_independent_review", "review_in_progress", "engineering_review_complete"]
+    },
+    "prepared": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preparedBy", "preparedDate", "purpose"],
+      "properties": {
+        "preparedBy": { "const": "TowerFlow Phase 3A implementation" },
+        "preparedDate": { "type": "string", "format": "date" },
+        "purpose": { "type": "string", "minLength": 1 }
+      }
+    },
+    "controlledSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publication",
+        "incorporatedAmendments",
+        "expectedSha256",
+        "licensedSourceBundled",
+        "reviewerMustUseControlledCopy"
+      ],
+      "properties": {
+        "publication": { "const": "AS/NZS 1170.2:2021" },
+        "incorporatedAmendments": {
+          "const": ["Amd 1:2023", "Amd 2:2024"]
+        },
+        "expectedSha256": { "$ref": "#/$defs/sha256" },
+        "licensedSourceBundled": { "const": false },
+        "reviewerMustUseControlledCopy": { "const": true }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifactId", "path", "hashBasis", "sha256", "role"],
+        "properties": {
+          "artifactId": { "type": "string", "pattern": "^P3A-A[0-9]{2}$" },
+          "path": {
+            "type": "string",
+            "pattern": "^(analysis|docs|rules|schemas|verification)/[A-Za-z0-9._/-]+$"
+          },
+          "hashBasis": { "const": "utf8_lf_normalized" },
+          "sha256": { "$ref": "#/$defs/sha256" },
+          "role": {
+            "enum": ["rule_data", "implementation", "golden_case", "verification", "governance", "evidence_contract"]
+          }
+        }
+      }
+    },
+    "reviewItems": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "itemId",
+          "title",
+          "releaseGateIds",
+          "scope",
+          "sourcePointers",
+          "artifactIds",
+          "decision",
+          "comments"
+        ],
+        "properties": {
+          "itemId": { "type": "string", "pattern": "^P3A-RR-[0-9]{2}$" },
+          "title": { "type": "string", "minLength": 1 },
+          "releaseGateIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "pattern": "^WIND-(01|04|05|06|07|08)$" }
+          },
+          "scope": { "type": "string", "minLength": 1 },
+          "sourcePointers": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "artifactIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "pattern": "^P3A-A[0-9]{2}$" }
+          },
+          "decision": { "enum": ["pending", "accepted", "rejected"] },
+          "comments": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "name",
+        "organisation",
+        "qualification",
+        "registrationReference",
+        "independenceConfirmed",
+        "independenceBasis",
+        "controlledSourceHashObservedSha256",
+        "reviewDate",
+        "signedRecordReference"
+      ],
+      "properties": {
+        "role": { "const": "independent_structural_engineer" },
+        "name": { "$ref": "#/$defs/nullableText" },
+        "organisation": { "$ref": "#/$defs/nullableText" },
+        "qualification": { "$ref": "#/$defs/nullableText" },
+        "registrationReference": { "$ref": "#/$defs/nullableText" },
+        "independenceConfirmed": { "type": "boolean" },
+        "independenceBasis": { "$ref": "#/$defs/nullableText" },
+        "controlledSourceHashObservedSha256": {
+          "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+        },
+        "reviewDate": {
+          "anyOf": [{ "type": "string", "format": "date" }, { "type": "null" }]
+        },
+        "signedRecordReference": { "$ref": "#/$defs/nullableText" }
+      }
+    },
+    "completion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requiredReviewItemIds",
+        "allItemsAccepted",
+        "independentEngineeringReview",
+        "releaseAuthority"
+      ],
+      "properties": {
+        "requiredReviewItemIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^P3A-RR-[0-9]{2}$" }
+        },
+        "allItemsAccepted": { "type": "boolean" },
+        "independentEngineeringReview": { "enum": ["pending", "accepted", "rejected"] },
+        "releaseAuthority": { "const": false }
+      }
+    },
+    "restrictions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullableText": {
+      "anyOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }]
+    }
+  }
+}
